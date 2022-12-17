@@ -6,6 +6,7 @@ import emoji
 import sqlite3
 from discord import TextChannel, VoiceChannel, Role, Intents
 from discord.ext import commands
+from os import getnv
 
 import settings
 
@@ -218,5 +219,5 @@ def get_data(query) -> list:
 
     return result
 
-
-client.run(settings.TOKEN)
+token = getenv('DISCORD_BOT_TOKEN')
+client.run(token)
