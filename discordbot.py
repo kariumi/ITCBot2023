@@ -12,16 +12,17 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 client = commands.Bot(command_prefix='/', intents=intents)
+token = "MTA0Nzc2MjQ2NjAxODQyNjkzMQ.GMnJm3.qiHh5t2f-hZk7bbzd3rySPaoU0E4C8wdf4t80c"
 
 
-
+#コマンド-投票 ! vote--------------------------------------------------------
 @client.command()
 async def vote(ctx, text: str, *choices):
-    if len(choices) == 0:
+    if len(choices) == 0:#選択肢が書かれてない場合はエラー
         await ctx.send("選択肢を指定してください")
         return
 
-    if len(choices) % 2 != 0:
+    if len(choices) % 2 != 0:#選択肢+選択肢名が奇数個の場合
         await ctx.send("選択肢は選択肢と絵文字をセットで指定してください\n"
                        "例:りんご 🍎 みかん 🍊 ぶどう 🍇")
         return
@@ -45,9 +46,10 @@ async def vote(ctx, text: str, *choices):
     for e in emojis:
         await message.add_reaction(e)
 
+    #ここで、sqlにmessage.id、channel.id、emojisをsqlに登録
     send_data(f"INSERT INTO votes (message_id, channel_id, emojis) VALUES (\'{message.id}\', \'{ctx.channel.id}\', \'{''.join(emojis)}\')")
 
-
+#コマンド-投票履歴--------------------------------------------------------
 @client.command()
 async def vote_history(ctx, channel: typing.Optional[TextChannel] = None, num: typing.Optional[int] = 10):
     urls = []
@@ -67,7 +69,7 @@ async def on_command_error(ctx, error):
         return
     raise error
 
-
+#コマンド-ボイチャ中の人間をシャッフルして飛ばす--------------------------------------------------------
 @client.command()
 async def shuffle(ctx,
                   host1: typing.Optional[Role] = None,
@@ -77,7 +79,7 @@ async def shuffle(ctx,
                   *channels: VoiceChannel):
     if not ctx.guild.get_role(968160313797136414) in ctx.author.roles:
         await ctx.send("実行権限がありません")
-        return
+        #return
     if ctx.author.voice is None:
         await ctx.send("ボイスチャンネルに入ってください")
         return
@@ -199,6 +201,7 @@ async def update_vote(message, content, reactions):
 
     await message.edit(content=str("\n".join(content)), suppress=False)
 
+DATABASE_URL="vote.sqlite"
 
 def send_data(query):
     conn = sqlite3.connect(DATABASE_URL)
@@ -218,5 +221,5 @@ def get_data(query) -> list:
     return result
 
 
-token = getenv('DISCORD_BOT_TOKEN')
+#token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
