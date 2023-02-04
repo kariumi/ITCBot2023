@@ -12,7 +12,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 client = commands.Bot(command_prefix='/', intents=intents)
-token = "MTA0Nzc2MjQ2NjAxODQyNjkzMQ.GMnJm3.qiHh5t2f-hZk7bbzd3rySPaoU0E4C8wdf4t80c"
+
 
 
 #コマンド-投票 ! vote--------------------------------------------------------
