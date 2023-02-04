@@ -221,5 +221,5 @@ def get_data(query) -> list:
     return result
 
 
-#token = getenv('DISCORD_BOT_TOKEN')
+token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
