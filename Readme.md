@@ -7,11 +7,13 @@
 
 - [コマンド一覧](https://github.com/kariumi/ITCBot/edit/master/Readme.md#コマンド一覧)
   - [!shuffle](https://github.com/kariumi/ITCBot/edit/master/Readme.md#shuffle) - メンバーをボイスチャンネルに均等に振り分ける
+  - [!vote](https://github.com/kariumi/ITCBot2023/edit/master/Readme.md#vote) - 投票する
+    - [create](https://github.com/kariumi/ITCBot2023/edit/master/Readme.md#vote-create)
 - [更新履歴](https://github.com/kariumi/ITCBot/edit/master/Readme.md#%E6%9B%B4%E6%96%B0%E5%B1%A5%E6%AD%B4)
 
 # コマンド一覧
 
-## \!shuffle
+## !shuffle
 
 自分が入っているボイスチャンネルの人を指定したボイスチャンネルにランダムに振り分け、自動的に移動させるコマンドです。
 ```Python
@@ -30,6 +32,10 @@
 上記のようにロールを指定すると、指定したロールのメンバーは均等に振り分けられます。
 - ロールは0~3個の間で指定することができます。
 
+
+## !vote
+
+### !vote create
 
   
 # 更新履歴
