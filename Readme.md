@@ -5,11 +5,12 @@
 
 # 目次
 
-- [コマンド一覧](https://github.com/kariumi/ITCBot/edit/master/Readme.md#コマンド一覧)
-  - [!shuffle](https://github.com/kariumi/ITCBot/edit/master/Readme.md#shuffle) - メンバーをボイスチャンネルに均等に振り分ける
-  - [!vote](https://github.com/kariumi/ITCBot2023/edit/master/Readme.md#vote) - 投票する
-    - [create](https://github.com/kariumi/ITCBot2023/edit/master/Readme.md#vote-create)
-- [更新履歴](https://github.com/kariumi/ITCBot/edit/master/Readme.md#%E6%9B%B4%E6%96%B0%E5%B1%A5%E6%AD%B4)
+- [コマンド一覧](#コマンド一覧)
+  - [!shuffle](#shuffle) - メンバーをボイスチャンネルに均等に振り分ける
+  - [!vote](#vote) - サブコマンド参照
+    - [create](#vote-create) - 投票を作成する
+    - [role](#vote-role) - 投票者にロールを与える(未実装)
+- [更新履歴](#更新履歴)
 
 # コマンド一覧
 
@@ -35,7 +36,19 @@
 
 ## !vote
 
+投票を作成して様々なことができる機能です。```!vote```のみで実行するとvoteコマンドの説明が表示されます。
 ### !vote create
+```Python
+!vote create [投票タイトル] [投票先1] [投票先2] [投票先3] ...
+
+例:
+!vote create 学部は？ 工学部 先進工学部 薬学部 その他
+!vote create @prog部昼ごはん食べた？__⚠️期限：~2/20__ はい 食べない 今から
+```
+選択肢に投票したメンバーの名前がリアルタイムで表示されます。複数人が同時に投票するとバグることがあるので、その時はリサイクルマークを押すと正しく表示されます。
+- うまくやるとメンションや、下線文字、絵文字も含めることができます。
+- 
+⚠️投票タイトルに空白や改行は使用できません。
 
   
 # 更新履歴
@@ -48,3 +61,6 @@
 ### 2023/2/4
 - shuffleコマンドの軽微な修正。
 - Readmeを執筆。
+
+### 2023/2/5
+- voteコマンドの追加。
