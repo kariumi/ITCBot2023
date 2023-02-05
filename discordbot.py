@@ -32,7 +32,7 @@ async def on_command_error(ctx, error):
         return
     raise error
 
-"""
+""" 
 !shuffle
 自分が入っているボイスチャンネルの人を指定したボイスチャンネルにランダムに振り分け、自動的に移動させるコマンドです。
 
@@ -102,6 +102,8 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 
 !vote create [投票タイトル] [投票先1] [投票先2] [投票先3] ...
 投票を作成してくれます。
+
+
 """
 
 
