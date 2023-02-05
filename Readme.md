@@ -1,9 +1,8 @@
-# ITC bot 2023 取説
-- このbotはITC Bot ver.1.1.0を移植したものです。
+# ITC bot 2023 取扱説明書
 - 高度な操作ができるため、`BOT使用`のロールが付与されていないと使用できません。
 - コマンドは随時追加予定。
 
-![ITC](readme/icon.jpg "ITC")
+![ITC](readme/bot_banner.png "ITC Bot 2023")
 
 # 目次
 
