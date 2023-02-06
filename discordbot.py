@@ -224,6 +224,22 @@ async def on_raw_reaction_add(payload):
                     title=f"{title}", description=f"{new_mes}", color=0x0000ff)
             await message.edit(embed=embed)
 
+# set_role用↓
+    if payload.member.bot:
+        return
+    if payload.message_id in message_id_for_registration_list:
+        guild = client.get_guild(payload.guild_id)
+        await payload.member.add_roles(guild.get_role(851748635023769630))
+        # 体験入部付与
+        if payload.emoji.name == "💻":
+            await payload.member.add_roles(guild.get_role(837510590841880617))
+        if payload.emoji.name == "🎨":
+            await payload.member.add_roles(guild.get_role(829263508016463923))
+        if payload.emoji.name == "🎧":
+            await payload.member.add_roles(guild.get_role(837510593077706782))
+        if payload.emoji.name == "🎥":
+            await payload.member.add_roles(guild.get_role(837510944459456562))
+
 
 @client.event
 async def on_raw_reaction_remove(payload):
@@ -286,23 +302,6 @@ async def set_role(ctx, channel: typing.Optional[TextChannel] = None):
         return
     message_id_for_registration_list.append(message.id)
 
-
-@client.event
-async def on_raw_reaction_add(payload):
-    if payload.member.bot:
-        return
-    if payload.message_id in message_id_for_registration_list:
-        guild = client.get_guild(payload.guild_id)
-        await payload.member.add_roles(guild.get_role(851748635023769630))
-        # 体験入部付与
-        if payload.emoji.name == "💻":
-            await payload.member.add_roles(guild.get_role(837510590841880617))
-        if payload.emoji.name == "🎨":
-            await payload.member.add_roles(guild.get_role(829263508016463923))
-        if payload.emoji.name == "🎧":
-            await payload.member.add_roles(guild.get_role(837510593077706782))
-        if payload.emoji.name == "🎥":
-            await payload.member.add_roles(guild.get_role(837510944459456562))
 
 """
 エラーメッセージ一覧
