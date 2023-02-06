@@ -181,7 +181,7 @@ async def on_raw_reaction_add(payload):
                         line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2][:-2]}"
                 new_mes += f"{line[i]}\n"
             await message.edit(content=new_mes)
-            # await message.remove_reaction('♻️', user)
+            await message.remove_reaction('♻️', user)
             print("aa")
             return
 
