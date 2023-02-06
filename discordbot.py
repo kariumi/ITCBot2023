@@ -227,18 +227,19 @@ async def on_raw_reaction_add(payload):
 # set_role用↓
     if payload.member.bot:
         return
-    if payload.message_id in message_id_for_registration_list:
-        guild = client.get_guild(payload.guild_id)
-        await payload.member.add_roles(guild.get_role(851748635023769630))
-        # 体験入部付与
-        if payload.emoji.name == "💻":
-            await payload.member.add_roles(guild.get_role(837510590841880617))
-        if payload.emoji.name == "🎨":
-            await payload.member.add_roles(guild.get_role(829263508016463923))
-        if payload.emoji.name == "🎧":
-            await payload.member.add_roles(guild.get_role(837510593077706782))
-        if payload.emoji.name == "🎥":
-            await payload.member.add_roles(guild.get_role(837510944459456562))
+    for embed in await client.get_channel(payload.channel_id).fetch_message(payload.message_id).embeds:
+        if embed.title == "ロール割振":
+            guild = client.get_guild(payload.guild_id)
+            await payload.member.add_roles(guild.get_role(851748635023769630))
+            # 体験入部付与
+            if payload.emoji.name == "💻":
+                await payload.member.add_roles(guild.get_role(837510590841880617))
+            if payload.emoji.name == "🎨":
+                await payload.member.add_roles(guild.get_role(829263508016463923))
+            if payload.emoji.name == "🎧":
+                await payload.member.add_roles(guild.get_role(837510593077706782))
+            if payload.emoji.name == "🎥":
+                await payload.member.add_roles(guild.get_role(837510944459456562))
 
 
 @client.event
@@ -281,8 +282,6 @@ async def on_raw_reaction_remove(payload):
 !set_role
 ロールを割り振る。
 """
-message_id_for_registration_list = []
-
 
 @client.command()
 async def set_role(ctx, channel: typing.Optional[TextChannel] = None):
@@ -303,7 +302,6 @@ async def set_role(ctx, channel: typing.Optional[TextChannel] = None):
     if ctx.channel != 377392053182660609:
         await ctx.send("このコマンドはITCサーバー以外では使用できません。")
         return
-    message_id_for_registration_list.append(message.id)
 
 
 """
