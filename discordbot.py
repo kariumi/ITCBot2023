@@ -270,6 +270,9 @@ message_id_for_registration_list = []
 
 @client.command()
 async def set_role(ctx, channel: typing.Optional[TextChannel] = None):
+    if not ctx.guild.get_role(968160313797136414) in ctx.author.roles and not ctx.guild.get_role(1071476455348903977) in ctx.author.roles:
+        await ctx.send(embed=authority_error())
+        return
     embed = discord.Embed(color=0xc0ffee, title="ロール割振", description="テストです。\n"
                           "prog部 : :computer:\n"
                           "cg部   : :art:\n"
