@@ -81,13 +81,11 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
             hosts3.append(m)
             members.remove(m)
             continue
-        print(m)
 
     random.shuffle(members)
     random.shuffle(hosts1)
     random.shuffle(hosts2)
     random.shuffle(hosts3)
-    print("ああ")
 
     for i in range(len(members)):
         await members[i].move_to(channels[i % len(channels)])
@@ -97,7 +95,6 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
         await hosts2[i].move_to(channels[i % len(channels)])
     for i in range(len(hosts3)):
         await hosts3[i].move_to(channels[i % len(channels)])
-    print("あn")
 
     await ctx.send(f"{channel.mention}に接続している人を移動させました")
 
@@ -105,9 +102,11 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 !vote
 投票を作成して色々できる
 
-!vote create [投票タイトル] [投票先1] [投票先2] [投票先3] ...
+!vote create [テキストチャンネルID] [投票タイトル] [投票先1] [投票先2] [投票先3] ...
 投票を作成してくれます。
 
+!vote role [テキストチャンネルID] [テキストメッセージID] [投票番号] [ロール]
+ロールを付与できます。
 
 """
 
@@ -123,7 +122,17 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, *arg
                            "```\n"
                            "!vote create [投票タイトル] [投票先1] ...\t投票を作成します。\n"
                            "```")
+        return
     elif arg == "create":
+        if channel == None:
+            await channel.send("送信先のテキストチャンネルが指定されていません。")
+            return
+        if len(args) == 0:
+            await channel.send("タイトルが指定されていません。")
+            return
+        elif len(args) == 1:
+            await channel.send("選択肢が指定されていません。")
+            return
         vote_title = args[0]
         vote_mes = ""
         vote_icon = ["1️⃣", "2️⃣", "3️⃣", "4️⃣",
@@ -138,11 +147,15 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, *arg
             await message.add_reaction(vote_icon[i])
         await message.add_reaction("♻️")
 
+    elif arg == "role":
+        pass
+
     else:
         await channel.send("*Error:引数が認識されませんでした。*\n"
                            "```\n"
                            "!vote create [投票タイトル] [投票先1] ...\t投票を作成します。\n"
                            "```")
+        return
 
 
 @client.event
@@ -171,7 +184,6 @@ async def on_raw_reaction_add(payload):
                     if not user.bot:
                         new[i].append(user.name)
                 i += 1
-            print(new)
             for i in range(len(line)):
                 mes.append(line[i].split(" "))
                 for j in range(len(new)):
@@ -187,7 +199,6 @@ async def on_raw_reaction_add(payload):
                 new_mes += f"{line[i]}\n"
             await message.edit(content=new_mes)
             await message.remove_reaction('♻️', user)
-            print("aa")
             return
 
         for i in range(len(line)):
