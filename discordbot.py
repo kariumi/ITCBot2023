@@ -62,7 +62,9 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
     channel = ctx.author.voice.channel  # 実行者の入っているチャンネル
 
     members = channel.members  # channelに入っている全メンバーをmenbersに追加
-    hosts1, hosts2, hosts3 = []
+    hosts1 = []
+    hosts2 = []
+    hosts3 = []
 
     for m in members[:]:
         if host1 is not None and host1 in m.roles:
@@ -230,5 +232,7 @@ async def on_raw_reaction_remove(payload):
             new_mes += f"{line[i]}\n"
         await message.edit(content=new_mes)
 
-token = getenv('DISCORD_BOT_TOKEN')
+token = "MTA0Nzc2MjQ2NjAxODQyNjkzMQ.GkFeAB.M4SuYCHHhwv1R0fAwShgKAtmK6YU6IO4OAt-HM"
+
+# token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
