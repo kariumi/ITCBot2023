@@ -178,6 +178,9 @@ async def on_raw_reaction_add(payload):
             new_members = []
             i = 0
             if number == "♻️":  # リフレッシュ用。
+                temp_embed = embed
+                temp_embed.color = 0xffff00
+                await message.edit(embed=temp_embed, content="⚠️⚠️__***ボタンを押さないでください***__⚠️⚠️")
 
                 new = []
                 for reaction_ in reactions:
@@ -200,9 +203,13 @@ async def on_raw_reaction_add(payload):
                             line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2][:-2]}"
                     new_mes += f"{line[i]}\n"
                 embed = discord.Embed(
-                    title=f"{title}", description=f"{new_mes}", color=0x0000ff)
-                await message.edit(embed=embed)
-                await message.remove_reaction('♻️', user)
+                    title=f"{title}", description=f"{new_mes}", color=0x008000)
+                await message.edit(embed=embed, content="♻️__***リフレッシュ完了！***__♻️")
+
+                if not user.bot:
+                    await message.remove_reaction('♻️', user)
+                embed.color = 0x0000ff
+                await message.edit(embed=embed, content="")
                 return
 
             for i in range(len(line)):
@@ -284,5 +291,6 @@ def vote_create_error(ctx):
     return embed
 
 
-token = getenv('DISCORD_BOT_TOKEN')
+token = "MTA0Nzc2MjQ2NjAxODQyNjkzMQ.G7gb5B.9z5jN3FZinF7hvjqjoDomRdWmb1kuaJkjwXQaQ"
+# token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
