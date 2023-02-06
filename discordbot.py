@@ -79,11 +79,13 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
             hosts3.append(m)
             members.remove(m)
             continue
+        print(m)
 
     random.shuffle(members)
     random.shuffle(hosts1)
     random.shuffle(hosts2)
     random.shuffle(hosts3)
+    print("ああ")
 
     for i in range(len(members)):
         await members[i].move_to(channels[i % len(channels)])
@@ -93,6 +95,7 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
         await hosts2[i].move_to(channels[i % len(channels)])
     for i in range(len(hosts3)):
         await hosts3[i].move_to(channels[i % len(channels)])
+    print("あn")
 
     await ctx.send(f"{channel.mention}に接続している人を移動させました")
 
