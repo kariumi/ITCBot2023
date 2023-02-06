@@ -27,7 +27,7 @@ async def on_ready():
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.ChannelNotFound):
-        await ctx.send("指定したチャンネルが見つかりません")
+        await ctx.send(embed=any_error("指定したチャンネルが見つかりません"))
     elif isinstance(error, commands.CommandNotFound):
         return
     raise error
@@ -51,13 +51,13 @@ async def on_command_error(ctx, error):
 @client.command()
 async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Optional[Role] = None, host3: typing.Optional[Role] = None, *channels: VoiceChannel):
     if not ctx.guild.get_role(968160313797136414) in ctx.author.roles and not ctx.guild.get_role(1071476455348903977) in ctx.author.roles:
-        await ctx.send("実行権限がありません")
+        await ctx.send(embed=authority_error())
         return
     if ctx.author.voice is None:
-        await ctx.send("ボイスチャンネルに入ってください")
+        await ctx.send(embed=any_error("ボイスチャンネルに入ってください", ""))
         return
     if len(channels) == 0:
-        await ctx.send("ボイスチャンネルを指定してください")
+        await ctx.send(embed=any_error("ボイスチャンネルを指定してください", ""))
         return
     channel = ctx.author.voice.channel  # 実行者の入っているチャンネル
 
@@ -114,47 +114,45 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 @client.command()
 async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, *args):
     if not ctx.guild.get_role(968160313797136414) in ctx.author.roles and not ctx.guild.get_role(1071476455348903977) in ctx.author.roles:
-        await ctx.send("実行権限がありません")
+        await ctx.send(embed=authority_error())
         return
 
     if arg == None:
-        await channel.send("*Error:引数が指定されていません。*\n"
-                           "```\n"
-                           "!vote create [投票タイトル] [投票先1] ...\t投票を作成します。\n"
-                           "```")
+        await ctx.send(embed=vote_error("引数が指定されていません！"))
         return
+
     elif arg == "create":
-        if channel == None:
-            await channel.send("送信先のテキストチャンネルが指定されていません。")
-            return
-        if len(args) == 0:
-            await channel.send("タイトルが指定されていません。")
-            return
-        elif len(args) == 1:
-            await channel.send("選択肢が指定されていません。")
-            return
-        vote_title = args[0]
-        vote_mes = ""
-        vote_icon = ["1️⃣", "2️⃣", "3️⃣", "4️⃣",
-                     "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
-        for i in range(len(args[1:])):
-            vote_mes += f"{vote_icon[i]} {args[i+1]}\t：\n"
-        message = await channel.send(f"【投票受付中】`(バグったらリサイクルマークを押してください)`\n"
+        try:
+            if channel == None:
+                await ctx.send(embed=vote_create_error("送信先のテキストチャンネルIDが指定されていません！"))
+                return
+            if len(args) == 0:
+                await ctx.send(embed=vote_create_error("投票タイトルが指定されていません！"))
+                return
+            elif len(args) == 1:
+                await ctx.send(embed=vote_create_error("選択肢が指定されていません！"))
+                return
+            vote_title = args[0]
+            vote_mes = ""
+            vote_icon = ["1️⃣", "2️⃣", "3️⃣", "4️⃣",
+                         "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
+            for i in range(len(args[1:])):
+                vote_mes += f"{vote_icon[i]} {args[i+1]}\t：\n"
+            message = await ctx.send(f"【投票受付中】`(バグったらリサイクルマークを押してください)`\n"
                                      f"**{vote_title}**\n"
                                      f"\n"
                                      f"{vote_mes}")
-        for i in range(len(args[1:])):
-            await message.add_reaction(vote_icon[i])
-        await message.add_reaction("♻️")
+            for i in range(len(args[1:])):
+                await message.add_reaction(vote_icon[i])
+            await message.add_reaction("♻️")
+        except:
+            await ctx.send
 
     elif arg == "role":
         pass
 
     else:
-        await channel.send("*Error:引数が認識されませんでした。*\n"
-                           "```\n"
-                           "!vote create [投票タイトル] [投票先1] ...\t投票を作成します。\n"
-                           "```")
+        await ctx.send(embed=vote_error("引数が違います！"))
         return
 
 
@@ -242,6 +240,35 @@ async def on_raw_reaction_remove(payload):
                     line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2]}"
             new_mes += f"{line[i]}\n"
         await message.edit(content=new_mes)
+
+
+"""
+エラーメッセージ一覧
+"""
+
+
+def any_error(*ctx):
+    embed = discord.Embed(
+        title=f"*Error*：{ctx[0]}", description=f"{ctx[1]}", color=0xff0000)
+    return embed
+
+
+def authority_error():
+    embed = discord.Embed(
+        title=f"*Error*：実行権限がありません！", description="このコマンドを実行するには権限が必要です。", color=0xff0000)
+    return embed
+
+
+def vote_error(ctx):
+    embed = discord.Embed(
+        title=f"*Error*：{ctx}", description="以下の様式で記述してください。\n```\n!vote create [テキストチャンネルID] [投票タイトル] [投票先1] [投票先2] ...\n\n!vote role [テキストチャンネルID] [テキストメッセージID] [選択肢の番号] [ロール] ...```\n詳細：https://github.com/kariumi/ITCBot2023", color=0xff0000)
+    return embed
+
+
+def vote_create_error(ctx):
+    embed = discord.Embed(
+        title=f"*Error*：{ctx}", description="以下の様式で記述してください。\n```\n!vote create [テキストチャンネルID] [投票タイトル] [投票先1] [投票先2] ...\n```\n詳細：https://github.com/kariumi/ITCBot2023", color=0xff0000)
+    return embed
 
 
 token = getenv('DISCORD_BOT_TOKEN')
