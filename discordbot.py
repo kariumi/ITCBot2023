@@ -13,7 +13,6 @@ intents.message_content = True
 intents.reactions = True
 intents.members = True
 
-
 client = commands.Bot(command_prefix='!', intents=intents)
 
 authority_role = ["", ""]
@@ -290,6 +289,47 @@ def vote_create_error(ctx):
         title=f"*Error*：{ctx}", description="以下の様式で記述してください。\n```\n!vote create [テキストチャンネルID] [投票タイトル] [投票先1] [投票先2] ...\n```\n詳細：https://github.com/kariumi/ITCBot2023", color=0xff0000)
     return embed
 
+
+"""
+!set_role
+ロールを割り振る。
+"""
+message_id_for_registration_list = []
+        
+@client.command()
+async def set_role(ctx, channel: typing.Optional[TextChannel] = None):
+    embed = discord.Embed(color=0xc0ffee, title="ロール割振", description="テストです。\n"
+        "prog部 : :computer:\n"
+        "cg部   : :art:\n"
+        "dtm部  : :headphones:\n"
+        "mv部   : :movie_camera:"
+    )
+    message = await ctx.send(embed = embed)
+    await message.add_reaction("💻")
+    await message.add_reaction("🎨")
+    await message.add_reaction("🎧")
+    await message.add_reaction("🎥")
+    if ctx.channel != 377392053182660609:
+        await ctx.send("このコマンドはITCサーバー以外では使用できません。")
+        return
+    message_id_for_registration_list.append(message.id)
+    
+@client.event
+async def on_raw_reaction_add(payload):
+    if payload.member.bot:
+        return
+    if payload.message_id in message_id_for_registration_list:
+        guild = client.get_guild(payload.guild_id)
+        await payload.member.add_roles(guild.get_role(851748635023769630))
+        #体験入部付与
+        if payload.emoji.name == "💻":
+            await payload.member.add_roles(guild.get_role(837510590841880617))
+        if payload.emoji.name == "🎨":
+            await payload.member.add_roles(guild.get_role(829263508016463923))
+        if payload.emoji.name == "🎧":
+            await payload.member.add_roles(guild.get_role(837510593077706782))
+        if payload.emoji.name == "🎥":
+            await payload.member.add_roles(guild.get_role(837510944459456562))
 
 token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
