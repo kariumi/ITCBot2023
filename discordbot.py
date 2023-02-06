@@ -108,16 +108,16 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 
 
 @client.command()
-async def vote(ctx, arg=None, *args):
+async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, *args):
     if not ctx.guild.get_role(968160313797136414) in ctx.author.roles and not ctx.guild.get_role(1071476455348903977) in ctx.author.roles:
         await ctx.send("実行権限がありません")
         return
 
     if arg == None:
-        await ctx.send("*Error:引数が指定されていません。*\n"
-                       "```\n"
-                       "!vote create [投票タイトル] [投票先1] ...\t投票を作成します。\n"
-                       "```")
+        await channel.send("*Error:引数が指定されていません。*\n"
+                           "```\n"
+                           "!vote create [投票タイトル] [投票先1] ...\t投票を作成します。\n"
+                           "```")
     elif arg == "create":
         vote_title = args[0]
         vote_mes = ""
@@ -125,19 +125,19 @@ async def vote(ctx, arg=None, *args):
                      "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
         for i in range(len(args[1:])):
             vote_mes += f"{vote_icon[i]} {args[i+1]}\t：\n"
-        message = await ctx.send(f"【投票受付中】`(バグったらリサイクルマークを押してください)`\n"
-                                 f"**{vote_title}**\n"
-                                 f"\n"
-                                 f"{vote_mes}")
+        message = await channel.send(f"【投票受付中】`(バグったらリサイクルマークを押してください)`\n"
+                                     f"**{vote_title}**\n"
+                                     f"\n"
+                                     f"{vote_mes}")
         for i in range(len(args[1:])):
             await message.add_reaction(vote_icon[i])
         await message.add_reaction("♻️")
 
     else:
-        await ctx.send("*Error:引数が認識されませんでした。*\n"
-                       "```\n"
-                       "!vote create [投票タイトル] [投票先1] ...\t投票を作成します。\n"
-                       "```")
+        await channel.send("*Error:引数が認識されませんでした。*\n"
+                           "```\n"
+                           "!vote create [投票タイトル] [投票先1] ...\t投票を作成します。\n"
+                           "```")
 
 
 @client.event
