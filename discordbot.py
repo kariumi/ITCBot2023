@@ -232,7 +232,6 @@ async def on_raw_reaction_remove(payload):
             new_mes += f"{line[i]}\n"
         await message.edit(content=new_mes)
 
-token = "MTA0Nzc2MjQ2NjAxODQyNjkzMQ.GkFeAB.M4SuYCHHhwv1R0fAwShgKAtmK6YU6IO4OAt-HM"
 
-# token = getenv('DISCORD_BOT_TOKEN')
+token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
