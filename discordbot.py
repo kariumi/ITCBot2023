@@ -291,5 +291,6 @@ def vote_create_error(ctx):
     return embed
 
 
-token = getenv('DISCORD_BOT_TOKEN')
+token = "MTA0Nzc2MjQ2NjAxODQyNjkzMQ.GLV3qw.Me2QMrn_fFvmQS2-lwzV0OLHj9BFhAi1dM7yHc"
+# token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
