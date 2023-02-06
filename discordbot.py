@@ -122,31 +122,31 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, *arg
         return
 
     elif arg == "create":
-        try:
-            if channel == None:
-                await ctx.send(embed=vote_create_error("送信先のテキストチャンネルIDが指定されていません！"))
-                return
-            if len(args) == 0:
-                await ctx.send(embed=vote_create_error("投票タイトルが指定されていません！"))
-                return
-            elif len(args) == 1:
-                await ctx.send(embed=vote_create_error("選択肢が指定されていません！"))
-                return
-            vote_title = args[0]
-            vote_mes = ""
-            vote_icon = ["1️⃣", "2️⃣", "3️⃣", "4️⃣",
-                         "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
-            for i in range(len(args[1:])):
-                vote_mes += f"{vote_icon[i]} {args[i+1]}\t：\n"
-            message = await ctx.send(f"【投票受付中】`(バグったらリサイクルマークを押してください)`\n"
-                                     f"**{vote_title}**\n"
-                                     f"\n"
-                                     f"{vote_mes}")
-            for i in range(len(args[1:])):
-                await message.add_reaction(vote_icon[i])
-            await message.add_reaction("♻️")
-        except:
-            await ctx.send
+
+        if channel == None:
+            await ctx.send(embed=vote_create_error("送信先のテキストチャンネルIDが指定されていません！"))
+            return
+        if len(args) == 0:
+            await ctx.send(embed=vote_create_error("投票タイトルが指定されていません！"))
+            return
+        elif len(args) == 1:
+            await ctx.send(embed=vote_create_error("選択肢が指定されていません！"))
+            return
+        vote_title = args[0]
+        vote_mes = ""
+        vote_icon = ["1️⃣", "2️⃣", "3️⃣", "4️⃣",
+                     "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
+        for i in range(len(args[1:])):
+            vote_mes += f"{vote_icon[i]} {args[i+1]}\t：\n"
+        message_contents = (f"**{vote_title}**\n"
+                            f"\n"
+                            f"{vote_mes}")
+        embed = discord.Embed(
+            title=f"【投票受付中】`(バグったらリサイクルマークを押してください)`", description=f"{message_contents}", color=0x0000ff)
+        message = await channel.send(embed=embed)
+        for i in range(len(args[1:])):
+            await message.add_reaction(vote_icon[i])
+        await message.add_reaction("♻️")
 
     elif arg == "role":
         pass
@@ -162,84 +162,97 @@ async def on_raw_reaction_add(payload):
         return
 
     message = await client.get_channel(payload.channel_id).fetch_message(payload.message_id)
-    line = message.content.split("\n")
-    user = client.get_user(payload.user_id)
-    user_name = user.name
-    number = payload.emoji.name
+    embeds = message.embeds
+    for embed in embeds:
 
-    if line[0] == "【投票受付中】`(バグったらリサイクルマークを押してください)`":
-        mes = []
-        new_mes = ""
-        reactions = message.reactions
-        new_members = []
-        i = 0
-        if number == "♻️":  # リフレッシュ用。
+        title = embed.title
+        line = embed.description.split("\n")
+        user = client.get_user(payload.user_id)
+        user_name = user.name
+        number = payload.emoji.name
 
-            new = []
-            for reaction_ in reactions:
-                new.append([reaction_.emoji])
-                async for user in reaction_.users():
-                    if not user.bot:
-                        new[i].append(user.name)
-                i += 1
+        if title == "【投票受付中】`(バグったらリサイクルマークを押してください)`":
+            mes = []
+            new_mes = ""
+            reactions = message.reactions
+            new_members = []
+            i = 0
+            if number == "♻️":  # リフレッシュ用。
+
+                new = []
+                for reaction_ in reactions:
+                    new.append([reaction_.emoji])
+                    async for user in reaction_.users():
+                        if not user.bot:
+                            new[i].append(user.name)
+                    i += 1
+                for i in range(len(line)):
+                    mes.append(line[i].split(" "))
+                    for j in range(len(new)):
+                        if mes[i][0] == new[j][0]:
+                            try:
+                                mes[i][2] = ""
+
+                            except:
+                                mes[i].append("")
+                            for user_ in new[j][1:]:
+                                mes[i][2] += f"{user_},　"
+                            line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2][:-2]}"
+                    new_mes += f"{line[i]}\n"
+                embed = discord.Embed(
+                    title=f"{title}", description=f"{new_mes}", color=0x0000ff)
+                await message.edit(embed=embed)
+                await message.remove_reaction('♻️', user)
+                return
+
             for i in range(len(line)):
                 mes.append(line[i].split(" "))
-                for j in range(len(new)):
-                    if mes[i][0] == new[j][0]:
-                        try:
-                            mes[i][2] = ""
-
-                        except:
-                            mes[i].append("")
-                        for user_ in new[j][1:]:
-                            mes[i][2] += f"{user_},　"
-                        line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2][:-2]}"
+                if mes[i][0] == number:
+                    try:
+                        mes[i][2] += f",　{user_name}"
+                    except:
+                        mes[i].append(user_name)
+                    line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2]}"
                 new_mes += f"{line[i]}\n"
-            await message.edit(content=new_mes)
-            await message.remove_reaction('♻️', user)
-            return
-
-        for i in range(len(line)):
-            mes.append(line[i].split(" "))
-            if mes[i][0] == number:
-                try:
-                    mes[i][2] += f",　{user_name}"
-                except:
-                    mes[i].append(user_name)
-                line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2]}"
-            new_mes += f"{line[i]}\n"
-        await message.edit(content=new_mes)
+                embed = discord.Embed(
+                    title=f"{title}", description=f"{new_mes}", color=0x0000ff)
+            await message.edit(embed=embed)
 
 
 @client.event
 async def on_raw_reaction_remove(payload):
 
     message = await client.get_channel(payload.channel_id).fetch_message(payload.message_id)
-    line = message.content.split("\n")
-    user = client.get_user(payload.user_id)
-    user_name = user.name
-    number = payload.emoji.name
+    embeds = message.embeds
+    for embed in embeds:
+        title = embed.title
+        line = embed.description.split("\n")
+        user = client.get_user(payload.user_id)
+        user_name = user.name
+        number = payload.emoji.name
 
-    if line[0] == "【投票受付中】`(バグったらリサイクルマークを押してください)`":
-        mes = []
-        new_mes = ""
-        new_members = ""
-        for i in range(len(line)):
-            mes.append(line[i].split(" "))
-            if mes[i][0] == number:
-                members = mes[i][2].split(",　")
-                for j in range(len(members)):
-                    if members[j] == user_name:
-                        members[j] = ""
+        if title == "【投票受付中】`(バグったらリサイクルマークを押してください)`":
+            mes = []
+            new_mes = ""
+            new_members = ""
+            for i in range(len(line)):
+                mes.append(line[i].split(" "))
+                if mes[i][0] == number:
+                    members = mes[i][2].split(",　")
+                    for j in range(len(members)):
+                        if members[j] == user_name:
+                            members[j] = ""
+                        else:
+                            new_members += f"{members[j]},　"
+                    mes[i][2] = new_members[:-2]
+                    if mes[i][2] == "":
+                        line[i] = f"{mes[i][0]} {mes[i][1]}"
                     else:
-                        new_members += f"{members[j]},　"
-                mes[i][2] = new_members[:-2]
-                if mes[i][2] == "":
-                    line[i] = f"{mes[i][0]} {mes[i][1]}"
-                else:
-                    line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2]}"
-            new_mes += f"{line[i]}\n"
-        await message.edit(content=new_mes)
+                        line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2]}"
+                new_mes += f"{line[i]}\n"
+            embed = discord.Embed(
+                title=f"{title}", description=f"{new_mes}", color=0x0000ff)
+            await message.edit(embed=embed)
 
 
 """
