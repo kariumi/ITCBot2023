@@ -177,7 +177,7 @@ async def get_date(ctx, role: typing.Optional[Role] = None):
 
     now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
 
-    message = f"__{role.mention}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}\n__\n__参加日\t経過日数\t名前__\n"
+    message = f"__{role.mention}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}\n__\n__参加日\t\t経過日数\t名前__\n"
 
     day90_members = []
     day60_members = []
@@ -187,7 +187,7 @@ async def get_date(ctx, role: typing.Optional[Role] = None):
     for member in sorted_taiken_members:
         # ログ用
         member_days = now_time - member.joined_at
-        message += f"\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.name}\n"
+        message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.name}\n"
 
     await ctx.send(message)  # ログ
 
@@ -394,20 +394,20 @@ async def Trial_entry_explulsion():
             member_days = now_time - time_start_date
         # ログ用
 
-        if member_days.days == 56:
+        if member_days.days == 60:
             day60_members.append(member.name)
             message += f"__***❗\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日***\t{member.mention}__\n"
         elif 60 < member_days.days < 90:
-            message += f"_❗\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.mention}_\n"
+            message += f"_{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.mention}_\n"
 
         elif member_days.days >= 90:
             day90_members.append(member.name)
-            message += f"__***❌\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日***__\t{member.mention}\n"
+            message += f"__***❌{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日***__\t{member.mention}\n"
         elif member_days.days >= 0:
-            message += f"\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.name}\n"
+            message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.name}\n"
         else:
-            message += f"\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t0日\t{member.name}\n"
-    if day60_members > 0 or day90_members > 0:
+            message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t0日\t{member.name}\n"
+    if len(day60_members) > 0 or len(day90_members) > 0:
         leader_role = client.get_guild(
             377392053182660609).get_role(377446484162904065)
         message += f"{leader_role.mention}:2ヶ月/3ヶ月経過したメンバーがいます。対応してください。"
