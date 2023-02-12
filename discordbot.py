@@ -1,6 +1,7 @@
+import datetime
 import discord
 import traceback
-from discord.ext import commands
+from discord.ext import tasks, commands
 from os import getenv
 import random
 import typing
@@ -17,10 +18,13 @@ client = commands.Bot(command_prefix='!', intents=intents)
 
 authority_role = ["", ""]
 
+utc = datetime.timezone.utc
+
 
 @client.event
 async def on_ready():
     print(f"{client.user}でログインしました")
+    Trial_entry_explulsion.start()
 
 
 @client.event
@@ -31,7 +35,7 @@ async def on_command_error(ctx, error):
         return
     raise error
 
-""" 
+"""
 !shuffle
 自分が入っているボイスチャンネルの人を指定したボイスチャンネルにランダムに振り分け、自動的に移動させるコマンドです。
 
@@ -154,6 +158,77 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, *arg
         await ctx.send(embed=vote_error("引数が違います！"))
         return
 
+"""
+!get_date [ロール]
+指定ロールに所属しているメンバーのサーバー参加日/その日からの経過日数を教えてくれる。
+体験入部の管理用に作ったけどそっちは自動でやってくれるので手動で実行することはほぼない。
+
+"""
+
+
+@client.command()
+async def get_date(ctx, role: typing.Optional[Role] = None):
+    if not ctx.guild.get_role(968160313797136414) in ctx.author.roles and not ctx.guild.get_role(1071476455348903977) in ctx.author.roles:
+        await ctx.send(embed=authority_error())
+        return
+    if role == None:
+        await ctx.send(embed=get_date_error("ロールが指定されていません！"))
+        return
+
+    now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
+
+    message = f"__{role.mention}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}\n__\n__参加日\t経過日数\t名前__\n"
+
+    day90_members = []
+    day60_members = []
+    sorted_taiken_members = sorted(
+        role.members, key=lambda x: x.joined_at)  # 参加日順にソート
+
+    for member in sorted_taiken_members:
+        # ログ用
+        member_days = now_time - member.joined_at
+        message += f"\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.name}\n"
+
+    await ctx.send(message)  # ログ
+
+
+"""
+（制作中）
+!set_role
+ロールを割り振る。
+"""
+
+
+@client.command()
+async def set_role(ctx, channel: typing.Optional[TextChannel] = None):
+    if not ctx.guild.get_role(968160313797136414) in ctx.author.roles and not ctx.guild.get_role(1071476455348903977) in ctx.author.roles:
+        await ctx.send(embed=authority_error())
+        return
+    embed = discord.Embed(color=0xc0ffee, title="ロール割振", description="テストです。\n"
+                          "prog部 : :computer:\n"
+                          "cg部   : :art:\n"
+                          "dtm部  : :headphones:\n"
+                          "mv部   : :movie_camera:"
+                          )
+    message = await ctx.send(embed=embed)
+    await message.add_reaction("💻")
+    await message.add_reaction("🎨")
+    await message.add_reaction("🎧")
+    await message.add_reaction("🎥")
+    if ctx.channel != 377392053182660609:
+        await ctx.send("このコマンドはITCサーバー以外では使用できません。")
+        return
+
+"""
+on_raw_reaction_add
+
+- voteコマンドで使用
+    - 投票にリアクションが押されたらメンバーリストを更新
+    - リフレッシュマークでバグを自動修正
+- set_roleで使用
+    - メッセージにリアクションを押されたらロールを付与
+"""
+
 
 @client.event
 async def on_raw_reaction_add(payload):
@@ -241,6 +316,14 @@ async def on_raw_reaction_add(payload):
             if payload.emoji.name == "🎥":
                 await payload.member.add_roles(guild.get_role(837510944459456562))
 
+"""
+on_raw_reaction_remove
+
+- voteコマンド
+    - リアクションを外されたらメンバーリストを更新
+
+"""
+
 
 @client.event
 async def on_raw_reaction_remove(payload):
@@ -279,29 +362,54 @@ async def on_raw_reaction_remove(payload):
 
 
 """
-!set_role
-ロールを割り振る。
+体験入部生が60日/90日経過したらお知らせする。
+（予定では、botが自動で60日経過でDMを送信し、90日でkickする。）
+現段階では、サーバー参加日から何日経過したかを視覚的に分かりやすく表示してくれるだけ。
 """
 
-@client.command()
-async def set_role(ctx, channel: typing.Optional[TextChannel] = None):
-    if not ctx.guild.get_role(968160313797136414) in ctx.author.roles and not ctx.guild.get_role(1071476455348903977) in ctx.author.roles:
-        await ctx.send(embed=authority_error())
-        return
-    embed = discord.Embed(color=0xc0ffee, title="ロール割振", description="テストです。\n"
-                          "prog部 : :computer:\n"
-                          "cg部   : :art:\n"
-                          "dtm部  : :headphones:\n"
-                          "mv部   : :movie_camera:"
-                          )
-    message = await ctx.send(embed=embed)
-    await message.add_reaction("💻")
-    await message.add_reaction("🎨")
-    await message.add_reaction("🎧")
-    await message.add_reaction("🎥")
-    if ctx.channel != 377392053182660609:
-        await ctx.send("このコマンドはITCサーバー以外では使用できません。")
-        return
+
+# ループが実行される時間(UTC)
+time = datetime.time(hour=15, minute=0, tzinfo=utc)
+
+
+@tasks.loop(time=time)
+async def Trial_entry_explulsion():
+    now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
+    role = client.get_guild(377392053182660609).get_role(851748635023769630)
+    text_ch = client.get_channel(829334489473482752)
+    # ↓↓year=は毎年変更する必要あり。↓↓
+    time_start_date = datetime.datetime(year=2020, month=4, day=1, tzinfo=utc)
+    message = f"__{role.mention}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}現在\n__経過日数について、4月1日以前の参加者は4月1日から計算する。\n\n__参加日\t経過日数\t名前__\n"
+
+    day90_members = []
+    day60_members = []
+    sorted_taiken_members = sorted(
+        role.members, key=lambda x: x.joined_at)  # 参加日順にソート
+
+    for member in sorted_taiken_members:  # 90日、60日経過メンバーを絞る->90_members、60_membersへ。尚、4月1日以前に参加した者は4月1日参加とみなして計算する。
+
+        if member.joined_at > time_start_date:
+            member_days = now_time - member.joined_at
+        else:
+            member_days = now_time - time_start_date
+        # ログ用
+
+        if member_days.days == 60:
+            day60_members.append(member.name)
+            message += f"__***❗\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日***\t{member.mention}__\n"
+        elif member_days.days == 70:
+            day90_members.append(member.name)
+            message += f"__***❌\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日***__\t{member.mention}\n"
+        elif member_days.days >= 0:
+            message += f"\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.name}\n"
+        else:
+            message += f"\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t0日\t{member.name}\n"
+    if day60_members > 0 or day90_members > 0:
+        leader_role = client.get_guild(
+            377392053182660609).get_role(377446484162904065)
+        message += f"{leader_role.mention}:2ヶ月/3ヶ月経過したメンバーがいます。対応してください。"
+
+    await text_ch.send(message)  # ログとして出力
 
 
 """
@@ -331,6 +439,21 @@ def vote_create_error(ctx):
     embed = discord.Embed(
         title=f"*Error*：{ctx}", description="以下の様式で記述してください。\n```\n!vote create [テキストチャンネルID] [投票タイトル] [投票先1] [投票先2] ...\n```\n詳細：https://github.com/kariumi/ITCBot2023", color=0xff0000)
     return embed
+
+
+def get_date_error(ctx):
+    embed = discord.Embed(
+        title=f"*Error*：{ctx}", description="以下の様式で記述してください。\n```\n!get_date [ロール] ...\n```\n詳細：https://github.com/kariumi/ITCBot2023", color=0xff0000)
+    return embed
+
+
+"""
+権限の確認
+"""
+
+
+def authority_check(ctx):
+    pass
 
 
 token = getenv('DISCORD_BOT_TOKEN')
