@@ -394,10 +394,13 @@ async def Trial_entry_explulsion():
             member_days = now_time - time_start_date
         # ログ用
 
-        if member_days.days == 60:
+        if member_days.days == 56:
             day60_members.append(member.name)
             message += f"__***❗\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日***\t{member.mention}__\n"
-        elif member_days.days == 70:
+        elif 60 < member_days.days < 90:
+            message += f"_❗\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.mention}_\n"
+
+        elif member_days.days >= 90:
             day90_members.append(member.name)
             message += f"__***❌\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日***__\t{member.mention}\n"
         elif member_days.days >= 0:
