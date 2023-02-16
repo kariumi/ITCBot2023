@@ -8,6 +8,8 @@ import typing
 import emoji
 import sqlite3
 from discord import TextChannel, VoiceChannel, Role, Intents
+import asyncio
+
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -53,7 +55,8 @@ async def on_command_error(ctx, error):
 
 @client.command()
 async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Optional[Role] = None, host3: typing.Optional[Role] = None, *channels: VoiceChannel):
-    if not ctx.guild.get_role(968160313797136414) in ctx.author.roles and not ctx.guild.get_role(1071476455348903977) in ctx.author.roles:
+    authority = authority_check(ctx)
+    if not authority:
         await ctx.send(embed=authority_error())
         return
     if ctx.author.voice is None:
@@ -113,10 +116,14 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 
 """
 
+# 拡張性を高くしようと思ってたら変に複雑になってしまった
+# 特に引数が謎
+
 
 @client.command()
-async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, *args):
-    if not ctx.guild.get_role(968160313797136414) in ctx.author.roles and not ctx.guild.get_role(1071476455348903977) in ctx.author.roles:
+async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * args):
+    authority = authority_check(ctx)
+    if not authority:
         await ctx.send(embed=authority_error())
         return
 
@@ -125,7 +132,6 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, *arg
         return
 
     elif arg == "create":
-
         if channel == None:
             await ctx.send(embed=vote_create_error("送信先のテキストチャンネルIDが指定されていません！"))
             return
@@ -151,12 +157,20 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, *arg
             await message.add_reaction(vote_icon[i])
         await message.add_reaction("♻️")
 
-    elif arg == "role":
-        pass
+    elif arg == "finish":
+
+        message = await channel.fetch_message(int(args[0]))
+        for embed in message.embeds:
+            description_ = embed.description
+        title = "【投票終了】`(バグっている場合はリサイクルマークを押してください)`"
+        embed = discord.Embed(
+            title=f"{title}", description=description_, color=0x191970)
+        await message.edit(embed=embed)
 
     else:
         await ctx.send(embed=vote_error("引数が違います！"))
         return
+
 
 """
 !get_date [ロール]
@@ -168,9 +182,7 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, *arg
 
 @client.command()
 async def get_date(ctx, role: typing.Optional[Role] = None):
-    if not ctx.guild.get_role(968160313797136414) in ctx.author.roles and not ctx.guild.get_role(1071476455348903977) in ctx.author.roles:
-        await ctx.send(embed=authority_error())
-        return
+
     if role == None:
         await ctx.send(embed=get_date_error("ロールが指定されていません！"))
         return
@@ -179,8 +191,6 @@ async def get_date(ctx, role: typing.Optional[Role] = None):
 
     message = f"__{role.mention}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}\n__\n__参加日\t\t経過日数\t名前__\n"
 
-    day90_members = []
-    day60_members = []
     sorted_taiken_members = sorted(
         role.members, key=lambda x: x.joined_at)  # 参加日順にソート
 
@@ -193,31 +203,40 @@ async def get_date(ctx, role: typing.Optional[Role] = None):
 
 
 """
-（制作中）
-!set_role
-ロールを割り振る。
+
+!vote_role
+ロールを割り振る用の投票を作成。自動でロールを割り振ることが出来ます。
 """
 
 
 @client.command()
-async def set_role(ctx, channel: typing.Optional[TextChannel] = None):
-    if not ctx.guild.get_role(968160313797136414) in ctx.author.roles and not ctx.guild.get_role(1071476455348903977) in ctx.author.roles:
+async def vote_role(ctx, channel: typing.Optional[TextChannel] = None, title="", *roles: typing.Optional[Role]):
+    authority = authority_check(ctx)
+    if not authority:
         await ctx.send(embed=authority_error())
         return
-    embed = discord.Embed(color=0xc0ffee, title="ロール割振", description="テストです。\n"
-                          "prog部 : :computer:\n"
-                          "cg部   : :art:\n"
-                          "dtm部  : :headphones:\n"
-                          "mv部   : :movie_camera:"
-                          )
-    message = await ctx.send(embed=embed)
-    await message.add_reaction("💻")
-    await message.add_reaction("🎨")
-    await message.add_reaction("🎧")
-    await message.add_reaction("🎥")
-    if ctx.channel != 377392053182660609:
-        await ctx.send("このコマンドはITCサーバー以外では使用できません。")
+    if channel == None:
+        await ctx.send(embed=set_role_error("テキストチャンネルが指定されていません。"))
         return
+    if title == "":
+        await ctx.send(embed=set_role_error("タイトルが指定されていません。"))
+        return
+    if len(roles) == 0:
+        await ctx.send(embed=set_role_error("roleが指定されていません。"))
+        return
+    message = f"**{title}**\n\n"
+    vote_icon = ["1️⃣", "2️⃣", "3️⃣", "4️⃣",
+                 "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
+    for i in range(len(roles)):
+        message += f"{vote_icon[i]} {roles[i].name}\n"
+    message += f"😎 選択をやり直す"
+    embed = discord.Embed(
+        color=0x0000ff, title="【投票受付中】ロールが自動で付与されます。", description=message)
+    id = await channel.send(embed=embed)
+    for i in range(len(roles)):
+        await id.add_reaction(vote_icon[i])
+    await id.add_reaction("😎")  # ←絵文字が見えない（泣）
+
 
 """
 on_raw_reaction_add
@@ -237,7 +256,7 @@ async def on_raw_reaction_add(payload):
 
     message = await client.get_channel(payload.channel_id).fetch_message(payload.message_id)
     embeds = message.embeds
-    for embed in embeds:
+    for embed in embeds:  # embedを使用している場合はこの中を使用する。
 
         title = embed.title
         line = embed.description.split("\n")
@@ -245,17 +264,22 @@ async def on_raw_reaction_add(payload):
         user_name = user.name
         number = payload.emoji.name
 
+        # voteコマンド
+        # 1.リフレッシュマークが押された時
+        # 2.選択肢が押された時
+        # 3.vote finish後にリフレッシュしたいとき（これはvote finishに統合すると一番良い。面倒くさいからやらん）
+        # 4.vote finish後に選択肢が押された時
         if title == "【投票受付中】`(バグったらリサイクルマークを押してください)`":
             mes = []
             new_mes = ""
             reactions = message.reactions
             new_members = []
             i = 0
+            # 1.リフレッシュマークが押された時
             if number == "♻️":  # リフレッシュ用。
                 temp_embed = embed
                 temp_embed.color = 0xffff00
                 await message.edit(embed=temp_embed, content="⚠️⚠️__***ボタンを押さないでください***__⚠️⚠️")
-
                 new = []
                 for reaction_ in reactions:
                     new.append([reaction_.emoji])
@@ -269,7 +293,6 @@ async def on_raw_reaction_add(payload):
                         if mes[i][0] == new[j][0]:
                             try:
                                 mes[i][2] = ""
-
                             except:
                                 mes[i].append("")
                             for user_ in new[j][1:]:
@@ -279,13 +302,12 @@ async def on_raw_reaction_add(payload):
                 embed = discord.Embed(
                     title=f"{title}", description=f"{new_mes}", color=0x008000)
                 await message.edit(embed=embed, content="♻️__***リフレッシュ完了！***__♻️")
-
                 if not user.bot:
                     await message.remove_reaction('♻️', user)
                 embed.color = 0x0000ff
                 await message.edit(embed=embed, content="")
                 return
-
+            # 2.選択肢が押された時
             for i in range(len(line)):
                 mes.append(line[i].split(" "))
                 if mes[i][0] == number:
@@ -298,23 +320,80 @@ async def on_raw_reaction_add(payload):
                 embed = discord.Embed(
                     title=f"{title}", description=f"{new_mes}", color=0x0000ff)
             await message.edit(embed=embed)
+            return
+        # 3.vote finish後にリフレッシュしたいとき（これはvote finishに統合すると一番良い。面倒くさいからやらん）
+        if title == "【投票終了】`(バグっている場合はリサイクルマークを押してください)`":
+            mes = []
+            new_mes = ""
+            reactions = message.reactions
+            new_members = []
+            i = 0
+            if number == "♻️":  # リフレッシュ用。
+                temp_embed = embed
+                temp_embed.color = 0xffff00
+                await message.edit(embed=temp_embed, content="⚠️⚠️__***ボタンを押さないでください***__⚠️⚠️")
+                new = []
+                for reaction_ in reactions:
+                    new.append([reaction_.emoji])
+                    async for user in reaction_.users():
+                        if not user.bot:
+                            new[i].append(user.name)
+                    i += 1
+                for i in range(len(line)):
+                    mes.append(line[i].split(" "))
+                    for j in range(len(new)):
+                        if mes[i][0] == new[j][0]:
+                            try:
+                                mes[i][2] = ""
+                            except:
+                                mes[i].append("")
+                            for user_ in new[j][1:]:
+                                mes[i][2] += f"{user_},　"
+                            line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2][:-2]}"
+                    new_mes += f"{line[i]}\n"
+                embed = discord.Embed(
+                    title=f"{title}", description=f"{new_mes}", color=0x008000)
+                await message.edit(embed=embed, content="♻️__***リフレッシュ完了！***__♻️")
+                if not user.bot:
+                    await message.remove_reaction('♻️', user)
+                embed.color = 0x0000ff
+                await message.edit(embed=embed, content="")
+                return
+            # 4.vote finish後に選択肢が押された時
+            await message.remove_reaction(number, user)
 
-# set_role用↓
-    if payload.member.bot:
-        return
-    for embed in await client.get_channel(payload.channel_id).fetch_message(payload.message_id).embeds:
-        if embed.title == "ロール割振":
-            guild = client.get_guild(payload.guild_id)
-            await payload.member.add_roles(guild.get_role(851748635023769630))
-            # 体験入部付与
-            if payload.emoji.name == "💻":
-                await payload.member.add_roles(guild.get_role(837510590841880617))
-            if payload.emoji.name == "🎨":
-                await payload.member.add_roles(guild.get_role(829263508016463923))
-            if payload.emoji.name == "🎧":
-                await payload.member.add_roles(guild.get_role(837510593077706782))
-            if payload.emoji.name == "🎥":
-                await payload.member.add_roles(guild.get_role(837510944459456562))
+        # vote_roleコマンド
+        # 1.リセットボタンが押されたら選択肢にあるロールを全て剥奪
+        # 2.押された選択肢に対応するロールを付与
+        if title == "【投票受付中】ロールが自動で付与されます。":
+            mes = []
+            print(number)
+            if number == "😎":   # ←絵文字が見えない（泣）フォントの問題かな
+                vote_icon = ["1️⃣", "2️⃣", "3️⃣", "4️⃣",
+                             "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
+                vote_list = []
+                for i in range(len(line)):
+                    mes.append(line[i].split(" "))
+                    for j in vote_icon:
+                        if mes[i][0] == j:
+                            vote_list.append(mes[i][1])
+                guild = client.get_guild(payload.guild_id)
+                print(vote_list)
+                for role_name in vote_list:
+                    role = discord.utils.get(guild.roles, name=role_name)
+                    await payload.member.remove_roles(role)
+                await message.remove_reaction(number, user)
+                return
+            else:
+                for i in range(len(line)):
+                    mes.append(line[i].split(" "))
+                    if mes[i][0] == number:
+                        guild = client.get_guild(payload.guild_id)
+                        role = discord.utils.get(guild.roles, name=mes[i][1])
+                        await message.remove_reaction(number, user)
+                        await payload.member.add_roles(role)
+                return
+
 
 """
 on_raw_reaction_remove
@@ -359,6 +438,8 @@ async def on_raw_reaction_remove(payload):
             embed = discord.Embed(
                 title=f"{title}", description=f"{new_mes}", color=0x0000ff)
             await message.edit(embed=embed)
+        if title == "【投票終了】`(バグっている場合はリサイクルマークを押してください)`":
+            await message.remove_reaction(number, user)
 
 
 """
@@ -450,13 +531,38 @@ def get_date_error(ctx):
     return embed
 
 
+def set_role_error(ctx):
+    embed = discord.Embed(
+        title=f"*Error*：{ctx}", description="以下の様式で記述してください。\n```\n!set_tole [テキストチャンネルID] [ロール] ...\n```\n詳細：https://github.com/kariumi/ITCBot2023", color=0xff0000)
+    return embed
+
+
 """
 権限の確認
 """
 
 
 def authority_check(ctx):
-    pass
+    true_role = [968160313797136414, 1051495123285983304, 1052290950875062403]
+    # true_guildはtrue_roleと一対一対応で。
+    true_guild = [884771781708247041, 1053669243616501800]
+
+    authority = False
+
+    # サーバー内ロール権限
+    try:
+        for i in range(len(true_role)):
+            if ctx.guild.get_role(true_role[i]) in ctx.author.roles:
+                authority = True
+    except:
+        pass
+    try:
+        for i in range(len(true_guild)):
+            if ctx.guild == client.get_guild(true_guild[i]):
+                authority = True
+    except:
+        pass
+    return authority
 
 
 token = getenv('DISCORD_BOT_TOKEN')
