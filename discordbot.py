@@ -394,6 +394,57 @@ async def on_raw_reaction_add(payload):
                         await payload.member.add_roles(role)
                 return
 
+"""
+DMを受け取ったとき（TwitterのDMみたいなシステムで相互に返信可）
+
+"""
+
+
+@client.listen()
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    # DMを管理するサーバー
+    guild = client.get_guild(1075592226534600755)
+
+    # 本鯖
+    itcGuild = client.get_guild(377392053182660609)
+
+    # DMカテゴリーの取得
+    DMcategory = client.get_channel(1076657448200458362)
+
+    # test送信用のtextchannel
+    test_channel = client.get_channel(1075592227180527699)
+    # DMに返信を受け取ったときの処理
+    if type(message.channel) == discord.DMChannel:
+        database = await client.get_channel(1076661281131601940).fetch_message(1076661661802451025)
+        data_ = database.content.split("\n")
+        for i in data_:
+            data = i.split(" ")
+            if int(data[0]) == message.author.id:
+                sendMes = await client.get_channel(int(data[1])).send(message.content)
+                await printLog(f"BOTが{message.author.name}からDMを受け取りました。\n{sendMes.jump_url}")
+                return
+        # 初めて送ってきた人はチャンネルを作成する
+        channel = await guild.create_text_channel(message.author.name, category=DMcategory)
+        send_Mes = await client.get_channel(channel.id).send(f"【{message.author.name}】\n\n{message.content}")
+        new_database = f"{database.content}"
+        new_database += f"\n{message.author.id} {channel.id}"
+        await database.edit(content=new_database)
+        await printLog(f"BOTが{message.author.name}からDMを初めて受け取りました。\n{sendMes.jump_url}\nDBに{message.author.name}を追加します。\n{database.jump_url}")
+        return
+    # botデータベースのDMカテゴリーに返信を受け取ったとき→DMに送信
+    if message.channel.category == DMcategory:
+        database = await client.get_channel(1076661281131601940).fetch_message(1076661661802451025)
+        data_ = database.content.split("\n")
+        for i in data_:
+            data = i.split(" ")
+            if int(data[1]) == message.channel.id:
+                member = itcGuild.get_member(int(data[0]))
+                await member.send(message.content)
+                await printLog(f"BOTから、{member.name}にDMを返信しました。\n{message.jump_url}")
+
 
 """
 on_raw_reaction_remove
@@ -563,6 +614,21 @@ def authority_check(ctx):
     except:
         pass
     return authority
+
+
+"""
+ログを残す
+printLog
+"""
+
+
+async def printLog(content):
+    t_delta = datetime.timedelta(hours=9)
+    JST = datetime.timezone(t_delta, 'JST')
+    nowTime = datetime.datetime.now(JST)
+    textch = client.get_channel(1076682841821282486)
+    now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
+    await textch.send(f"[{now}] - {content}")
 
 
 token = getenv('DISCORD_BOT_TOKEN')
