@@ -528,6 +528,19 @@ async def on_message(message):
                 await printLog(f"BOTから、{member.name}にDMを返信しました。\n{message.jump_url}")
                 return
 
+    # botのデータベースのロール一斉送信→一斉DM
+
+    RoleCaregory = client.get_channel(1076860376924307557)
+
+    if message.channel.category == RoleCaregory:
+        role = discord.utils.get(itcGuild.roles, name=message.channel.name)
+        await printLog(f"以下の文章を@{role.name}ロール保持者に一斉送信します。")
+
+        members = role.members
+        for member in members:
+            await member.send(message.content)
+            await printLog(f"|{member.name}に送信しました。")
+
 
 """
 on_raw_reaction_remove
