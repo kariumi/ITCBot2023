@@ -59,6 +59,18 @@ async def on_command_error(ctx, error):
         return
     raise error
 
+
+"""
+一時的に作ったやつ
+"""
+
+
+@client.command()
+async def remove(ctx):
+    await ctx.send(content="1 1")
+    print("aaa")
+
+
 """
 !shuffle
 自分が入っているボイスチャンネルの人を指定したボイスチャンネルにランダムに振り分け、自動的に移動させるコマンドです。
@@ -515,15 +527,6 @@ async def on_message(message):
                 await member.send(message.content)
                 await printLog(f"BOTから、{member.name}にDMを返信しました。\n{message.jump_url}")
                 return
-
-"""
-一時的に作ったやつ
-"""
-
-
-@client.command
-async def remove(ctx):
-    await ctx.send("1 1")
 
 
 """
