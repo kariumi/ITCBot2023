@@ -439,30 +439,29 @@ async def on_raw_reaction_add(payload):
     # 新歓サーバー用
     # スタンプを押されたら
     #
-    try:
-        # CG
-        CGch = await client.get_channel(1056757946610110494)
-        PROGch = await client.get_channel(1056760188243292273)
-        DTMch = await client.get_channel(1056758114600353922)
-        MVch = await client.get_channel(1056758410558845038)
 
-        stamp = payload.emoji.name
+    # CG
+    try:
+        CGch = client.get_channel(1056757946610110494)
+        PROGch = client.get_channel(1056760188243292273)
+        DTMch = client.get_channel(1056758114600353922)
+        MVch = client.get_channel(1056758410558845038)
 
         if payload.message_id == 1076845241421803530:
             await payload.member.move_to(CGch)
 
-        if payload.message_id == 1056760188243292273:
+        if payload.message_id == 1076845246501093466:
             await payload.member.move_to(PROGch)
 
-        if payload.message_id == 1056758114600353922:
+        if payload.message_id == 1076845256970092564:
             await payload.member.move_to(DTMch)
 
-        if payload.message_id == 1056758410558845038:
+        if payload.message_id == 1076845260975652955:
             await payload.member.move_to(MVch)
-
-        user = client.get_user(payload.user_id)
     except:
         pass
+    user = client.get_user(payload.user_id)
+    stamp = payload.emoji.name
     await message.remove_reaction(stamp, user)
 
 """
@@ -516,6 +515,15 @@ async def on_message(message):
                 await member.send(message.content)
                 await printLog(f"BOTから、{member.name}にDMを返信しました。\n{message.jump_url}")
                 return
+
+"""
+一時的に作ったやつ
+"""
+
+
+@client.command
+async def remove(ctx):
+    await ctx.send("1 1")
 
 
 """
@@ -762,6 +770,7 @@ async def printLog(content):
     textch = client.get_channel(1076682589185790065)
     now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
     await textch.send(f"[{now}] - {content}")
+
 
 token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
