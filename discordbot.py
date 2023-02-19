@@ -500,7 +500,7 @@ async def on_message(message):
     test_channel = client.get_channel(1075592227180527699)
     # DMに返信を受け取ったときの処理
     if type(message.channel) == discord.DMChannel:
-        database = await client.get_channel(1076661281131601940).fetch_message(1076661661802451025)
+        database = await client.get_channel(1076661281131601940).fetch_message(1076864300200755261)
         data_ = database.content.split("\n")
         for i in data_:
             data = i.split(" ")
@@ -512,13 +512,13 @@ async def on_message(message):
         channel = await guild.create_text_channel(message.author.name, category=DMcategory)
         send_Mes = await client.get_channel(channel.id).send(f"【{message.author.name}】\n\n{message.content}")
         new_database = f"{database.content}"
-        new_database += f"\n{message.author.id} {channel.id}"
+        new_database = f"\n{message.author.id} {channel.id}"
         await database.edit(content=new_database)
         await printLog(f"BOTが{message.author.name}からDMを初めて受け取りました。\n{sendMes.jump_url}\nDBに{message.author.name}を追加します。\n{database.jump_url}")
         return
     # botデータベースのDMカテゴリーに返信を受け取ったとき→DMに送信
     if message.channel.category == DMcategory:
-        database = await client.get_channel(1076661281131601940).fetch_message(1076661661802451025)
+        database = await client.get_channel(1076661281131601940).fetch_message(1076864300200755261)
         data_ = database.content.split("\n")
         for i in data_:
             data = i.split(" ")
