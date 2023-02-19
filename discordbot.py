@@ -512,7 +512,7 @@ async def on_message(message):
         channel = await guild.create_text_channel(message.author.name, category=DMcategory)
         send_Mes = await client.get_channel(channel.id).send(f"【{message.author.name}】\n\n{message.content}")
         new_database = f"{database.content}"
-        new_database = f"\n{message.author.id} {channel.id}"
+        new_database += f"\n{message.author.id} {channel.id}"
         await database.edit(content=new_database)
         await printLog(f"BOTが{message.author.name}からDMを初めて受け取りました。\n{sendMes.jump_url}\nDBに{message.author.name}を追加します。\n{database.jump_url}")
         return
