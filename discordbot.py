@@ -439,27 +439,30 @@ async def on_raw_reaction_add(payload):
     # 新歓サーバー用
     # スタンプを押されたら
     #
-    # CG
-    CGch = await client.get_channel(1056757946610110494)
-    PROGch = await client.get_channel(1056760188243292273)
-    DTMch = await client.get_channel(1056758114600353922)
-    MVch = await client.get_channel(1056758410558845038)
+    try:
+        # CG
+        CGch = await client.get_channel(1056757946610110494)
+        PROGch = await client.get_channel(1056760188243292273)
+        DTMch = await client.get_channel(1056758114600353922)
+        MVch = await client.get_channel(1056758410558845038)
 
-    stamp = payload.emoji.name
+        stamp = payload.emoji.name
 
-    if payload.channel_id == 1076845241421803530:
-        await payload.member.move_to(CGch)
+        if payload.message_id == 1076845241421803530:
+            await payload.member.move_to(CGch)
 
-    if payload.channel_id == 1056760188243292273:
-        await payload.member.move_to(PROGch)
+        if payload.message_id == 1056760188243292273:
+            await payload.member.move_to(PROGch)
 
-    if payload.channel_id == 1056758114600353922:
-        await payload.member.move_to(DTMch)
+        if payload.message_id == 1056758114600353922:
+            await payload.member.move_to(DTMch)
 
-    if payload.channel_id == 1056758410558845038:
-        await payload.member.move_to(MVch)
+        if payload.message_id == 1056758410558845038:
+            await payload.member.move_to(MVch)
 
-    user = client.get_user(payload.user_id)
+        user = client.get_user(payload.user_id)
+    except:
+        pass
     await message.remove_reaction(stamp, user)
 
 """
