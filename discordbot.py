@@ -11,6 +11,28 @@ from discord import TextChannel, VoiceChannel, Role, Intents
 import asyncio
 
 
+class color:
+    RED = '\033[31m'  # (文字)赤
+    GREEN = '\033[32m'  # (文字)緑
+    YELLOW = '\033[33m'  # (文字)黄
+    BLUE = '\033[34m'  # (文字)青
+    MAGENTA = '\033[35m'  # (文字)マゼンタ
+    CYAN = '\033[36m'  # (文字)シアン
+    WHITE = '\033[37m'  # (文字)白
+    BOLD = '\033[1m'  # 太字
+    UNDERLINE = '\033[4m'  # 下線
+    INVISIBLE = '\033[08m'  # 不可視
+    REVERCE = '\033[07m'  # 文字色と背景色を反転
+    BG_RED = '\033[41m'  # (背景)赤
+    BG_GREEN = '\033[42m'  # (背景)緑
+    BG_YELLOW = '\033[43m'  # (背景)黄
+    BG_BLUE = '\033[44m'  # (背景)青
+    BG_MAGENTA = '\033[45m'  # (背景)マゼンタ
+    BG_CYAN = '\033[46m'  # (背景)シアン
+    BG_WHITE = '\033[47m'  # (背景)白
+    RESET = '\033[0m'  # 全てリセット
+
+
 intents = discord.Intents.default()
 intents.message_content = True
 intents.reactions = True
@@ -25,7 +47,7 @@ utc = datetime.timezone.utc
 
 @client.event
 async def on_ready():
-    print(f"{client.user}でログインしました")
+    print(f"{color.YELLOW}{client.user}{color.RESET}でログインしました")
     Trial_entry_explulsion.start()
 
 
@@ -117,7 +139,7 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 """
 
 # 拡張性を高くしようと思ってたら変に複雑になってしまった
-# 特に引数が謎
+# 特に引数が分かりにくい
 
 
 @client.command()
@@ -395,7 +417,7 @@ async def on_raw_reaction_add(payload):
                 return
 
 """
-DMを受け取ったとき（TwitterのDMみたいなシステムで相互に返信可）
+DMを受け取ったときの処理（TwitterのDMみたいなシステムで相互に返信可）
 
 """
 
@@ -496,7 +518,9 @@ async def on_raw_reaction_remove(payload):
 """
 体験入部生が60日/90日経過したらお知らせする。
 （予定では、botが自動で60日経過でDMを送信し、90日でkickする。）
-現段階では、サーバー参加日から何日経過したかを視覚的に分かりやすく表示してくれるだけ。
+毎日のログはDB鯖のbot-logに送信します。
+60日が経過すると@体験入部のロールを外し、@要確認をつける。
+90日が経過すると、代表にDMを送信する。
 """
 
 
@@ -506,12 +530,26 @@ time = datetime.time(hour=15, minute=0, tzinfo=utc)
 
 @tasks.loop(time=time)
 async def Trial_entry_explulsion():
-    now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
+
+    # itcの鯖
+    ITCserver = client.get_guild(1075592226534600755)
+    # 代表の人を取得
+    member_leader = ITCserver.get_member(588717978594443264)
+    # ｵﾚ
+    member_me = ITCserver.get_member(599515603484672002)
+    # 体験入部ロール
+    taiken_role = ITCserver.get_role(851748635023769630)
+    # 要確認ロール
+    yo_kakunin_role = ITCserver.get_role(833323166440095744)
+
+    t_delta = datetime.timedelta(hours=9)
+    JST = datetime.timezone(t_delta, 'JST')
+    now_time = datetime.datetime.now(JST)  # 現在時刻を取得
+    now = now_time.strftime('%Y/%m/%d %H:%M:%S')
     role = client.get_guild(377392053182660609).get_role(851748635023769630)
-    text_ch = client.get_channel(829334489473482752)
     # ↓↓year=は毎年変更する必要あり。↓↓
-    time_start_date = datetime.datetime(year=2020, month=4, day=1, tzinfo=utc)
-    message = f"__{role.mention}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}現在\n__経過日数について、4月1日以前の参加者は4月1日から計算する。\n\n__参加日\t経過日数\t名前__\n"
+    time_start_date = datetime.datetime(year=2023, month=4, day=1, tzinfo=utc)
+    message = f"__{role.mention}の一覧を出力します:\n参加日\t経過日数\t名前__\n"
 
     day90_members = []
     day60_members = []
@@ -526,25 +564,70 @@ async def Trial_entry_explulsion():
             member_days = now_time - time_start_date
         # ログ用
 
-        if member_days.days == 60:
+        if member_days.days == 60:  # 60
+            # 体験入部ロールを外し、要確認ロールを付与
+            member.remove_roles(taiken_role)
+            member.add_roles(yo_kakunin_role)
             day60_members.append(member.name)
             message += f"__***❗\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日***\t{member.mention}__\n"
         elif 60 < member_days.days < 90:
             message += f"_{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.mention}_\n"
 
-        elif member_days.days >= 90:
+        elif member_days.days >= 90:  # 90~<----------------ここを変更すること！！！！
             day90_members.append(member.name)
             message += f"__***❌{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日***__\t{member.mention}\n"
-        elif member_days.days >= 0:
+        elif member_days.days >= 0:  # 0~59,61~89
             message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.name}\n"
-        else:
-            message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t0日\t{member.name}\n"
+
     if len(day60_members) > 0 or len(day90_members) > 0:
         leader_role = client.get_guild(
             377392053182660609).get_role(377446484162904065)
-        message += f"{leader_role.mention}:2ヶ月/3ヶ月経過したメンバーがいます。対応してください。"
 
-    await text_ch.send(message)  # ログとして出力
+    if len(day60_members) > 0:
+        message += f"60日を超えたメンバーが{len(day60_members)}人いました。\n"
+    else:
+        message += "60日を超えたメンバーはいませんでした。\n"
+
+    # 代表に送信するDMの内容
+    if len(day90_members) > 0:
+        dm_mes = "90日を超えたメンバーを検出しました。確認してください。\n"
+        message += f"90日を超えたメンバーが{len(day90_members)}人いました。\n"
+        for i in range(len(day90_members)):
+            dm_mes += f"{member.name}\t【参加日】{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t【経過日数】{member_days.days}日\n"
+        await member_me.send(dm_mes)  # テスト用に自分にも送信する。後で消してよい。
+        await member_leader.send(dm_mes)
+    else:
+        message += "90日を超えたメンバーはいませんでした。\n"
+
+    await printLog(message)  # ログを出力
+
+
+"""
+@体験入部のロールが付与された時、その人にBOTから自動でDMを送信する
+"""
+
+
+@client.event
+async def on_member_update(before, after):
+    if before.guild.id == 377392053182660609:
+        guild = client.get_guild(377392053182660609)
+        role = guild.get_role(851748635023769630)  # 体験入部
+
+        # 送信する文章の取得
+        teikeibunCh = client.get_channel(1076714278154932344)
+        sendMes = teikeibunCh.fetch_message(1076714411512840192)
+
+        # roleの差分を取得
+        # diff_role = list(set(before.roles) ^ set(after.roles))
+        # await printLog(f"{before.name}の{diff_role}ロールが変更されました。")
+        if (not (role in before.roles)) and (role in after.roles):
+            await printLog(f"{before.name}に体験入部のロールが付与されました。")
+            try:
+                await before.send(sendMes.send)
+                await printLog(f"{before.name}に「体験入部が付与された時」のDMを送信しました。")
+            except:  # 失敗したら報告
+                await printLog(f"Error!!:{before.name}に「体験入部が付与された時」のDMを送信できませんでした。")
+            return
 
 
 """
@@ -626,7 +709,7 @@ async def printLog(content):
     t_delta = datetime.timedelta(hours=9)
     JST = datetime.timezone(t_delta, 'JST')
     nowTime = datetime.datetime.now(JST)
-    textch = client.get_channel(1076682841821282486)
+    textch = client.get_channel(1076682589185790065)
     now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
     await textch.send(f"[{now}] - {content}")
 

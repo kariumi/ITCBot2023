@@ -1,2 +1,3 @@
-nt.fetch_guild(377392053182660609)
-    # print(guild)
+member_days.days == 63:
+            await member.remove_roles(taiken)
+            await member.add_roles(yo_kakunin)
