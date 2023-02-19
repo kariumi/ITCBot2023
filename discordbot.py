@@ -80,13 +80,17 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
     authority = authority_check(ctx)
     if not authority:
         await ctx.send(embed=authority_error())
+        await printLog("!shuffle : Error00")
         return
     if ctx.author.voice is None:
         await ctx.send(embed=any_error("ボイスチャンネルに入ってください", ""))
+        printLog("!shuffle : Error01")
         return
     if len(channels) == 0:
         await ctx.send(embed=any_error("ボイスチャンネルを指定してください", ""))
+        printLog("!shuffle : Error02")
         return
+
     channel = ctx.author.voice.channel  # 実行者の入っているチャンネル
 
     members = channel.members  # channelに入っている全メンバーをmenbersに追加
@@ -124,7 +128,7 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
     for i in range(len(hosts3)):
         await hosts3[i].move_to(channels[i % len(channels)])
 
-    await ctx.send(f"{channel.mention}に接続している人を移動させました")
+    await printLog(f"{channel.mention}に接続している人を移動させました")
 
 """
 !vote
@@ -147,21 +151,30 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
     authority = authority_check(ctx)
     if not authority:
         await ctx.send(embed=authority_error())
+        await printLog("!vote : Error00")
         return
 
     if arg == None:
         await ctx.send(embed=vote_error("引数が指定されていません！"))
+        await printLog("!vote : Error01")
         return
 
     elif arg == "create":
         if channel == None:
             await ctx.send(embed=vote_create_error("送信先のテキストチャンネルIDが指定されていません！"))
+            await printLog("!vote : Error02")
             return
         if len(args) == 0:
             await ctx.send(embed=vote_create_error("投票タイトルが指定されていません！"))
+            await printLog("!vote : Error03")
             return
         elif len(args) == 1:
             await ctx.send(embed=vote_create_error("選択肢が指定されていません！"))
+            await printLog("!vote : Error04")
+            return
+        elif len(args) > 10:
+            await ctx.send(embed=vote_create_error("選択肢が多すぎます！最大9個まで指定できます。"))
+            await printLog("!vote : Error05")
             return
         vote_title = args[0]
         vote_mes = ""
@@ -191,6 +204,7 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
 
     else:
         await ctx.send(embed=vote_error("引数が違います！"))
+        await printLog("!vote : Error06")
         return
 
 
@@ -207,6 +221,7 @@ async def get_date(ctx, role: typing.Optional[Role] = None):
 
     if role == None:
         await ctx.send(embed=get_date_error("ロールが指定されていません！"))
+        await printLog("!get_date : Error01")
         return
 
     now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
@@ -236,15 +251,19 @@ async def vote_role(ctx, channel: typing.Optional[TextChannel] = None, title="",
     authority = authority_check(ctx)
     if not authority:
         await ctx.send(embed=authority_error())
+        await printLog("!vote_role : Error00")
         return
     if channel == None:
         await ctx.send(embed=set_role_error("テキストチャンネルが指定されていません。"))
+        await printLog("!vote_role : Error01")
         return
     if title == "":
         await ctx.send(embed=set_role_error("タイトルが指定されていません。"))
+        await printLog("!vote_role : Error02")
         return
     if len(roles) == 0:
         await ctx.send(embed=set_role_error("roleが指定されていません。"))
+        await printLog("!vote_role : Error03")
         return
     message = f"**{title}**\n\n"
     vote_icon = ["1️⃣", "2️⃣", "3️⃣", "4️⃣",
@@ -257,7 +276,7 @@ async def vote_role(ctx, channel: typing.Optional[TextChannel] = None, title="",
     id = await channel.send(embed=embed)
     for i in range(len(roles)):
         await id.add_reaction(vote_icon[i])
-    await id.add_reaction("😎")  # ←絵文字が見えない（泣）
+    await id.add_reaction("😎")
 
 
 """
@@ -416,6 +435,33 @@ async def on_raw_reaction_add(payload):
                         await payload.member.add_roles(role)
                 return
 
+    #
+    # 新歓サーバー用
+    # スタンプを押されたら
+    #
+    # CG
+    CGch = await client.get_channel(1056757946610110494)
+    PROGch = await client.get_channel(1056760188243292273)
+    DTMch = await client.get_channel(1056758114600353922)
+    MVch = await client.get_channel(1056758410558845038)
+
+    stamp = payload.emoji.name
+
+    if payload.channel_id == 1076845241421803530:
+        await payload.member.move_to(CGch)
+
+    if payload.channel_id == 1056760188243292273:
+        await payload.member.move_to(PROGch)
+
+    if payload.channel_id == 1056758114600353922:
+        await payload.member.move_to(DTMch)
+
+    if payload.channel_id == 1056758410558845038:
+        await payload.member.move_to(MVch)
+
+    user = client.get_user(payload.user_id)
+    await message.remove_reaction(stamp, user)
+
 """
 DMを受け取ったときの処理（TwitterのDMみたいなシステムで相互に返信可）
 
@@ -466,6 +512,7 @@ async def on_message(message):
                 member = itcGuild.get_member(int(data[0]))
                 await member.send(message.content)
                 await printLog(f"BOTから、{member.name}にDMを返信しました。\n{message.jump_url}")
+                return
 
 
 """
@@ -712,7 +759,6 @@ async def printLog(content):
     textch = client.get_channel(1076682589185790065)
     now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
     await textch.send(f"[{now}] - {content}")
-
 
 token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
