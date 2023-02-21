@@ -459,29 +459,24 @@ async def on_raw_reaction_add(payload):
     DTMch = client.get_channel(1056758114600353922)
     MVch = client.get_channel(1056758410558845038)
 
+    user = client.get_user(payload.user_id)
+    stamp = payload.emoji.name
+
     if payload.message_id == 1076845241421803530:
-        await payload.member.move_to(CGch)
-        user = client.get_user(payload.user_id)
-        stamp = payload.emoji.name
         await message.remove_reaction(stamp, user)
+        await payload.member.move_to(CGch)
 
     if payload.message_id == 1076845246501093466:
-        await payload.member.move_to(PROGch)
-        user = client.get_user(payload.user_id)
-        stamp = payload.emoji.name
         await message.remove_reaction(stamp, user)
+        await payload.member.move_to(PROGch)
 
     if payload.message_id == 1076845256970092564:
-        await payload.member.move_to(DTMch)
-        user = client.get_user(payload.user_id)
-        stamp = payload.emoji.name
         await message.remove_reaction(stamp, user)
+        await payload.member.move_to(DTMch)
 
     if payload.message_id == 1076845260975652955:
-        await payload.member.move_to(MVch)
-        user = client.get_user(payload.user_id)
-        stamp = payload.emoji.name
         await message.remove_reaction(stamp, user)
+        await payload.member.move_to(MVch)
 
 
 """
