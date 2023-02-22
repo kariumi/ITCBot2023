@@ -703,6 +703,7 @@ async def on_member_update(before, after):
             await printLog(f"{before.name}に体験入部のロールが付与されました。")
             try:
                 await before.send(sendMes.content)
+                await printLog(f"{sendMes.content}")
                 await printLog(f"{before.name}に「体験入部が付与された時」のDMを送信しました。")
             except:  # 失敗したら報告
                 await printLog(f"Error!!:{before.name}に「体験入部が付与された時」のDMを送信できませんでした。")
