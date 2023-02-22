@@ -694,7 +694,7 @@ async def on_member_update(before, after):
 
         # 送信する文章の取得
         teikeibunCh = client.get_channel(1076714278154932344)
-        sendMes = teikeibunCh.fetch_message(1076714411512840192)
+        sendMes = await teikeibunCh.fetch_message(1076714411512840192)
 
         # roleの差分を取得
         # diff_role = list(set(before.roles) ^ set(after.roles))
@@ -703,7 +703,6 @@ async def on_member_update(before, after):
             await printLog(f"{before.name}に体験入部のロールが付与されました。")
             try:
                 await before.send(sendMes.content)
-                await printLog(f"{sendMes.content}")
                 await printLog(f"{before.name}に「体験入部が付与された時」のDMを送信しました。")
             except:  # 失敗したら報告
                 await printLog(f"Error!!:{before.name}に「体験入部が付与された時」のDMを送信できませんでした。")
