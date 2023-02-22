@@ -501,7 +501,8 @@ async def on_message(message):
 
     # test送信用のtextchannel
     test_channel = client.get_channel(1075592227180527699)
-    # DMに返信を受け取ったときの処理
+
+    # DMを受け取る→データベースに送信　完成　バグなし
     if type(message.channel) == discord.DMChannel:
         database = await client.get_channel(1076661281131601940).fetch_message(1076864300200755261)
         data_ = database.content.split("\n")
@@ -519,7 +520,7 @@ async def on_message(message):
         await database.edit(content=new_database)
         await printLog(f"BOTが{message.author.name}からDMを初めて受け取りました。\n{sendMes.jump_url}\nDBに{message.author.name}を追加します。\n{database.jump_url}")
         return
-    # botデータベースのDMカテゴリーに返信を受け取ったとき→DMに送信
+    # データベースに受け取る→DM送信　完成　バグなし
     if message.channel.category == DMcategory:
         database = await client.get_channel(1076661281131601940).fetch_message(1076864300200755261)
         data_ = database.content.split("\n")
@@ -531,11 +532,12 @@ async def on_message(message):
                 await printLog(f"BOTから、{member.name}にDMを返信しました。\n{message.jump_url}")
                 return
 
-    # botのデータベースのロール一斉送信→一斉DM
+    # ロール一斉送信　完成済み　バグなし
 
     RoleCaregory = client.get_channel(1076860376924307557)
 
     if message.channel.category == RoleCaregory:
+        await printLog(message.channel.topic)
         try:
             role = itcGuild.get_role(int(message.channel.topic))
             await printLog(f"以下の文章を@{role.name}ロール保持者に一斉送信します。")
@@ -700,12 +702,11 @@ async def on_member_update(before, after):
         # diff_role = list(set(before.roles) ^ set(after.roles))
         # await printLog(f"{before.name}の{diff_role}ロールが変更されました。")
         if (not (role in before.roles)) and (role in after.roles):
-            await printLog(f"{before.name}に体験入部のロールが付与されました。")
             try:
                 await before.send(sendMes.content)
                 await printLog(f"{before.name}に「体験入部が付与された時」のDMを送信しました。")
             except:  # 失敗したら報告
-                await printLog(f"Error!!:{before.name}に「体験入部が付与された時」のDMを送信できませんでした。")
+                await printLog(f"Error!!：{before.name}に「体験入部が付与された時」のDMを送信できませんでした。")
             return
 
 
@@ -791,7 +792,6 @@ async def printLog(content):
     textch = client.get_channel(1076682589185790065)
     now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
     await textch.send(f"[{now}] - {content}")
-
 
 token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
