@@ -142,6 +142,15 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 
     await printLog(f"{channel.mention}に接続している人を移動させました")
 
+
+"""
+!version
+デバッグ用
+"""
+@client.command()
+async def version(ctx):
+    await ctx.send("ver0.1.00 : 20232/3/18 21:06")
+
 """
 !vote
 投票を作成して色々できる
