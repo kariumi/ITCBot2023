@@ -546,12 +546,12 @@ async def on_message(message):
                 await printLog(f"BOTから、{member.name}にDMを返信しました。\n{message.jump_url}")
                 return
 
-    # ロール一斉送信　完成済み　バグなし
+    # ロール一斉送信
 
     RoleCategory = client.get_channel(1076860376924307557)
     ShinkanRoleCategory = client.get_channel(1086441780574167071)
 
-    if message.channnel.category == ShinkanRoleCategory:
+    if message.channel.category == ShinkanRoleCategory:
         await printLog(message.channel.topic)
         try:
             role = shinkanGuild.get_role(int(message.channel.topic))
