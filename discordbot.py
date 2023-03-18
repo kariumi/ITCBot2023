@@ -496,6 +496,9 @@ async def on_message(message):
     # 本鯖
     itcGuild = client.get_guild(377392053182660609)
 
+    # 新歓鯖
+    shinkanGuild = client.get_guild(1056591502958145627)
+
     # DMカテゴリーの取得
     DMcategory = client.get_channel(1076657448200458362)
 
@@ -534,9 +537,10 @@ async def on_message(message):
 
     # ロール一斉送信　完成済み　バグなし
 
-    RoleCaregory = client.get_channel(1076860376924307557)
+    RoleCategory = client.get_channel(1076860376924307557)
+    ShinkanRoleCategory = client.get_channel(1086441780574167071)
 
-    if message.channel.category == RoleCaregory:
+    if message.channel.category == RoleCategory:
         await printLog(message.channel.topic)
         try:
             role = itcGuild.get_role(int(message.channel.topic))
@@ -548,6 +552,19 @@ async def on_message(message):
                 await printLog(f"|{member.name}に送信しました。")
         except:
             await printLog("DM一斉送信に失敗しました。")
+        return
+    elif message.channnel.category == ShinkanRoleCategory:
+        await printLog(message.channel.topic)
+        try:
+            role = shinkanGuild.get_role(int(message.channel.topic))
+            await printLog(f"以下の文章を@{role.name}ロール保持者に一斉送信します。")
+            members = role.members
+            for member in members:
+                await member.send(message.content)
+                await printLog(f"|{member.name}に送信しました。")
+        except:
+            await printLog("DM一斉送信に失敗しました。")
+
 
 """
 on_raw_reaction_remove
@@ -630,7 +647,7 @@ async def Trial_entry_explulsion():
     role = client.get_guild(377392053182660609).get_role(851748635023769630)
     # ↓↓year=は毎年変更する必要あり。↓↓
     time_start_date = datetime.datetime(year=2023, month=4, day=1, tzinfo=utc)
-    message = f"__{role.mention}の一覧を出力します:\n参加日\t経過日数\t名前__\n"
+    message = f"__{role.name}の一覧を出力します:\n参加日\t経過日数\t名前__\n"
 
     day90_members = []
     day60_members = []
