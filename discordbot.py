@@ -551,12 +551,11 @@ async def on_message(message):
     RoleCategory = client.get_channel(1076860376924307557)
     ShinkanRoleCategory = client.get_channel(1086441780574167071)
 
-    if message.channel.category == RoleCategory:
+    if message.channnel.category == ShinkanRoleCategory:
         await printLog(message.channel.topic)
         try:
-            role = itcGuild.get_role(int(message.channel.topic))
+            role = shinkanGuild.get_role(int(message.channel.topic))
             await printLog(f"文章を@{role.name}ロール保持者に一斉送信します。")
-
             members = role.members
             for member in members:
                 await member.send(message.content)
@@ -564,11 +563,13 @@ async def on_message(message):
         except:
             await printLog("DM一斉送信に失敗しました。")
         return
-    if message.channnel.category == ShinkanRoleCategory:
+
+    if message.channel.category == RoleCategory:
         await printLog(message.channel.topic)
         try:
-            role = shinkanGuild.get_role(int(message.channel.topic))
+            role = itcGuild.get_role(int(message.channel.topic))
             await printLog(f"文章を@{role.name}ロール保持者に一斉送信します。")
+
             members = role.members
             for member in members:
                 await member.send(message.content)
