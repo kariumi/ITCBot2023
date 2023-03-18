@@ -543,8 +543,10 @@ async def on_message(message):
             if int(data[1]) == message.channel.id:
                 try:  # try→本鯖にいるメンバーを取得、except→新歓鯖にいるメンバーを取得、どちらにもいないとバグる
                     member = itcGuild.get_member(int(data[0]))
+                    await printLog(f"本鯖に、{member.name}がいます")
                 except:
                     member = shinkanGuild.get_member(int(data[0]))
+                    await printLog(f"本鯖には、{member.name}がいませんでした。")
                 await member.send(message.content)
                 await printLog(f"BOTから、{member.name}にDMを返信しました。\n{message.jump_url}")
                 return
