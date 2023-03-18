@@ -147,6 +147,8 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 !version
 デバッグ用
 """
+
+
 @client.command()
 async def version(ctx):
     await ctx.send("ver0.1.00 : 20232/3/18 21:06")
@@ -553,7 +555,7 @@ async def on_message(message):
         await printLog(message.channel.topic)
         try:
             role = itcGuild.get_role(int(message.channel.topic))
-            await printLog(f"以下の文章を@{role.name}ロール保持者に一斉送信します。")
+            await printLog(f"文章を@{role.name}ロール保持者に一斉送信します。")
 
             members = role.members
             for member in members:
@@ -562,17 +564,18 @@ async def on_message(message):
         except:
             await printLog("DM一斉送信に失敗しました。")
         return
-    elif message.channnel.category == ShinkanRoleCategory:
+    if message.channnel.category == ShinkanRoleCategory:
         await printLog(message.channel.topic)
         try:
             role = shinkanGuild.get_role(int(message.channel.topic))
-            await printLog(f"以下の文章を@{role.name}ロール保持者に一斉送信します。")
+            await printLog(f"文章を@{role.name}ロール保持者に一斉送信します。")
             members = role.members
             for member in members:
                 await member.send(message.content)
                 await printLog(f"|{member.name}に送信しました。")
         except:
             await printLog("DM一斉送信に失敗しました。")
+        return
 
 
 """
