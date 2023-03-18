@@ -151,7 +151,7 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 
 @client.command()
 async def version(ctx):
-    await ctx.send("ver0.1.00 : 20232/3/18 21:06")
+    await ctx.send("ver0.1.02 : 20232/3/18 21:22")
 
 """
 !vote
