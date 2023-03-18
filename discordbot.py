@@ -151,7 +151,7 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 
 @client.command()
 async def version(ctx):
-    await ctx.send("ver0.1.02 : 20232/3/18 21:22")
+    await ctx.send("ver0.1.03 : 20232/3/18 23:14")
 
 """
 !vote
@@ -516,7 +516,7 @@ async def on_message(message):
     # test送信用のtextchannel
     test_channel = client.get_channel(1075592227180527699)
 
-    # DMを受け取る→データベースに送信　完成　バグなし
+    # DMを受け取る→データベースに送信　
     if type(message.channel) == discord.DMChannel:
         database = await client.get_channel(1076661281131601940).fetch_message(1076864300200755261)
         data_ = database.content.split("\n")
@@ -534,14 +534,17 @@ async def on_message(message):
         await database.edit(content=new_database)
         await printLog(f"BOTが{message.author.name}からDMを初めて受け取りました。\n{sendMes.jump_url}\nDBに{message.author.name}を追加します。\n{database.jump_url}")
         return
-    # データベースに受け取る→DM送信　完成　バグなし
+    # データベースに返信を書き込む→DM送信
     if message.channel.category == DMcategory:
         database = await client.get_channel(1076661281131601940).fetch_message(1076864300200755261)
         data_ = database.content.split("\n")
         for i in data_:
             data = i.split(" ")
             if int(data[1]) == message.channel.id:
-                member = itcGuild.get_member(int(data[0]))
+                try:  # try→本鯖にいるメンバーを取得、except→新歓鯖にいるメンバーを取得、どちらにもいないとバグる
+                    member = itcGuild.get_member(int(data[0]))
+                except:
+                    member = shinkanGuild.get_member(int(data[0]))
                 await member.send(message.content)
                 await printLog(f"BOTから、{member.name}にDMを返信しました。\n{message.jump_url}")
                 return
