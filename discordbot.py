@@ -44,6 +44,16 @@ authority_role = ["", ""]
 
 utc = datetime.timezone.utc
 
+"""
+!version
+デバッグ用
+"""
+
+
+@client.command()
+async def version(ctx):
+    await ctx.send("ver0.1.04 : 20232/3/19 13:54")
+
 
 @client.event
 async def on_ready():
@@ -61,7 +71,7 @@ async def on_command_error(ctx, error):
 
 
 """
-一時的に作ったやつ
+一時的に作ったやつ、消して良い
 """
 
 
@@ -142,16 +152,6 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 
     await printLog(f"{channel.mention}に接続している人を移動させました")
 
-
-"""
-!version
-デバッグ用
-"""
-
-
-@client.command()
-async def version(ctx):
-    await ctx.send("ver0.1.03 : 20232/3/18 23:14")
 
 """
 !vote
@@ -725,6 +725,7 @@ async def Trial_entry_explulsion():
 
 @client.event
 async def on_member_update(before, after):
+    # 本鯖で体験入部ロールが付与されたときの処理
     if before.guild.id == 377392053182660609:
         guild = client.get_guild(377392053182660609)
         role = guild.get_role(851748635023769630)  # 体験入部
@@ -743,7 +744,25 @@ async def on_member_update(before, after):
             except:  # 失敗したら報告
                 await printLog(f"Error!!：{before.name}に「体験入部が付与された時」のDMを送信できませんでした。")
             return
+    # 新歓鯖で体験入部ロールが付与されたときの処理
+    if before.guild.id == 1056591502958145627:
+        guild = client.get_guild(1056591502958145627)
+        role = guild.get_role(1078850225281708122)  # 体験入部
 
+        # 送信する文章の取得
+        teikeibunCh = client.get_channel(1076714278154932344)
+        sendMes = await teikeibunCh.fetch_message(1086872856551489637)
+
+        # roleの差分を取得
+        # diff_role = list(set(before.roles) ^ set(after.roles))
+        # await printLog(f"{before.name}の{diff_role}ロールが変更されました。")
+        if (not (role in before.roles)) and (role in after.roles):
+            try:
+                await before.send(sendMes.content)
+                await printLog(f"{before.name}に「新歓鯖で体験入部が付与された時」のDMを送信しました。")
+            except:  # 失敗したら報告
+                await printLog(f"Error!!：{before.name}に「新歓鯖で体験入部が付与された時」のDMを送信できませんでした。")
+            return
 
 """
 エラーメッセージ一覧
