@@ -52,7 +52,7 @@ utc = datetime.timezone.utc
 
 @client.command()
 async def version(ctx):
-    await ctx.send("ver0.1.04 : 20232/3/19 13:54")
+    await ctx.send("ver0.1.05 : 20232/3/20 16:54")
 
 
 @client.event
@@ -261,6 +261,52 @@ async def get_date(ctx, role: typing.Optional[Role] = None):
 
     await ctx.send(message)  # ログ
 
+"""
+!おみくじ
+なんとなく
+"""
+
+
+@client.command()
+async def おみくじ(ctx):
+    img = ["daikichi.png", "kichi.png",
+           "syoukichi.png", "kyou.png", "daikyou.png"]
+    unsei = ["大吉 ❤️", "吉 🤍", "小吉 🤍", "凶 💙", "大凶 💙"]
+    daikichi_pool = ["今日であればあなたの思いが届くかもしれません…", "通帳見てみな！4630万円入金されてない？？"]
+    kichi_pool = ["お、100円玉拾った！", "財布に入ってるクーポン券、今日までだよ！"]
+    syoukichi_pool = ["う～ん、微妙！！", "課題やった？", "笑う門には福来る！笑吉！！(笑)"]
+    kyou_pool = ["え、、レポート課題忘れない？今日までだよ（絶望）", "こういう日もあるよ。。"]
+    daikyou_pool = ["多分、今日出かけたら終電逃すよ", "明日テストあるよ！！"]
+    luckyItem = ["龍角散", "理科大の水", "イヤホン", "PCの充電器", "新500円玉"]
+    num = random.randrange(5)
+    title = f"{unsei[num]}"
+    if num == 0:
+        num2 = random.randrange(len(daikichi_pool))
+        description_ = daikichi_pool[num2]
+    elif num == 1:
+        num2 = random.randrange(len(kichi_pool))
+        description_ = kichi_pool[num2]
+    elif num == 2:
+        num2 = random.randrange(len(syoukichi_pool))
+        description_ = syoukichi_pool[num2]
+    elif num == 3:
+        num2 = random.randrange(len(kyou_pool))
+        description_ = kyou_pool[num2]
+    elif num == 4:
+        num2 = random.randrange(len(daikyou_pool))
+        description_ = daikyou_pool[num2]
+    embed = discord.Embed(
+        title=f"{title}", description=description_, color=0xffffff)
+    num3 = random.randrange(len(luckyItem))
+    avatar = ctx.message.author.avatar.url
+    embed.set_author(
+        name=f"{ctx.author.name}さんの今日の運勢は…", icon_url=avatar)
+    embed.add_field(name="ラッキーアイテム", value=f"{luckyItem[num3]}")
+    img_url = f"img/omikuji/{img[num]}"
+    file = discord.File(fp=img_url, filename="img.png")
+    embed.set_thumbnail(url="attachment://img.png")
+
+    await ctx.send(embed=embed, file=file)
 
 """
 
