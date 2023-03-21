@@ -52,7 +52,7 @@ utc = datetime.timezone.utc
 
 @client.command()
 async def version(ctx):
-    await ctx.send("ver0.1.05 : 20232/3/20 16:54")
+    await ctx.send("ver0.1.10 : 20232/3/22 1:40")
 
 
 @client.event
@@ -320,7 +320,7 @@ async def get_date_test(ctx):
             member_days = now_time - member.joined_at
         else:
             member_days = now_time - time_start_date
-        message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.name}\n"
+        message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days}日\t{member.name}\n"
 
         if member_days.days >= 60:
             membersOf60days.append(member.name)
