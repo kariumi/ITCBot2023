@@ -52,7 +52,7 @@ utc = datetime.timezone.utc
 
 @client.command()
 async def version(ctx):
-    await ctx.send("ver0.1.11 : 20232/3/22 1:50")
+    await ctx.send("ver0.1.12 : 2023/3/22 2:26")
 
 
 @client.event
@@ -618,7 +618,12 @@ async def kariumi(ctx):
     guild = client.get_guild(377392053182660609)
     kariumi = guild.get_member(599515603484672002)
     yokakunin = guild.get_role(833323166440095744)
-    kariumi.add_roles(yokakunin)
+    try:
+        kariumi.add_roles(yokakunin)
+        await printLog("kariumiに要確認を付与しました")
+
+    except:
+        await printLog("kariumiに要確認を付与できませんでした")
 
 
 """
