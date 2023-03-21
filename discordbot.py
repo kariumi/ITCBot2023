@@ -619,7 +619,7 @@ async def kariumi(ctx):
     kariumi = guild.get_member(599515603484672002)
     yokakunin = guild.get_role(833323166440095744)
     try:
-        kariumi.add_roles(yokakunin)
+        await kariumi.add_roles(yokakunin)
         await printLog("kariumiに要確認を付与しました")
 
     except:
