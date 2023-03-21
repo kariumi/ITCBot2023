@@ -52,7 +52,7 @@ utc = datetime.timezone.utc
 
 @client.command()
 async def version(ctx):
-    await ctx.send("ver0.1.10 : 20232/3/22 1:40")
+    await ctx.send("ver0.1.11 : 20232/3/22 1:50")
 
 
 @client.event
@@ -307,20 +307,20 @@ async def get_date_test(ctx):
     yo_kakunin_role = guild.get_role(833323166440095744)  # @要確認
     role = guild.get_role(851748635023769630)
     now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
-    message = f"__{role.name}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}\n__\n__参加日\t\t経過日数\t名前__\n"
+    message = f"__{role.name}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}(UTC表記)\n__\n__参加日\t\t経過日数\t名前__\n"
     sorted_taiken_members = sorted(
         role.members, key=lambda x: x.joined_at)  # 参加日順にソート
 
     # ここから、60日を超えためんばーを選別
     membersOf60days = []
-    time_start_date = datetime.datetime(year=2023, month=3, day=1, tzinfo=utc)
+    time_start_date = datetime.datetime(year=2023, month=4, day=1, tzinfo=utc)
 
     for member in sorted_taiken_members:
         if member.joined_at > time_start_date:
             member_days = now_time - member.joined_at
         else:
             member_days = now_time - time_start_date
-        message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days}日\t{member.name}\n"
+        message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t{member_days}日\t{member.name}\n"
 
         if member_days.days >= 60:
             membersOf60days.append(member.name)
