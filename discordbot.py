@@ -272,7 +272,7 @@ async def get_date(ctx, role: typing.Optional[Role] = None):
 @client.command()
 async def get_date_id(ctx, role_id):
     guild = client.get_guild(377392053182660609)
-    role = guild.get_role(851748635023769630)
+    role = guild.get_role(int(role_id))
 
     if role == None:
         await ctx.send(embed=get_date_error("ロールが指定されていません！"))
