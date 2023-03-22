@@ -948,6 +948,7 @@ async def on_member_update(before, after):
         if (not (role in before.roles)) and (role in after.roles):
             new_database = f"{database.content}\n{before.name} {before.id} {now_time.year}/{now_time.month}/{now_time.day}"
             await database.edit(content=new_database)
+            await printLog(f"{before.name}に要確認ロールを付与しました")
 
     # 本鯖で要確認ロールを剥奪されたときの処理
     if before.guild.id == 377392053182660609:
@@ -970,12 +971,11 @@ async def on_member_update(before, after):
                 await printLog(data_[1])
                 if data_[0] == "名前":
                     pass
-                elif data_[1] == before.id:
+                elif data_[1] != str(before.id):
                     new_database += f"{i}\n"
-                else:
-                    pass
 
             await database.edit(content=new_database)
+            await printLog(f"{before.name}から要確認ロールを剥奪しました")
 
 
 """
