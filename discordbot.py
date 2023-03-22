@@ -639,18 +639,6 @@ async def yokakunin(ctx):
     await text_ch.send(f"名前 id 日付")
 
 
-@client.command()
-async def kariumi(ctx):
-    guild = client.get_guild(377392053182660609)
-    kariumi = guild.get_member(599515603484672002)
-    yokakunin = guild.get_role(833323166440095744)
-    try:
-        await kariumi.add_roles(yokakunin)
-        await printLog("kariumiに要確認を付与しました")
-
-    except:
-        await printLog("kariumiに要確認を付与できませんでした")
-
 """
 DMを受け取ったときの処理（TwitterのDMみたいなシステムで相互に返信可）
 
