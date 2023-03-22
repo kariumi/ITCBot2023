@@ -961,7 +961,7 @@ async def on_member_update(before, after):
         now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
 
         if (role in before.roles) and (not (role in after.roles)):
-            new_database = f"名前 id 日付[{now_time}]\n"
+            new_database = f"名前 id 日付 [{now_time}]\n"
             data = database.content.split("\n")
             await printLog(before.id)
             for i in data:
@@ -970,8 +970,11 @@ async def on_member_update(before, after):
                 await printLog(data_[1])
                 if data_[0] == "名前":
                     pass
-                elif data_[1] != before.id:
+                elif data_[1] == before.id:
+                    pass
+                else:
                     new_database += f"{i}\n"
+
             await database.edit(content=new_database)
 
 
