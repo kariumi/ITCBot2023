@@ -961,7 +961,7 @@ async def on_member_update(before, after):
         now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
 
         if (role in before.roles) and (not (role in after.roles)):
-            new_database = "名前 id 日付\n"
+            new_database = f"名前 id 日付[{now_time}]\n"
             data = database.content.split("\n")
             for i in data:
                 data_ = i.split(" ")
