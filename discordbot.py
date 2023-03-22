@@ -971,9 +971,9 @@ async def on_member_update(before, after):
                 if data_[0] == "名前":
                     pass
                 elif data_[1] == before.id:
-                    pass
-                else:
                     new_database += f"{i}\n"
+                else:
+                    pass
 
             await database.edit(content=new_database)
 
