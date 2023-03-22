@@ -636,7 +636,7 @@ async def kariumi(ctx):
 async def yokakunin(ctx):
     guild = client.get_guild(377392053182660609)
     text_ch = guild.get_channel(1085388068112048241)
-    text_ch.send(f"名前 id 日付")
+    await text_ch.send(f"名前 id 日付")
 
 
 @client.command()
