@@ -625,6 +625,31 @@ async def kariumi(ctx):
     except:
         await printLog("kariumiに要確認を付与できませんでした")
 
+"""
+!yokakunin
+要確認ちゃんねるにメッセを初めて書き込むとき用
+後で消せ
+"""
+
+
+@client.command()
+async def yokakunin(ctx):
+    guild = client.get_guild(377392053182660609)
+    text_ch = guild.get_channel(1085388068112048241)
+    text_ch.send(f"名前 id 日付")
+
+
+@client.command()
+async def kariumi(ctx):
+    guild = client.get_guild(377392053182660609)
+    kariumi = guild.get_member(599515603484672002)
+    yokakunin = guild.get_role(833323166440095744)
+    try:
+        await kariumi.add_roles(yokakunin)
+        await printLog("kariumiに要確認を付与しました")
+
+    except:
+        await printLog("kariumiに要確認を付与できませんでした")
 
 """
 DMを受け取ったときの処理（TwitterのDMみたいなシステムで相互に返信可）
@@ -805,8 +830,8 @@ async def Trial_entry_explulsion():
         if member_days.days >= 60:
             membersOf60days.append(member.name)
             try:
-                member.remove_roles(taiken_role)
-                member.add_roles(yo_kakunin_role)
+                await member.remove_roles(taiken_role)
+                await member.add_roles(yo_kakunin_role)
                 await printLog(f"{member.name}に要確認ロールを付与しました。")
             except:
                 await printLog(f"{member.name}に要確認ロールを付与できませんでした")
