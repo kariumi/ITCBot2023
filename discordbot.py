@@ -947,9 +947,28 @@ async def on_member_update(before, after):
 
         if (not (role in before.roles)) and (role in after.roles):
             new_database = f"{database.content}\n{before.name} {before.id} {now_time.year}/{now_time.month}/{now_time.day}"
-            await printLog(new_database)
+            await database.edit(new_database)
 
-        # 本鯖で要確認ロールを剥奪されたときの処理
+    # 本鯖で要確認ロールを剥奪されたときの処理
+    if before.guild.id == 377392053182660609:
+        guild = client.get_guild(377392053182660609)
+        role = guild.get_role(833323166440095744)  # 要確認
+
+        # 要確認の人のデータベース
+        youkakuninCh = client.get_channel(1085388068112048241)
+        database = await youkakuninCh.fetch_message(1087927106509475860)
+
+        now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
+
+        if (role in before.roles) and (not (role in after.roles)):
+            new_database = "名前 id 日付\n"
+            data = database.content.split("\n")
+            for i in data:
+                data_ = i.split(" ")
+                if data_[1] != before.id:
+                    new_database += f"{i}\n"
+            await database.edit(new_database)
+
 
 """
 エラーメッセージ一覧
