@@ -964,18 +964,17 @@ async def on_member_update(before, after):
         if (role in before.roles) and (not (role in after.roles)):
             new_database = f"名前 id 日付 [{now_time}]\n"
             data = database.content.split("\n")
-            await printLog(before.id)
-            for i in data:
 
+            for i in data:
                 data_ = i.split(" ")
-                await printLog(data_[1])
                 if data_[0] == "名前":
                     pass
                 elif data_[1] != str(before.id):
                     new_database += f"{i}\n"
+                else:
+                    await printLog(f"{before.name}から要確認ロールを剥奪しました")
 
             await database.edit(content=new_database)
-            await printLog(f"{before.name}から要確認ロールを剥奪しました")
 
 
 """
