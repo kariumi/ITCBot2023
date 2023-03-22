@@ -946,7 +946,7 @@ async def on_member_update(before, after):
         now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
 
         if (not (role in before.roles)) and (role in after.roles):
-            new_database = f"{database.content}\n{before.name} {before.id} {now_time}"
+            new_database = f"{database.content}\n{before.name} {before.id} {now_time.year}/{now_time.month}/{now_time.day}"
             await printLog(new_database)
 
         # 本鯖で要確認ロールを剥奪されたときの処理
