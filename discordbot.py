@@ -44,20 +44,11 @@ authority_role = ["", ""]
 
 utc = datetime.timezone.utc
 
-"""
-!version
-デバッグ用
-"""
-
-
-@client.command()
-async def version(ctx):
-    await ctx.send("ver0.1.14 : 2023/3/22 10:12")
-
 
 @client.event
 async def on_ready():
     print(f"{color.YELLOW}{client.user}{color.RESET}でログインしました")
+    printLog("BOTが更新されました。ver0.1.15")
     Trial_entry_explulsion.start()
 
 
@@ -636,8 +627,10 @@ async def kariumi(ctx):
 async def yokakunin(ctx):
     guild = client.get_guild(377392053182660609)
     text_ch = guild.get_channel(1085388068112048241)
-    await text_ch.send(f"名前 id 日付")
-
+    try:
+        await text_ch.send(f"名前 id 日付")
+    except:
+        await printLog("失敗")
 
 """
 DMを受け取ったときの処理（TwitterのDMみたいなシステムで相互に返信可）
