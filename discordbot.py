@@ -947,7 +947,7 @@ async def on_member_update(before, after):
 
         if (not (role in before.roles)) and (role in after.roles):
             new_database = f"{database.content}\n{before.name} {before.id} {now_time}"
-            printLog(new_database)
+            await printLog(new_database)
 
         # 本鯖で要確認ロールを剥奪されたときの処理
 
