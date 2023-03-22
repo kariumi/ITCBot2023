@@ -52,7 +52,7 @@ utc = datetime.timezone.utc
 
 @client.command()
 async def version(ctx):
-    await ctx.send("ver0.1.12 : 2023/3/22 2:26")
+    await ctx.send("ver0.1.14 : 2023/3/22 10:12")
 
 
 @client.event
