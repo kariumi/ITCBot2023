@@ -877,9 +877,8 @@ async def Trial_entry_explulsion():
     message += f"**要確認の一覧(UTC基準)**\n__要確認日\t\t経過日数\t名前__\n"
     YoukakuninCH = DBguild.get_channel(1085388068112048241)
     YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
-    mes = YoukakuninMes.split("\n")
-    # await printLog(mes)
     try:
+        mes = YoukakuninMes.split("\n")
         for i in mes:
             await printLog(i)
             data = i.split(" ")
