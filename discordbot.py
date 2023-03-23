@@ -887,8 +887,8 @@ async def Trial_entry_explulsion():
         if data[0] == "名前":
             pass
         else:
-            date = data[1].split("/")
-            time = data[2].split(":")
+            date = data[2].split("/")
+            time = data[3].split(":")
             time_ = datetime.datetime(
                 year=data[0], month=data[1], day=data[2], hour=time[0], minute=time[1], second=time[2], tzinfo=utc)
             KeikaDays = now_time - time_
