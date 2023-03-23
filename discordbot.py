@@ -785,7 +785,7 @@ async def on_raw_reaction_remove(payload):
 time = datetime.time(hour=15, minute=0, tzinfo=utc)
 
 
-@tasks.loop(seconds=2)  # time=timeに直すことで一日一回実行に戻せます
+@tasks.loop(seconds=1)  # time=timeに直すことで一日一回実行に戻せます
 async def Trial_entry_explulsion():
 
     # 今の時間を取得
