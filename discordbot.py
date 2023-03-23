@@ -846,7 +846,7 @@ async def Trial_entry_explulsion():
     taiken_role = guild.get_role(851748635023769630)  # @体験入部
     yo_kakunin_role = guild.get_role(833323166440095744)  # @要確認
     # role = guild.get_role(851748635023769630) #@体験入部
-    message += f"**体験入部の一覧(UTC基準)**\n - __参加日\t\t\t\t\t\t\t\t経過日数\t\t\t\t\t名前__\n"
+    message += f"**体験入部の一覧(UTC基準)**\n - __参加日\t\t\t\t\t\t経過日数\t\t\t\t\t名前__\n"
     sorted_taiken_members = sorted(
         taiken_role.members, key=lambda x: x.joined_at)  # 参加日順にソート
 
@@ -877,7 +877,7 @@ async def Trial_entry_explulsion():
                 await printLog(f"{member.name}に要確認ロールを付与できませんでした")
 
     message += f"----------------------------------------------------------------------------------------\n"
-    message += f"**要確認の一覧(UTC基準)**\n - __要確認日\t\t\t\t\t\t経過日数\t\t\t\t\t名前__\n"
+    message += f"**要確認の一覧(UTC基準)**\n - __要確認日\t\t\t\t経過日数\t\t\t\t\t名前__\n"
     YoukakuninCH = DBguild.get_channel(1085388068112048241)
     YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
     mes = YoukakuninMes.content.split("\n")
