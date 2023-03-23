@@ -787,6 +787,9 @@ time = datetime.time(hour=15, minute=0, tzinfo=utc)
 
 @tasks.loop(seconds=2)  # time=timeに直すことで一日一回実行に戻せます
 async def Trial_entry_explulsion():
+
+    message = f"BOTの最新データ"
+
     # 今の時間を取得
     t_delta = datetime.timedelta(hours=9)
     JST = datetime.timezone(t_delta, 'JST')
@@ -803,7 +806,7 @@ async def Trial_entry_explulsion():
     yo_kakunin_role = guild.get_role(833323166440095744)  # @要確認
     role = guild.get_role(851748635023769630)
     now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
-    message = f"[{now}] - __{role.name}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}(UTC表記)\n__\n__参加日\t\t経過日数\t名前__\n"
+    message = f"[{now}]\n体験入部の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}(UTC表記)\n\n__参加日\t\t経過日数\t名前__\n"
     sorted_taiken_members = sorted(
         role.members, key=lambda x: x.joined_at)  # 参加日順にソート
 
