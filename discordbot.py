@@ -605,16 +605,8 @@ kariumiに要確認ロールを付与する
 
 
 @client.command()
-async def kariumi(ctx):
-    guild = client.get_guild(377392053182660609)
-    kariumi = guild.get_member(599515603484672002)
-    yokakunin = guild.get_role(833323166440095744)
-    try:
-        await kariumi.add_roles(yokakunin)
-        await printLog("kariumiに要確認を付与しました")
-
-    except:
-        await printLog("kariumiに要確認を付与できませんでした")
+async def kariumi(ctx, *arg):
+    await ctx.send(arg[0])
 
 """
 !yokakunin
@@ -823,9 +815,9 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f"最終更新日時：2023-3-24 2:51\n"
+    message += f"最終更新日時：2023/3/24 2:51\n"
 
-    message += f"UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}"
+    message += f"UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
     message += f"----------------------------------------------------------------------------------------\n"
 
