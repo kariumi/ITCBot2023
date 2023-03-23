@@ -782,18 +782,18 @@ async def ModifyDatabase(ctx, arg, channel: typing.Optional[TextChannel],  mes, 
     if arg == "add":
         content += f"\n{str}"
         changeMes = await message.edit(content=content)
-        await printLog(f"{changeMes.jump_url}の文章に追加しました。")
+        await printLog(f"{changeMes.jump_url} の文章に追加しました。")
 
     if arg == "remove":
         data = content.split("\n")
         new_content = ""
         for i in data:
-            if i == str:
+            if str(i) == str(str):
                 pass
             else:
                 new_content = f"{i}\n"
-        changeMes = await message.edit(content=content)
-        await printLog(f"{changeMes.jump_url}の文章の一部を削除しました。")
+        changeMes = await message.edit(content=new_content)
+        await printLog(f"{changeMes.jump_url} の文章の一部を削除しました。")
 
 
 """
@@ -827,7 +827,7 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f"最終更新日時：2023/3/24 5:13\n"
+    message += f"最終更新日時：2023/3/24 5:24\n"
 
     message += f"UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
@@ -875,16 +875,19 @@ async def Trial_entry_explulsion():
 
     message += f"----------------------------------------------------------------------------------------\n"
     message += f"**要確認の一覧(UTC基準)**\n__要確認日\t\t経過日数\t名前__\n"
-    YoukakuninCH = DBguild.get_channel(1085388068112048241)
-    YoukakuninMes = YoukakuninCH.fetch_message(1087927106509475860)
-    mes = YoukakuninMes.split("\n")
-    for i in mes:
-        data = i.split(" ")
-        if data[0] == "名前":
-            pass
-        else:
-            message += f" {data[0]}"
-            # 要確認メンバーを表示
+    try:
+        YoukakuninCH = DBguild.get_channel(1085388068112048241)
+        YoukakuninMes = YoukakuninCH.fetch_message(1087927106509475860)
+        mes = YoukakuninMes.split("\n")
+        for i in mes:
+            data = i.split(" ")
+            if data[0] == "名前":
+                pass
+            else:
+                message += f" {data[0]}\n"
+                # 要確認メンバーを表示
+    except Exception as e:
+        message += f"取得に失敗しました。\n{type(e)}\n"
 
     await DBmessage.edit(content=message)  # ログ
     # # itcの鯖
