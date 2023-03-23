@@ -780,7 +780,7 @@ async def modify(ctx, arg, channel: typing.Optional[TextChannel],  mes, s):
     message = await channel.fetch_message(mes)
     content = message.content
     if arg == "add":
-        content += f"\n{staticmethod}"
+        content += f"\n{s}"
         changeMes = await message.edit(content=content)
         await printLog(f"{changeMes.jump_url} の文章に追加しました。")
 
@@ -789,7 +789,7 @@ async def modify(ctx, arg, channel: typing.Optional[TextChannel],  mes, s):
             data = content.split("\n")
             new_content = ""
             for i in data:
-                if str(i) == str(s):
+                if i == s:
                     pass
                 else:
                     new_content = f"{i}\n"
