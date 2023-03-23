@@ -878,14 +878,18 @@ async def Trial_entry_explulsion():
     YoukakuninCH = DBguild.get_channel(1085388068112048241)
     YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
     mes = YoukakuninMes.split("\n")
-    for i in mes:
-        await printLog(i)
-        data = i.split(" ")
+    await printLog(mes)
+    try:
+        for i in mes:
+            await printLog(i)
+            data = i.split(" ")
 
-        if data[0] == "名前":
-            pass
-        else:
-            message += f" {data[0]}\n"
+            if data[0] == "名前":
+                pass
+            else:
+                message += f" {data[0]}\n"
+    except Exception as e:
+        message += f"取得に失敗しました。\n{type(e)}\n"
 
     await DBmessage.edit(content=message)  # ログ
 
