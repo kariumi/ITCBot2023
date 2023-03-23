@@ -879,10 +879,8 @@ async def Trial_entry_explulsion():
     YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
     mes = YoukakuninMes.split("\n")
     for i in mes:
-        try:
-            data = i.split(" ")
-        except Exception as e:
-            message += f"取得に失敗しました。\n{type(e)}\n"
+        await printLog(i)
+        data = i.split(" ")
 
         if data[0] == "名前":
             pass
@@ -890,6 +888,10 @@ async def Trial_entry_explulsion():
             message += f" {data[0]}\n"
 
     await DBmessage.edit(content=message)  # ログ
+
+#       except Exception as e:
+#           message += f"取得に失敗しました。\n{type(e)}\n"
+
     # # itcの鯖
     # ITCserver = client.get_guild(1075592226534600755)
     # # 代表の人を取得
