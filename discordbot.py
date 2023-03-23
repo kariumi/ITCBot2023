@@ -9,6 +9,7 @@ import emoji
 import sqlite3
 from discord import TextChannel, VoiceChannel, Role, Intents
 import asyncio
+from git import *
 
 
 class color:
@@ -794,7 +795,16 @@ async def Trial_entry_explulsion():
     nowTime = datetime.datetime.now(JST)
     now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
     message = f"[{now}]\n"
-    message += f"BOTの最新データ : ver0.1.20 2023/3/24 1:30\n\n"
+
+    message += f"**BOTの最新データ** \n"
+    repo = Repo('./')
+    for item in repo.iter_commits('master', max_count=1):
+        dt = datetime.datetime.fromtimestamp(
+            item.authored_date).strftime("%Y-%m-%d %H:%M:%S")
+        author = item.author
+    message += f"最終更新日時：{dt}\n最終更新者：{author}\n"
+
+    message += f"--------------------------------------------\n"
 
     # ログを更新するメッセージ
     DBguild = client.get_guild(1075592226534600755)
