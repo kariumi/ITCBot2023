@@ -785,15 +785,18 @@ async def modify(ctx, arg, channel: typing.Optional[TextChannel],  mes, str):
         await printLog(f"{changeMes.jump_url} の文章に追加しました。")
 
     if arg == "remove":
-        data = content.split("\n")
-        new_content = ""
-        for i in data:
-            if str(i) == str(str):
-                pass
-            else:
-                new_content = f"{i}\n"
-        changeMes = await message.edit(content=new_content)
-        await printLog(f"{changeMes.jump_url} の文章の一部を削除しました。")
+        try:
+            data = content.split("\n")
+            new_content = ""
+            for i in data:
+                if str(i) == str(str):
+                    pass
+                else:
+                    new_content = f"{i}\n"
+            changeMes = await message.edit(content=new_content)
+            await printLog(f"{changeMes.jump_url} の文章の一部を削除しました。")
+        except Exception as e:
+            await printLog(f"失敗しました。{e}")
 
 
 """
