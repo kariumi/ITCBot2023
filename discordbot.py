@@ -878,7 +878,7 @@ async def Trial_entry_explulsion():
     YoukakuninCH = DBguild.get_channel(1085388068112048241)
     YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
     mes = YoukakuninMes.split("\n")
-    await printLog(mes)
+    # await printLog(mes)
     try:
         for i in mes:
             await printLog(i)
