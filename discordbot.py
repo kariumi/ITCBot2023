@@ -781,7 +781,8 @@ async def ModifyDatabase(ctx, arg, channel: typing.Optional[TextChannel],  mes, 
     content = message.content
     if arg == "add":
         content += f"\n{str}"
-        await message.edit(content=content)
+        changeMes = await message.edit(content=content)
+        await printLog(f"{changeMes.jump_url}に変更が加えられました")
 
 
 """
@@ -815,7 +816,7 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f"最終更新日時：2023/3/24 4:46\n"
+    message += f"最終更新日時：2023/3/24 4:50\n"
 
     message += f"UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
