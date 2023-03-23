@@ -879,15 +879,15 @@ async def Trial_entry_explulsion():
     YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
     mes = YoukakuninMes.split("\n")
     for i in mes:
-        data = i.split(" ")
         try:
-            if data[0] == "名前":
-                pass
-            else:
-                message += f" {data[0]}\n"
-            # 要確認メンバーを表示
+            data = i.split(" ")
         except Exception as e:
             message += f"取得に失敗しました。\n{type(e)}\n"
+
+        if data[0] == "名前":
+            pass
+        else:
+            message += f" {data[0]}\n"
 
     await DBmessage.edit(content=message)  # ログ
     # # itcの鯖
