@@ -879,7 +879,6 @@ async def Trial_entry_explulsion():
     YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
     mes = YoukakuninMes.content.split("\n")
     for i in mes:
-        await printLog(i)
         data = i.split(" ")
 
         if data[0] == "名前":
