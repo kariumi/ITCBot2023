@@ -772,6 +772,25 @@ async def on_raw_reaction_remove(payload):
         if title == "【投票終了】`(バグっている場合はリサイクルマークを押してください)`":
             await message.remove_reaction(number, user)
 
+"""
+!ModifyDatabase [add/remove] channnelID messageID (str)
+手動でデータベースをいじれるコマンド。危ないので使用前にデータベースのバックアップをとること
+
+add - 最後の行に追加
+remove - 文字列が一致する行を削除
+"""
+
+
+@client.command()
+async def ModifyDatabase(ctx, *arg):
+    guild = client.get_guild(1075592226534600755)
+    channel = guild.get_channel(arg[1])
+    message = channel.fetch_message(arg[2])
+    content = message.content
+    if arg[0] == "add":
+        content += f"\n{arg[3]}"
+        await message.edit(content=content)
+
 
 """
 体験入部生が60日/90日経過したらお知らせする。
@@ -786,6 +805,11 @@ async def on_raw_reaction_remove(payload):
 time = datetime.time(hour=15, minute=0, tzinfo=utc)
 
 
+@tasks.loop(time=time)
+async def backup():
+    pass
+
+
 @tasks.loop(seconds=3)  # time=timeに直すことで一日一回実行に戻せます
 async def Trial_entry_explulsion():
 
@@ -794,27 +818,30 @@ async def Trial_entry_explulsion():
     JST = datetime.timezone(t_delta, 'JST')
     nowTime = datetime.datetime.now(JST)
     now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
+    now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得(UTC)
     message = f"[{now}]\n"
 
     message += f"**BOTの最新データ** \n"
 
     message += f"最終更新日時：2023-3-24 2:51\n"
 
-    message += f"--------------------------------------------\n"
+    message += f"UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}"
+
+    message += f"----------------------------------------------------------------------------------------\n"
 
     # ログを更新するメッセージ
     DBguild = client.get_guild(1075592226534600755)
     DBchannel = DBguild.get_channel(1088489507923443722)
     DBmessage = await DBchannel.fetch_message(1088489590681260032)
 
+    # 体験入部メンバーの一覧を表示/60日超えを選別
     guild = client.get_guild(377392053182660609)  # 本鯖
     taiken_role = guild.get_role(851748635023769630)  # @体験入部
     yo_kakunin_role = guild.get_role(833323166440095744)  # @要確認
-    role = guild.get_role(851748635023769630)
-    now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
-    message += f"**体験入部の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}(UTC基準です)**\n__参加日\t\t経過日数\t名前__\n"
+    # role = guild.get_role(851748635023769630) #@体験入部
+    message += f"**体験入部の一覧(UTC基準)**\n__参加日\t\t経過日数\t名前__\n"
     sorted_taiken_members = sorted(
-        role.members, key=lambda x: x.joined_at)  # 参加日順にソート
+        taiken_role.members, key=lambda x: x.joined_at)  # 参加日順にソート
 
     # ここから、60日を超えためんばーを選別
     membersOf60days = []
@@ -841,6 +868,12 @@ async def Trial_entry_explulsion():
                 await printLog(f"{member.name}に要確認ロールを付与しました。")
             except:
                 await printLog(f"{member.name}に要確認ロールを付与できませんでした")
+
+    message += f"----------------------------------------------------------------------------------------\n"
+    message += f"**要確認の一覧(UTC基準)**\n__参加日\t\t経過日数\t名前__\n"
+
+    # 要確認メンバーを表示
+
     await DBmessage.edit(content=message)  # ログ
     # # itcの鯖
     # ITCserver = client.get_guild(1075592226534600755)
