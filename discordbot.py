@@ -799,7 +799,7 @@ async def Trial_entry_explulsion():
     message += f"**BOTの最新データ** \n"
     try:
         repo = Repo(
-            'https://github.com/kariumi/ITCBot2023/blob/master/discordbot.py')
+            '/discordbot.py')
         for item in repo.iter_commits('master', max_count=1):
             dt = datetime.datetime.fromtimestamp(
                 item.authored_date).strftime("%Y-%m-%d %H:%M:%S")
