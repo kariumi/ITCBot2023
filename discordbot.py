@@ -806,7 +806,7 @@ async def Trial_entry_explulsion():
     yo_kakunin_role = guild.get_role(833323166440095744)  # @要確認
     role = guild.get_role(851748635023769630)
     now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
-    message += f"体験入部の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}(UTC表記)\n\n__参加日\t\t経過日数\t名前__\n"
+    message += f"【体験入部の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}(UTC基準です)\n__参加日\t\t経過日数\t名前__\n】"
     sorted_taiken_members = sorted(
         role.members, key=lambda x: x.joined_at)  # 参加日順にソート
 
@@ -820,7 +820,12 @@ async def Trial_entry_explulsion():
             member_days = now_time - member.joined_at
         else:
             member_days = now_time - time_start_date
-        message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t{member_days.days}日{member_days.seconds}秒\t{member.name}\n"
+        # member_days.secondsを時分秒に直す
+        member_hours = int(member_days.seconds/3600)
+        tmp = member_days.seconds % 3600
+        member_minutes = int(tmp/60)
+        member_seconds = tmp % 60
+        message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t{member_days.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member.name}\n"
 
         if member_days.days >= 60:
             membersOf60days.append(member.name)
