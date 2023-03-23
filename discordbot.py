@@ -797,12 +797,15 @@ async def Trial_entry_explulsion():
     message = f"[{now}]\n"
 
     message += f"**BOTの最新データ** \n"
-    repo = Repo('./')
-    for item in repo.iter_commits('master', max_count=1):
-        dt = datetime.datetime.fromtimestamp(
-            item.authored_date).strftime("%Y-%m-%d %H:%M:%S")
-        author = item.author
-    message += f"最終更新日時：{dt}\n最終更新者：{author}\n"
+    try:
+        repo = Repo('./')
+        for item in repo.iter_commits('master', max_count=1):
+            dt = datetime.datetime.fromtimestamp(
+                item.authored_date).strftime("%Y-%m-%d %H:%M:%S")
+            author = item.author
+        message += f"最終更新日時：{dt}\n最終更新者：{author}\n"
+    except:
+        message += "*取得に失敗しました*\n"
 
     message += f"--------------------------------------------\n"
 
