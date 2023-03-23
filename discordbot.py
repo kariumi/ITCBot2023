@@ -809,14 +809,15 @@ async def Trial_entry_explulsion():
 
     # ここから、60日を超えためんばーを選別
     membersOf60days = []
-    time_start_date = datetime.datetime(year=2023, month=4, day=1, tzinfo=utc)
+    time_start_date = datetime.datetime(
+        year=2023, month=4, day=1, hour=0, minute=0, second=0, tzinfo=utc)
 
     for member in sorted_taiken_members:
         if member.joined_at > time_start_date:
             member_days = now_time - member.joined_at
         else:
             member_days = now_time - time_start_date
-        message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t{member_days.days}日\t{member.name}\n"
+        message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t{member_days.days}日{member_days.seconds}秒\t{member.name}\n"
 
         if member_days.days >= 60:
             membersOf60days.append(member.name)
