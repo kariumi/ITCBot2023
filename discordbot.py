@@ -827,7 +827,7 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f"最終更新日時：2023/3/24 5:43\n"
+    message += f"最終更新日時：2023/3/24 6:02\n"
 
     message += f"UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
@@ -877,18 +877,15 @@ async def Trial_entry_explulsion():
     message += f"**要確認の一覧(UTC基準)**\n__要確認日\t\t経過日数\t名前__\n"
     YoukakuninCH = DBguild.get_channel(1085388068112048241)
     YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
-    try:
-        mes = YoukakuninMes.split("\n")
-        for i in mes:
-            await printLog(i)
-            data = i.split(" ")
+    mes = YoukakuninMes.content.split("\n")
+    for i in mes:
+        await printLog(i)
+        data = i.split(" ")
 
-            if data[0] == "名前":
-                pass
-            else:
-                message += f" {data[0]}\n"
-    except Exception as e:
-        message += f"取得に失敗しました。\n{e}\n"
+        if data[0] == "名前":
+            pass
+        else:
+            message += f" {data[0]}\n"
 
     await DBmessage.edit(content=message)  # ログ
 
