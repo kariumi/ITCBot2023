@@ -774,7 +774,7 @@ remove - 文字列が一致する行を削除
 
 
 @client.command()
-async def ModifyDatabase(ctx, arg, channel: typing.Optional[TextChannel],  mes, str):
+async def modify(ctx, arg, channel: typing.Optional[TextChannel],  mes, str):
     guild = client.get_guild(1075592226534600755)
     # channel = guild.get_channel(arg[1])
     message = await channel.fetch_message(mes)
@@ -827,7 +827,7 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f"最終更新日時：2023/3/24 5:29\n"
+    message += f"最終更新日時：2023/3/24 5:35\n"
 
     message += f"UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
@@ -875,9 +875,9 @@ async def Trial_entry_explulsion():
 
     message += f"----------------------------------------------------------------------------------------\n"
     message += f"**要確認の一覧(UTC基準)**\n__要確認日\t\t経過日数\t名前__\n"
+    YoukakuninCH = DBguild.get_channel(1085388068112048241)
+    YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
     try:
-        YoukakuninCH = DBguild.get_channel(1085388068112048241)
-        YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
         mes = YoukakuninMes.split("\n")
         for i in mes:
             data = i.split(" ")
