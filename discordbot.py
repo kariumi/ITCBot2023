@@ -9,7 +9,7 @@ import emoji
 import sqlite3
 from discord import TextChannel, VoiceChannel, Role, Intents
 import asyncio
-from git import *
+# from git import *
 
 
 class color:
