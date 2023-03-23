@@ -787,12 +787,23 @@ time = datetime.time(hour=15, minute=0, tzinfo=utc)
 
 @tasks.loop(minutes=2)  # time=timeに直すことで一日一回実行に戻せます
 async def Trial_entry_explulsion():
+    # 今の時間を取得
+    t_delta = datetime.timedelta(hours=9)
+    JST = datetime.timezone(t_delta, 'JST')
+    nowTime = datetime.datetime.now(JST)
+    now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
+
+    # ログを更新するメッセージ
+    DBguild = client.get_guild(1075592226534600755)
+    DBchannel = DBguild.get_channel(1088489507923443722)
+    DBmessage = await DBchannel.fetch_message(1088489590681260032)
+
     guild = client.get_guild(377392053182660609)  # 本鯖
     taiken_role = guild.get_role(851748635023769630)  # @体験入部
     yo_kakunin_role = guild.get_role(833323166440095744)  # @要確認
     role = guild.get_role(851748635023769630)
     now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
-    message = f"__{role.name}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}(UTC表記)\n__\n__参加日\t\t経過日数\t名前__\n"
+    message = f"[{now}] - __{role.name}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}(UTC表記)\n__\n__参加日\t\t経過日数\t名前__\n"
     sorted_taiken_members = sorted(
         role.members, key=lambda x: x.joined_at)  # 参加日順にソート
 
@@ -815,7 +826,7 @@ async def Trial_entry_explulsion():
                 await printLog(f"{member.name}に要確認ロールを付与しました。")
             except:
                 await printLog(f"{member.name}に要確認ロールを付与できませんでした")
-    await printLog(message)  # ログ
+    await DBmessage.edit(content=message)  # ログ
     # # itcの鯖
     # ITCserver = client.get_guild(1075592226534600755)
     # # 代表の人を取得
