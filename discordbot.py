@@ -774,13 +774,13 @@ remove - 文字列が一致する行を削除
 
 
 @client.command()
-async def modify(ctx, arg, channel: typing.Optional[TextChannel],  mes, str):
+async def modify(ctx, arg, channel: typing.Optional[TextChannel],  mes, s):
     guild = client.get_guild(1075592226534600755)
     # channel = guild.get_channel(arg[1])
     message = await channel.fetch_message(mes)
     content = message.content
     if arg == "add":
-        content += f"\n{str}"
+        content += f"\n{staticmethod}"
         changeMes = await message.edit(content=content)
         await printLog(f"{changeMes.jump_url} の文章に追加しました。")
 
@@ -789,7 +789,7 @@ async def modify(ctx, arg, channel: typing.Optional[TextChannel],  mes, str):
             data = content.split("\n")
             new_content = ""
             for i in data:
-                if str(i) == str(str):
+                if str(i) == str(s):
                     pass
                 else:
                     new_content = f"{i}\n"
