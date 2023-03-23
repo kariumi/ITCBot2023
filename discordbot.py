@@ -830,7 +830,7 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f"最終更新日時：2023/3/24 6:22\n"
+    message += f"最終更新日時：2023/3/24 6:31\n"
 
     message += f"UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
@@ -887,7 +887,17 @@ async def Trial_entry_explulsion():
         if data[0] == "名前":
             pass
         else:
-            message += f" {data[0]}\n"
+            date = data[1].split("/")
+            time = data[2].split(":")
+            time_ = datetime.datetime(
+                year=data[0], month=data[1], day=data[2], hour=time[0], minute=time[1], second=time[2], tzinfo=utc)
+            KeikaDays = now_time - time_
+            member_hours = int(KeikaDays.seconds/3600)
+            tmp = member_days.seconds % 3600
+            member_minutes = int(tmp/60)
+            member_seconds = tmp % 60
+
+            message += f"{data[1]} {data[2]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{data[0]}\n"
 
     await DBmessage.edit(content=message)  # ログ
 
