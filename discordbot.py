@@ -797,16 +797,8 @@ async def Trial_entry_explulsion():
     message = f"[{now}]\n"
 
     message += f"**BOTの最新データ** \n"
-    try:
-        repo = Repo(
-            '/discordbot.py')
-        for item in repo.iter_commits('master', max_count=1):
-            dt = datetime.datetime.fromtimestamp(
-                item.authored_date).strftime("%Y-%m-%d %H:%M:%S")
-            author = item.author
-        message += f"ver1,最終更新日時：{dt}\n最終更新者：{author}\n"
-    except Exception as e:
-        message += f"*取得に失敗しました\n{str(type(e))}*\n"
+
+    message += f"最終更新日時：2023-3-24 2:51\n"
 
     message += f"--------------------------------------------\n"
 
