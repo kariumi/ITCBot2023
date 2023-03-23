@@ -806,7 +806,7 @@ async def Trial_entry_explulsion():
     yo_kakunin_role = guild.get_role(833323166440095744)  # @要確認
     role = guild.get_role(851748635023769630)
     now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
-    message += f"【体験入部の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}(UTC基準です)\n__参加日\t\t経過日数\t名前__\n】"
+    message += f"**体験入部の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}(UTC基準です)**\n__参加日\t\t経過日数\t名前__\n"
     sorted_taiken_members = sorted(
         role.members, key=lambda x: x.joined_at)  # 参加日順にソート
 
