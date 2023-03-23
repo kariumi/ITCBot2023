@@ -804,7 +804,7 @@ async def Trial_entry_explulsion():
             dt = datetime.datetime.fromtimestamp(
                 item.authored_date).strftime("%Y-%m-%d %H:%M:%S")
             author = item.author
-        message += f"最終更新日時：{dt}\n最終更新者：{author}\n"
+        message += f"ver1,最終更新日時：{dt}\n最終更新者：{author}\n"
     except Exception as e:
         message += f"*取得に失敗しました\n{str(type(e))}*\n"
 
