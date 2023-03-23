@@ -897,7 +897,7 @@ async def Trial_entry_explulsion():
             member_minutes = int(tmp/60)
             member_seconds = tmp % 60
 
-            message += f"{data[1]} {data[2]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{data[0]}\n"
+            message += f"{data[2]} {data[3]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{data[0]}\n"
 
     await DBmessage.edit(content=message)  # ログ
 
