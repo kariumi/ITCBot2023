@@ -888,7 +888,7 @@ async def Trial_entry_explulsion():
             else:
                 message += f" {data[0]}\n"
     except Exception as e:
-        message += f"取得に失敗しました。\n{type(e)}\n"
+        message += f"取得に失敗しました。\n{e}\n"
 
     await DBmessage.edit(content=message)  # ログ
 
