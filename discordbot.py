@@ -68,7 +68,7 @@ async def on_command_error(ctx, error):
 
 @client.command()
 async def version(ctx):
-    await ctx.send(content="ver.0.1.15 2023/3/23 3:33")
+    await ctx.send(content="ver.0.1.16 2023/3/23 16:01")
 
 
 """
