@@ -890,7 +890,7 @@ async def Trial_entry_explulsion():
             date = data[2].split("/")
             time = data[3].split(":")
             time_ = datetime.datetime(
-                year=int(data[0]), month=int(data[1]), day=int(data[2]), hour=int(time[0]), minute=int(time[1]), second=int(time[2]), tzinfo=utc)
+                year=int(date[0]), month=int(date[1]), day=int(date[2]), hour=int(time[0]), minute=int(time[1]), second=int(time[2]), tzinfo=utc)
             KeikaDays = now_time - time_
             member_hours = int(KeikaDays.seconds/3600)
             tmp = member_days.seconds % 3600
