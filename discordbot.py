@@ -918,7 +918,7 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f" - 最終更新日時：2023/3/25 0:01\n"
+    message += f" - 最終更新日時：2023/3/25 0:33\n"
 
     message += f" - UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
