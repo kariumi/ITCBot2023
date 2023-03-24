@@ -379,35 +379,49 @@ async def おみくじ(ctx):
         for data in f_T[1]:
             if data == "大吉":
                 pass
+            elif data == "":
+                pass
             else:
                 daikichi_pool.append(data)
         for data in f_T[2]:
             if data == "吉":
+                pass
+            elif data == "":
                 pass
             else:
                 kichi_pool.append(data)
         for data in f_T[3]:
             if data == "小吉":
                 pass
+            elif data == "":
+                pass
             else:
                 syoukichi_pool.append(data)
         for data in f_T[4]:
             if data == "凶":
+                pass
+            elif data == "":
                 pass
             else:
                 kyou_pool.append(data)
         for data in f_T[5]:
             if data == "大凶":
                 pass
+            elif data == "":
+                pass
             else:
                 daikyou_pool.append(data)
         for data in f_T[8]:
             if data == "ラッキーアイテムimg":
                 pass
+            elif data == "":
+                pass
             else:
                 luckyIMG.append(data)
         for data in f_T[7]:
             if data == "ラッキーアイテム":
+                pass
+            elif data == "":
                 pass
             else:
                 luckyItem.append(data)
