@@ -379,22 +379,22 @@ async def おみくじ(ctx):
                 pass
             else:
                 daikichi_pool.append(data)
-        for data in f_T[1]:
+        for data in f_T[2]:
             if data == "吉":
                 pass
             else:
                 kichi_pool.append(data)
-        for data in f_T[2]:
+        for data in f_T[3]:
             if data == "小吉":
                 pass
             else:
                 syoukichi_pool.append(data)
-        for data in f_T[3]:
+        for data in f_T[4]:
             if data == "凶":
                 pass
             else:
                 kyou_pool.append(data)
-        for data in f_T[3]:
+        for data in f_T[5]:
             if data == "大凶":
                 pass
             else:
@@ -887,7 +887,7 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f" - 最終更新日時：2023/3/24 23:38\n"
+    message += f" - 最終更新日時：2023/3/24 23:42\n"
 
     message += f" - UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
