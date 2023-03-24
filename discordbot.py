@@ -340,7 +340,8 @@ async def おみくじ(ctx):
     syoukichi_pool = ["う～ん、微妙！！", "課題やった？", "笑う門には福来る！笑吉！！(笑)"]
     kyou_pool = ["え、、レポート課題忘れない？今日までだよ（絶望）", "こういう日もあるよ。。"]
     daikyou_pool = ["多分、今日出かけたら終電逃すよ", "明日テストあるよ！！"]
-    luckyItem = ["龍角散", "理科大の水", "イヤホン", "PCの充電器", "新500円玉"]
+    luckyItem = ["龍角散", "理科大の水"]
+    luckyIMG = ["ryuukakusan.png", "rikadainomizu.png"]
     num = random.randrange(5)
     title = f"{unsei[num]}"
     if num == 0:
@@ -365,7 +366,7 @@ async def おみくじ(ctx):
     embed.set_author(
         name=f"{ctx.author.name}さんの今日の運勢は…", icon_url=avatar)
     embed.add_field(name="ラッキーアイテム", value=f"{luckyItem[num3]}")
-    img_url = f"img/omikuji/{img[num]}"
+    img_url = f"img/omikuji/luckyItem/{luckyIMG[num3]}"
     file = discord.File(fp=img_url, filename="img.png")
     embed.set_thumbnail(url="attachment://img.png")
 
