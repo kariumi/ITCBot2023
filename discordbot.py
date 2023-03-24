@@ -350,20 +350,56 @@ async def get_date_id(ctx, role_id):
 
 @client.command()
 async def おみくじ(ctx):
-    img = ["daikichi.png", "kichi.png",
-           "syoukichi.png", "kyou.png", "daikyou.png"]
+    # img = ["daikichi.png", "kichi.png",
+    #       "syoukichi.png", "kyou.png", "daikyou.png"]
     unsei = ["大吉 ❤️", "吉 🤍", "小吉 🤍", "凶 💙", "大凶 💙"]
-    daikichi_pool = ["今日であればあなたの思いが届くかもしれません…", "通帳見てみな！4630万円入金されてない？？"]
-    kichi_pool = ["お、100円玉拾った！", "財布に入ってるクーポン券、今日までだよ！"]
-    syoukichi_pool = ["う～ん、微妙！！", "課題やった？", "笑う門には福来る！笑吉！！(笑)"]
-    kyou_pool = ["え、、レポート課題忘れない？今日までだよ（絶望）", "こういう日もあるよ。。"]
-    daikyou_pool = ["多分、今日出かけたら終電逃すよ", "明日テストあるよ！！"]
+    # daikichi_pool = ["今日であればあなたの思いが届くかもしれません…", "通帳見てみな！4630万円入金されてない？？"]
+    # kichi_pool = ["お、100円玉拾った！", "財布に入ってるクーポン券、今日までだよ！"]
+    # syoukichi_pool = ["う～ん、微妙！！", "課題やった？", "笑う門には福来る！笑吉！！(笑)"]
+    # kyou_pool = ["え、、レポート課題忘れない？今日までだよ（絶望）", "こういう日もあるよ。。"]
+    # daikyou_pool = ["多分、今日出かけたら終電逃すよ", "明日テストあるよ！！"]
+    daikichi_pool = []
+    kichi_pool = []
+    syoukichi_pool = []
+    kyou_pool = []
+    daikyou_pool = []
+
     luckyItem = ["龍角散", "理科大の水", "Apple Pencil", "四つ葉のクローバー", "虚無",
                  "モバイルバッテリー", "正八面体", "バッグクロージャー", "バラン", "三角フラスコ", "Linux", "2000円札"]
     luckyIMG = ["ryuukakusan.png", "rikadainomizu.png", "applePencil.png", "clover.png", "kyomu.png",
                 "mobile_battery.png", "seihachimentai.png", "bag_closure.png", "baran.png", "flask.png", "linux.png", "2000yen.png"]
     num = random.randrange(5)
     title = f"{unsei[num]}"
+    with open('data/omikuji.csv') as f:
+        reader = csv.reader(f)
+        l = [row for row in reader]
+        f_T = [list(x) for x in zip(*l)]
+        for data in f_T[1]:
+            if data == "大吉":
+                pass
+            else:
+                daikichi_pool.append(data)
+        for data in f_T[1]:
+            if data == "吉":
+                pass
+            else:
+                kichi_pool.append(data)
+        for data in f_T[2]:
+            if data == "小吉":
+                pass
+            else:
+                syoukichi_pool.append(data)
+        for data in f_T[3]:
+            if data == "凶":
+                pass
+            else:
+                kyou_pool.append(data)
+        for data in f_T[3]:
+            if data == "大凶":
+                pass
+            else:
+                daikyou_pool.append(data)
+
     if num == 0:
         num2 = random.randrange(len(daikichi_pool))
         description_ = daikichi_pool[num2]
