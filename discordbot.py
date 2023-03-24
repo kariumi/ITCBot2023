@@ -364,10 +364,12 @@ async def おみくじ(ctx):
     kyou_pool = []
     daikyou_pool = []
 
-    luckyItem = ["龍角散", "理科大の水", "Apple Pencil", "四つ葉のクローバー", "虚無",
-                 "モバイルバッテリー", "正八面体", "バッグクロージャー", "バラン", "三角フラスコ", "Linux", "2000円札"]
-    luckyIMG = ["ryuukakusan.png", "rikadainomizu.png", "applePencil.png", "clover.png", "kyomu.png",
-                "mobile_battery.png", "seihachimentai.png", "bag_closure.png", "baran.png", "flask.png", "linux.png", "2000yen.png"]
+    # luckyItem = ["龍角散", "理科大の水", "Apple Pencil", "四つ葉のクローバー", "虚無",
+    #             "モバイルバッテリー", "正八面体", "バッグクロージャー", "バラン", "三角フラスコ", "Linux", "2000円札"]
+    # luckyIMG = ["ryuukakusan.png", "rikadainomizu.png", "applePencil.png", "clover.png", "kyomu.png",
+    #            "mobile_battery.png", "seihachimentai.png", "bag_closure.png", "baran.png", "flask.png", "linux.png", "2000yen.png"]
+    luckyItem = []
+    luckyIMG = []
     num = random.randrange(5)
     title = f"{unsei[num]}"
     with open('data/omikuji.csv') as f:
@@ -399,6 +401,16 @@ async def おみくじ(ctx):
                 pass
             else:
                 daikyou_pool.append(data)
+        for data in f_T[8]:
+            if data == "ラッキーアイテムimg":
+                pass
+            else:
+                luckyIMG.append(data)
+        for data in f_T[7]:
+            if data == "ラッキーアイテム":
+                pass
+            else:
+                luckyItem.append(data)
 
     if num == 0:
         num2 = random.randrange(len(daikichi_pool))
@@ -417,7 +429,7 @@ async def おみくじ(ctx):
         description_ = daikyou_pool[num2]
     embed = discord.Embed(
         title=f"{title}", description=description_, color=0xffffff)
-    num3 = random.randrange(len(luckyItem))
+    num3 = random.randrange(len(luckyIMG))
     avatar = ctx.message.author.avatar.url
     embed.set_author(
         name=f"{ctx.author.name}さんの今日の運勢は…", icon_url=avatar)
@@ -887,7 +899,7 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f" - 最終更新日時：2023/3/24 23:42\n"
+    message += f" - 最終更新日時：2023/3/24 23:49\n"
 
     message += f" - UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
