@@ -372,73 +372,76 @@ async def おみくじ(ctx):
     luckyIMG = []
     num = random.randrange(5)
     title = f"{unsei[num]}"
-    with open('data/omikuji.csv') as f:
-        reader = csv.reader(f)
-        l = [row for row in reader]
-        f_T = [list(x) for x in zip(*l)]
-        for data in f_T[1]:
-            if data == "大吉":
-                pass
-            else:
-                daikichi_pool.append(data)
-        for data in f_T[2]:
-            if data == "吉":
-                pass
-            else:
-                kichi_pool.append(data)
-        for data in f_T[3]:
-            if data == "小吉":
-                pass
-            else:
-                syoukichi_pool.append(data)
-        for data in f_T[4]:
-            if data == "凶":
-                pass
-            else:
-                kyou_pool.append(data)
-        for data in f_T[5]:
-            if data == "大凶":
-                pass
-            else:
-                daikyou_pool.append(data)
-        for data in f_T[8]:
-            if data == "ラッキーアイテムimg":
-                pass
-            else:
-                luckyIMG.append(data)
-        for data in f_T[7]:
-            if data == "ラッキーアイテム":
-                pass
-            else:
-                luckyItem.append(data)
+    try:
+        with open('data/omikuji.csv') as f:
+            reader = csv.reader(f)
+            l = [row for row in reader]
+            f_T = [list(x) for x in zip(*l)]
+            for data in f_T[1]:
+                if data == "大吉":
+                    pass
+                else:
+                    daikichi_pool.append(data)
+            for data in f_T[2]:
+                if data == "吉":
+                    pass
+                else:
+                    kichi_pool.append(data)
+            for data in f_T[3]:
+                if data == "小吉":
+                    pass
+                else:
+                    syoukichi_pool.append(data)
+            for data in f_T[4]:
+                if data == "凶":
+                    pass
+                else:
+                    kyou_pool.append(data)
+            for data in f_T[5]:
+                if data == "大凶":
+                    pass
+                else:
+                    daikyou_pool.append(data)
+            for data in f_T[8]:
+                if data == "ラッキーアイテムimg":
+                    pass
+                else:
+                    luckyIMG.append(data)
+            for data in f_T[7]:
+                if data == "ラッキーアイテム":
+                    pass
+                else:
+                    luckyItem.append(data)
 
-    if num == 0:
-        num2 = random.randrange(len(daikichi_pool))
-        description_ = daikichi_pool[num2]
-    elif num == 1:
-        num2 = random.randrange(len(kichi_pool))
-        description_ = kichi_pool[num2]
-    elif num == 2:
-        num2 = random.randrange(len(syoukichi_pool))
-        description_ = syoukichi_pool[num2]
-    elif num == 3:
-        num2 = random.randrange(len(kyou_pool))
-        description_ = kyou_pool[num2]
-    elif num == 4:
-        num2 = random.randrange(len(daikyou_pool))
-        description_ = daikyou_pool[num2]
-    embed = discord.Embed(
-        title=f"{title}", description=description_, color=0xffffff)
-    num3 = random.randrange(len(luckyIMG))
-    avatar = ctx.message.author.avatar.url
-    embed.set_author(
-        name=f"{ctx.author.name}さんの今日の運勢は…", icon_url=avatar)
-    embed.add_field(name="ラッキーアイテム", value=f"{luckyItem[num3]}")
-    img_url = f"img/omikuji/luckyItem/{luckyIMG[num3]}"
-    file = discord.File(fp=img_url, filename="img.png")
-    embed.set_thumbnail(url="attachment://img.png")
+        if num == 0:
+            num2 = random.randrange(len(daikichi_pool))
+            description_ = daikichi_pool[num2]
+        elif num == 1:
+            num2 = random.randrange(len(kichi_pool))
+            description_ = kichi_pool[num2]
+        elif num == 2:
+            num2 = random.randrange(len(syoukichi_pool))
+            description_ = syoukichi_pool[num2]
+        elif num == 3:
+            num2 = random.randrange(len(kyou_pool))
+            description_ = kyou_pool[num2]
+        elif num == 4:
+            num2 = random.randrange(len(daikyou_pool))
+            description_ = daikyou_pool[num2]
+        embed = discord.Embed(
+            title=f"{title}", description=description_, color=0xffffff)
+        num3 = random.randrange(len(luckyIMG))
+        avatar = ctx.message.author.avatar.url
+        embed.set_author(
+            name=f"{ctx.author.name}さんの今日の運勢は…", icon_url=avatar)
+        embed.add_field(name="ラッキーアイテム", value=f"{luckyItem[num3]}")
+        img_url = f"img/omikuji/luckyItem/{luckyIMG[num3]}"
+        file = discord.File(fp=img_url, filename="img.png")
+        embed.set_thumbnail(url="attachment://img.png")
 
-    await ctx.send(embed=embed, file=file)
+        await ctx.send(embed=embed, file=file)
+    except Exception as e:
+        await printLog(e)
 
 """
 
@@ -899,7 +902,7 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f" - 最終更新日時：2023/3/24 23:49\n"
+    message += f" - 最終更新日時：2023/3/25 0:01\n"
 
     message += f" - UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
