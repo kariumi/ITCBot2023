@@ -9,6 +9,8 @@ import emoji
 import sqlite3
 from discord import TextChannel, VoiceChannel, Role, Intents
 import asyncio
+import csv
+import pprint
 # from git import *
 
 
@@ -70,6 +72,22 @@ async def on_command_error(ctx, error):
 @client.command()
 async def version(ctx):
     await ctx.send(content="ver.0.1.18 2023/3/24 1:00")
+
+
+"""
+おみくじ確認用
+!omikuji_test
+"""
+
+
+@client.command()
+async def omikuji_test(ctx):
+    with open('data/omikuji.csv') as f:
+        reader = csv.reader(f)
+        message = ""
+        for row in reader:
+            message += f"{row}\n"
+        await printLog(message)
 
 
 """
@@ -833,7 +851,7 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f" - 最終更新日時：2023/3/24 23:02\n"
+    message += f" - 最終更新日時：2023/3/24 23:21\n"
 
     message += f" - UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
