@@ -340,8 +340,10 @@ async def おみくじ(ctx):
     syoukichi_pool = ["う～ん、微妙！！", "課題やった？", "笑う門には福来る！笑吉！！(笑)"]
     kyou_pool = ["え、、レポート課題忘れない？今日までだよ（絶望）", "こういう日もあるよ。。"]
     daikyou_pool = ["多分、今日出かけたら終電逃すよ", "明日テストあるよ！！"]
-    luckyItem = ["龍角散", "理科大の水", "Apple Pencil"]
-    luckyIMG = ["ryuukakusan.png", "rikadainomizu.png", "applePencil.png"]
+    luckyItem = ["龍角散", "理科大の水", "Apple Pencil", "四つ葉のクローバー", "虚無",
+                 "モバイルバッテリー", "正八面体", "バッグクロージャー", "バラン", "三角フラスコ", "Linux", "2000円札"]
+    luckyIMG = ["ryuukakusan.png", "rikadainomizu.png", "applePencil.png", "clover.png", "kyomu.png",
+                "mobile_battery.png", "seihachimentai.png", "bag_closure.png", "baran.png", "flask.png", "linux.png", "2000yen.png"]
     num = random.randrange(5)
     title = f"{unsei[num]}"
     if num == 0:
@@ -831,7 +833,7 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f" - 最終更新日時：2023/3/24 21:33\n"
+    message += f" - 最終更新日時：2023/3/24 23:02\n"
 
     message += f" - UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
