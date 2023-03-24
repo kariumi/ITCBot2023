@@ -436,9 +436,10 @@ async def おみくじ(ctx):
     embed.add_field(name="ラッキーアイテム", value=f"{luckyItem[num3]}")
     try:
         img_url = f"img/omikuji/luckyItem/{luckyIMG[num3]}"
+        file = discord.File(fp=img_url, filename="img.png")
     except:
         img_url = f"img/omikuji/luckyItem/noImage.png"
-    file = discord.File(fp=img_url, filename="img.png")
+        file = discord.File(fp=img_url, filename="img.png")
     embed.set_thumbnail(url="attachment://img.png")
 
     await ctx.send(embed=embed, file=file)
