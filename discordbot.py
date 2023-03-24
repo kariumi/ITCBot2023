@@ -691,12 +691,14 @@ async def on_raw_reaction_add(payload):
 サイコロを回して1~6の乱数を生成
 
 """
+
+
 @client.command()
 async def さいころ(ctx):
 
     num = random.randrange(5)
-    file=f"img/saikoro/saikoro{num}.gif"
-    await ctx.send(file=file)
+    file = f"img/saikoro/saikoro{num}.gif"
+    await ctx.send(file=discord.File(file))
 
 
 """
