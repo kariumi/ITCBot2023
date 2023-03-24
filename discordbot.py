@@ -340,8 +340,8 @@ async def おみくじ(ctx):
     syoukichi_pool = ["う～ん、微妙！！", "課題やった？", "笑う門には福来る！笑吉！！(笑)"]
     kyou_pool = ["え、、レポート課題忘れない？今日までだよ（絶望）", "こういう日もあるよ。。"]
     daikyou_pool = ["多分、今日出かけたら終電逃すよ", "明日テストあるよ！！"]
-    luckyItem = ["龍角散", "理科大の水"]
-    luckyIMG = ["ryuukakusan.png", "rikadainomizu.png"]
+    luckyItem = ["龍角散", "理科大の水", "Apple Pencil"]
+    luckyIMG = ["ryuukakusan.png", "rikadainomizu.png", "applePencil.png"]
     num = random.randrange(5)
     title = f"{unsei[num]}"
     if num == 0:
