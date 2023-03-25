@@ -696,8 +696,27 @@ async def on_raw_reaction_add(payload):
 @client.command()
 async def さいころ(ctx):
 
-    num = random.randrange(5)
+    num = random.randrange(6)
     file = f"img/saikoro/saikoro{num}.gif"
+    await ctx.send(file=discord.File(file))
+
+"""
+!じゃんけん
+
+"""
+
+
+@client.command()
+async def じゃんけん(ctx, arg):
+    te = ["gu", "choki", "pa"]
+    num = random.randrange(3)
+    if arg == "グー":
+        file = f"img/janken/gu{te[num]}.gif"
+    elif arg == "チョキ":
+        file = f"img/janken/choki{te[num]}.gif"
+    elif arg == "パー":
+        file = f"img/janken/pa{te[num]}.gif"
+
     await ctx.send(file=discord.File(file))
 
 
