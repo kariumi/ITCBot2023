@@ -117,6 +117,7 @@ async def rule_r(ctx, arg):
         channel = guild.get_channel(836528209088217138)
         mes = await channel.fetch_message(1092068101413142618)
         await mes.add_reaction("1️⃣")
+        await printLog("rulesの、メッセージにリアクションを付与しました")
     except Exception as e:
         await printLog(failure(e))
 
