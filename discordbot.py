@@ -113,14 +113,14 @@ async def 離脱(ctx):
 @client.command()
 async def rule_r(ctx):
     await printLog("ruleにリアクションを付与します")
-    # try:
-    #     guild = client.get_guild(377392053182660609)
-    #     channel = guild.get_channel(836528209088217138)
-    #     mes = await channel.fetch_message(1092068101413142618)
-    #     await mes.add_reaction("1️⃣")
-    #     await printLog("rulesの、メッセージにリアクションを付与しました")
-    # except Exception as e:
-    #     await printLog(failure(e))
+    try:
+        guild = client.get_guild(377392053182660609)
+        channel = guild.get_channel(836528209088217138)
+        mes = await channel.fetch_message(1092068101413142618)
+        await mes.add_reaction("1️⃣")
+        await printLog("rulesの、メッセージにリアクションを付与しました")
+    except Exception as e:
+        await printLog("失敗したわ")
 
 """
 !bot_mes
