@@ -11,6 +11,8 @@ from discord import TextChannel, VoiceChannel, Role, Intents
 import asyncio
 import csv
 import pprint
+import sys
+import linecache
 # from git import *
 
 final_update = "最終更新日：2023/4/2 19:52"
@@ -48,6 +50,13 @@ client = commands.Bot(command_prefix='!', intents=intents)
 authority_role = ["", ""]
 
 utc = datetime.timezone.utc
+
+
+def failure(e):
+    exc_type, exc_obj, tb = sys.exc_info()
+    lineno = tb.tb_lineno
+    mes = (str(lineno) + ":" + str(type(e)))
+    return mes
 
 
 @client.event
@@ -1024,8 +1033,7 @@ async def Trial_entry_explulsion():
             message += f" - {data[2]} {data[3]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member_.name}\n"
 
     except Exception as e:
-        message = f"{e}"
-
+        message = failure(e)
     await DBmessage.edit(content=message)  # ログ
 
 #       except Exception as e:
