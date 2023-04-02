@@ -747,8 +747,7 @@ async def on_raw_reaction_add(payload):
     #
     #
 
-    rules = client.get_channel(836528209088217138)
-    if payload.message_id == 836528209088217138:
+    if payload.message_id == 1092081056775143575:
         user = client.get_user(payload.user_id)
         stamp = payload.emoji.name
         await message.remove_reaction(stamp, user)
