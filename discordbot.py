@@ -13,6 +13,8 @@ import csv
 import pprint
 # from git import *
 
+final_update = "最終更新日：2023/4/2 19:52"
+
 
 class color:
     RED = '\033[31m'  # (文字)赤
@@ -953,7 +955,7 @@ async def Trial_entry_explulsion():
 
     message += f"**BOTの最新データ** \n"
 
-    message += f" - 最終更新日時：2023/3/25 0:33\n"
+    message += f" - {final_update}\n"
 
     message += f" - UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
