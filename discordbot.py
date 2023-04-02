@@ -98,7 +98,7 @@ async def 読み上げ(ctx):
 
 @client.command()
 async def 離脱(ctx):
-    await ctx.guild.voice_channel.disconnect()
+    await ctx.guild.voice_client.disconnect()
 
 """
 一時的に作ったやつ、消して良い
