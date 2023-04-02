@@ -104,6 +104,17 @@ async def 離脱(ctx):
         await printLog(failure(e))
 
 """
+!rules
+"""
+
+
+@client.command()
+async def rules(ctx):
+    guild = client.guild(377392053182660609)
+    channel = guild.get_channel(836528209088217138)
+    await channel.send("test")
+
+"""
 一時的に作ったやつ、消して良い
 """
 
