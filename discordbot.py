@@ -105,14 +105,36 @@ async def 離脱(ctx):
 
 """
 !rules
+ルールに書き込む
 """
 
 
 @client.command()
 async def rules(ctx, arg):
+    authority = authority_check(ctx)
+    if not authority:
+        await ctx.send(embed=authority_error())
+        await printLog("!vote_role : Error00")
+        return
     guild = client.guild(377392053182660609)
     channel = guild.get_channel(836528209088217138)
     await channel.send(arg)
+
+"""
+!bot_mes
+ボットから好きなチャンネルに送信
+"""
+
+
+@client.command()
+async def bot_mes(ctx, textchannel: typing.Optional[TextChannel], arg):
+    authority = authority_check(ctx)
+    if not authority:
+        await ctx.send(embed=authority_error())
+        await printLog("!vote_role : Error00")
+        return
+    await textchannel.send(arg)
+
 
 """
 一時的に作ったやつ、消して良い
