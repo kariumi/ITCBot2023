@@ -103,6 +103,17 @@ async def 離脱(ctx):
     except Exception as e:
         await printLog(failure(e))
 
+"""
+!rule_r
+"""
+
+
+@client.command()
+async def rule_r(ctx):
+    channel = client.get_channel(836528209088217138)
+    mes = await channel.fetch_message(1092095707164463194)
+    await mes.add_reaction("👍")
+
 
 """
 !bot_mes
