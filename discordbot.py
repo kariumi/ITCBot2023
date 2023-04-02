@@ -109,10 +109,10 @@ async def 離脱(ctx):
 
 
 @client.command()
-async def rules(ctx):
+async def rules(ctx, arg):
     guild = client.guild(377392053182660609)
     channel = guild.get_channel(836528209088217138)
-    await channel.send("test")
+    await channel.send(arg)
 
 """
 一時的に作ったやつ、消して良い
