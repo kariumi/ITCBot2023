@@ -1007,20 +1007,18 @@ async def Trial_entry_explulsion():
     for i in mes:
         data = i.split(" ")
 
-        if data[0] == "名前":
-            pass
-        else:
-            date = data[2].split("/")
-            time = data[3].split(":")
-            time_ = datetime.datetime(
-                year=int(date[0]), month=int(date[1]), day=int(date[2]), hour=int(time[0]), minute=int(time[1]), second=int(time[2]), tzinfo=utc)
-            KeikaDays = now_time - time_
-            member_hours = int(KeikaDays.seconds/3600)
-            tmp = member_days.seconds % 3600
-            member_minutes = int(tmp/60)
-            member_seconds = tmp % 60
+        date = data[1].split("/")
+        time = data[2].split(":")
+        time_ = datetime.datetime(
+            year=int(date[0]), month=int(date[1]), day=int(date[2]), hour=int(time[0]), minute=int(time[1]), second=int(time[2]), tzinfo=utc)
+        KeikaDays = now_time - time_
+        member_hours = int(KeikaDays.seconds/3600)
+        tmp = member_days.seconds % 3600
+        member_minutes = int(tmp/60)
+        member_seconds = tmp % 60
+        member_ = guild.get_member(int(data[0]))
 
-            message += f" - {data[2]} {data[3]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{data[0]}\n"
+        message += f" - {data[2]} {data[3]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member_.name}\n"
 
     await DBmessage.edit(content=message)  # ログ
 
@@ -1172,14 +1170,13 @@ async def on_member_update(before, after):
         now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
 
         if (role in before.roles) and (not (role in after.roles)):
-            new_database = f"名前 id 日付 [{now_time}]\n"
+            new_database = f""
             data = database.content.split("\n")
 
             for i in data:
                 data_ = i.split(" ")
-                if data_[0] == "名前":
-                    pass
-                elif data_[1] != str(before.id):
+
+                if data_[1] != str(before.id):
                     new_database += f"{i}\n"
                 else:
                     await printLog(f"{before.name}から要確認ロールを剥奪しました")
