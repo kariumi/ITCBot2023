@@ -83,8 +83,11 @@ async def on_command_error(ctx, error):
 
 @client.command()
 async def 読み上げ(ctx):
-    vc = ctx.author.voice.channel
-    await vc.connect()
+    try:
+        vc = ctx.author.voice.channel
+        await vc.connect()
+    except Exception as e:
+        await printLog(failure(e))
 
 
 """
