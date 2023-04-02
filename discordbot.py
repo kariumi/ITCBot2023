@@ -133,7 +133,7 @@ async def rule_r(ctx, arg):
         guild = client.guild(377392053182660609)
         channel = guild.get_channel(836528209088217138)
         mes = channel.fetch_message(1092068101413142618)
-        await mes.add_reaction("👍")
+        await mes.add_reaction("♻️")
     except Exception as e:
         await printLog(failure(e))
 
