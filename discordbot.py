@@ -110,6 +110,7 @@ async def 離脱(ctx):
 """
 
 
+@client.command()
 async def rule_r(ctx, arg):
     try:
         guild = client.get_guild(377392053182660609)
