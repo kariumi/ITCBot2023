@@ -105,24 +105,6 @@ async def 離脱(ctx):
 
 
 """
-!rule_r
-後で消す
-"""
-
-
-@client.command()
-async def rule_r(ctx):
-    await printLog("ruleにリアクションを付与します")
-    try:
-        guild = client.get_guild(377392053182660609)
-        channel = guild.get_channel(836528209088217138)
-        mes = await channel.fetch_message(1092081056775143575)
-        await mes.add_reaction("👍")
-        await printLog("rulesの、メッセージにリアクションを付与しました")
-    except Exception as e:
-        await printLog("失敗したわ")
-
-"""
 !bot_mes
 ボットから好きなチャンネルに送信
 """
@@ -759,6 +741,19 @@ async def on_raw_reaction_add(payload):
     if payload.message_id == 1076845260975652955:
         await message.remove_reaction(stamp, user)
         await payload.member.move_to(MVch)
+
+    #
+    # rulesのメッセージの👍をクリックしたときの処理
+    #
+    #
+
+    rules = client.get_channel(836528209088217138)
+    if payload.message_id == 836528209088217138:
+        user = client.get_user(payload.user_id)
+        stamp = payload.emoji.name
+        await message.remove_reaction(stamp, user)
+        await user.send("ITC BOT 2023です！個人にDMを送信しづらい場合や、誰に質問していいかわからない場合はここに質問をしてください。")
+
 
 """
 !さいころ
