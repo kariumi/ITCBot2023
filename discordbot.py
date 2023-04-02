@@ -98,7 +98,10 @@ async def 読み上げ(ctx):
 
 @client.command()
 async def 離脱(ctx):
-    await ctx.guild.voice_client.disconnect()
+    try:
+        await ctx.guild.voice_client.disconnect()
+    except Exception as e:
+        await printLog(failure(e))
 
 """
 一時的に作ったやつ、消して良い
