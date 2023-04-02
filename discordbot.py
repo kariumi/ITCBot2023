@@ -111,7 +111,7 @@ async def 離脱(ctx):
 
 
 @client.command()
-async def rule_r(ctx, arg):
+async def rule_r(ctx):
     await printLog("ruleにリアクションを付与します")
     try:
         guild = client.get_guild(377392053182660609)
