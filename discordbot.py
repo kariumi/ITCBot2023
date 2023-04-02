@@ -779,6 +779,11 @@ kariumiに要確認ロールを付与する
 
 @client.command()
 async def kariumi(ctx, *arg):
+    authority = authority_check(ctx)
+    if not authority:
+        await ctx.send(embed=authority_error())
+        await printLog("!vote_role : Error00")
+        return
     await ctx.send(arg[0])
 
 """
