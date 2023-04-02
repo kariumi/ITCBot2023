@@ -76,6 +76,28 @@ async def on_command_error(ctx, error):
 
 
 """
+!読み上げ
+ボイスチャンネルに参加させる
+"""
+
+
+@client.command()
+async def 読み上げ(ctx):
+    vc = ctx.author.voice.channel
+    await vc.connect()
+
+
+"""
+!離脱
+ボイスチャンネルから離脱
+"""
+
+
+@client.command()
+async def 離脱(ctx):
+    await ctx.guild.voice_channel.disconnect()
+
+"""
 一時的に作ったやつ、消して良い
 """
 
