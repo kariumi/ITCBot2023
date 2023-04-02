@@ -1030,7 +1030,7 @@ async def Trial_entry_explulsion():
             member_seconds = tmp % 60
             member_ = guild.get_member(int(data[0]))
 
-            message += f" - {data[2]} {data[3]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member_.name}\n"
+            message += f" - {data[1]} {data[2]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member_.name}\n"
 
     except Exception as e:
         message = failure(e)
