@@ -103,24 +103,6 @@ async def 離脱(ctx):
     except Exception as e:
         await printLog(failure(e))
 
-"""
-!rules
-ルールに書き込む
-"""
-
-
-@client.command()
-async def rules(ctx, arg):
-    authority = authority_check(ctx)
-    if not authority:
-        await ctx.send(embed=authority_error())
-        await printLog("!vote_role : Error00")
-        return
-    guild = client.guild(377392053182660609)
-    channel = guild.get_channel(836528209088217138)
-    mes = await channel.send(arg)
-    await mes.add_reaction("👍")
-
 
 """
 !rule_r
@@ -133,7 +115,7 @@ async def rule_r(ctx, arg):
         guild = client.get_guild(377392053182660609)
         channel = guild.get_channel(836528209088217138)
         mes = await channel.fetch_message(1092068101413142618)
-        await mes.add_reaction("👍")
+        await mes.add_reaction("1️⃣")
     except Exception as e:
         await printLog(failure(e))
 
