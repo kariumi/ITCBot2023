@@ -29,7 +29,6 @@ client = commands.Bot(command_prefix='!', intents=intents)
 authority_role = ["", ""]
 
 
-
 def failure(e):
     exc_type, exc_obj, tb = sys.exc_info()
     lineno = tb.tb_lineno
@@ -43,11 +42,13 @@ async def on_ready():
     await printLog(client, final_update)
     Trial_entry_explulsion.start()
 
+
 @client.event
 async def setup_hook():
     await client.load_extension("extensions.ping")
     await client.load_extension("extensions.get_date")
     await client.load_extension("extensions.shuffle")
+
 
 @client.event
 async def on_command_error(ctx, error):
@@ -714,6 +715,22 @@ async def on_raw_reaction_remove(payload):
         if title == "【投票終了】`(バグっている場合はリサイクルマークを押してください)`":
             await message.remove_reaction(number, user)
 
+
+"""
+!icon
+"""
+
+
+@client.command()
+async def icon(ctx):
+    guild = client.get_guild(377392053182660609)
+    members = guild.members
+    for member in members:
+        try:
+            avatar = member.avatar.url
+            await ctx.send(avatar)
+        except Exception as e:
+            await ctx.send(f"{member.name} - {e}")
 """
 !ModifyDatabase [add/remove] channnelID messageID (str)
 手動でデータベースをいじれるコマンド。危ないので使用前にデータベースのバックアップをとること
