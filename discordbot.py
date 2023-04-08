@@ -14,8 +14,9 @@ import pprint
 import sys
 import linecache
 # from git import *
+from bot_error import *
 
-final_update = "最終更新日：2023/4/2 19:52"
+final_update = "最終更新日：2023/4/9 0:30"
 
 
 class color:
@@ -65,6 +66,9 @@ async def on_ready():
     printLog("BOTが更新されました。ver0.1.15")
     Trial_entry_explulsion.start()
 
+@client.event
+async def setup_hook():
+    await client.load_extension("ping")
 
 @client.event
 async def on_command_error(ctx, error):
@@ -1258,48 +1262,6 @@ async def on_member_update(before, after):
                     await printLog(f"{before.name}から要確認ロールを剥奪しました")
 
             await database.edit(content=new_database)
-
-
-"""
-エラーメッセージ一覧
-"""
-
-
-def any_error(*ctx):
-    embed = discord.Embed(
-        title=f"*Error*：{ctx[0]}", description=f"{ctx[1]}", color=0xff0000)
-    return embed
-
-
-def authority_error():
-    embed = discord.Embed(
-        title=f"*Error*：実行権限がありません！", description="このコマンドを実行するには権限が必要です。", color=0xff0000)
-    return embed
-
-
-def vote_error(ctx):
-    embed = discord.Embed(
-        title=f"*Error*：{ctx}", description="以下の様式で記述してください。\n```\n!vote create [テキストチャンネルID] [投票タイトル] [投票先1] [投票先2] ...\n\n!vote role [テキストチャンネルID] [テキストメッセージID] [選択肢の番号] [ロール] ...```\n詳細：https://github.com/kariumi/ITCBot2023", color=0xff0000)
-    return embed
-
-
-def vote_create_error(ctx):
-    embed = discord.Embed(
-        title=f"*Error*：{ctx}", description="以下の様式で記述してください。\n```\n!vote create [テキストチャンネルID] [投票タイトル] [投票先1] [投票先2] ...\n```\n詳細：https://github.com/kariumi/ITCBot2023", color=0xff0000)
-    return embed
-
-
-def get_date_error(ctx):
-    embed = discord.Embed(
-        title=f"*Error*：{ctx}", description="以下の様式で記述してください。\n```\n!get_date [ロール] ...\n```\n詳細：https://github.com/kariumi/ITCBot2023", color=0xff0000)
-    return embed
-
-
-def set_role_error(ctx):
-    embed = discord.Embed(
-        title=f"*Error*：{ctx}", description="以下の様式で記述してください。\n```\n!set_tole [テキストチャンネルID] [ロール] ...\n```\n詳細：https://github.com/kariumi/ITCBot2023", color=0xff0000)
-    return embed
-
 
 """
 権限の確認
