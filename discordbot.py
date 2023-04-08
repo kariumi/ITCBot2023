@@ -14,32 +14,10 @@ import pprint
 import sys
 import linecache
 # from git import *
-from bot_error import *
+from extensions.utils.bot_error import *
+from extensions.utils.others import *
 
 final_update = "最終更新日：2023/4/9 0:30"
-
-
-class color:
-    RED = '\033[31m'  # (文字)赤
-    GREEN = '\033[32m'  # (文字)緑
-    YELLOW = '\033[33m'  # (文字)黄
-    BLUE = '\033[34m'  # (文字)青
-    MAGENTA = '\033[35m'  # (文字)マゼンタ
-    CYAN = '\033[36m'  # (文字)シアン
-    WHITE = '\033[37m'  # (文字)白
-    BOLD = '\033[1m'  # 太字
-    UNDERLINE = '\033[4m'  # 下線
-    INVISIBLE = '\033[08m'  # 不可視
-    REVERCE = '\033[07m'  # 文字色と背景色を反転
-    BG_RED = '\033[41m'  # (背景)赤
-    BG_GREEN = '\033[42m'  # (背景)緑
-    BG_YELLOW = '\033[43m'  # (背景)黄
-    BG_BLUE = '\033[44m'  # (背景)青
-    BG_MAGENTA = '\033[45m'  # (背景)マゼンタ
-    BG_CYAN = '\033[46m'  # (背景)シアン
-    BG_WHITE = '\033[47m'  # (背景)白
-    RESET = '\033[0m'  # 全てリセット
-
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -50,7 +28,6 @@ client = commands.Bot(command_prefix='!', intents=intents)
 
 authority_role = ["", ""]
 
-utc = datetime.timezone.utc
 
 
 def failure(e):
@@ -63,12 +40,14 @@ def failure(e):
 @client.event
 async def on_ready():
     print(f"{color.YELLOW}{client.user}{color.RESET}でログインしました")
-    printLog("BOTが更新されました。ver0.1.15")
+    await printLog(client, "BOTが更新されました。ver0.1.15")
     Trial_entry_explulsion.start()
 
 @client.event
 async def setup_hook():
-    await client.load_extension("ping")
+    await client.load_extension("extensions.ping")
+    await client.load_extension("extensions.get_date")
+    await client.load_extension("extensions.shuffle")
 
 @client.event
 async def on_command_error(ctx, error):
@@ -91,7 +70,7 @@ async def 読み上げ(ctx):
         vc = ctx.author.voice.channel
         await vc.connect()
     except Exception as e:
-        await printLog(failure(e))
+        await printLog(client, failure(e))
 
 
 """
@@ -105,7 +84,7 @@ async def 離脱(ctx):
     try:
         await ctx.guild.voice_client.disconnect()
     except Exception as e:
-        await printLog(failure(e))
+        await printLog(client, failure(e))
 
 
 """
@@ -116,10 +95,10 @@ async def 離脱(ctx):
 
 @client.command()
 async def bot_mes(ctx, textchannel: typing.Optional[TextChannel], arg):
-    authority = authority_check(ctx)
+    authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
-        await printLog("!vote_role : Error00")
+        await printLog(client, "!vote_role : Error00")
         return
     await textchannel.send(arg)
 
@@ -147,80 +126,7 @@ async def omikuji_test(ctx):
         message = ""
         for row in reader:
             message += f"{row}\n"
-        await printLog(message)
-
-
-"""
-!shuffle
-自分が入っているボイスチャンネルの人を指定したボイスチャンネルにランダムに振り分け、自動的に移動させるコマンドです。
-
-!shuffle [ボイスチャンネルID 1] [ボイスチャンネルID 2] ...
-例：!shuffle 123456789012345678 123456789012345679
-上記のように指定すると、指定したボイスチャンネルにランダムに振り分けることができます。
-
-!shuffle [(任意)ロール 1] [(任意)ロール 2] [(任意)ロール 3] [ボイスチャンネルID 1] [ボイスチャンネルID 2] ...
-例：!shuffle @DTM部 @CG部 123456789012345678 123456789012345679
-上記のようにロールを指定すると、指定したロールのメンバーは均等に振り分けられます。
-・ロールは0~3個の間で指定することができます。
-(created by Chino)
-"""
-
-
-@client.command()
-async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Optional[Role] = None, host3: typing.Optional[Role] = None, *channels: VoiceChannel):
-    authority = authority_check(ctx)
-    if not authority:
-        await ctx.send(embed=authority_error())
-        await printLog("!shuffle : Error00")
-        return
-    if ctx.author.voice is None:
-        await ctx.send(embed=any_error("ボイスチャンネルに入ってください", ""))
-        printLog("!shuffle : Error01")
-        return
-    if len(channels) == 0:
-        await ctx.send(embed=any_error("ボイスチャンネルを指定してください", ""))
-        printLog("!shuffle : Error02")
-        return
-
-    channel = ctx.author.voice.channel  # 実行者の入っているチャンネル
-
-    members = channel.members  # channelに入っている全メンバーをmenbersに追加
-    hosts1 = []
-    hosts2 = []
-    hosts3 = []
-
-    for m in members[:]:
-        if host1 is not None and host1 in m.roles:
-            hosts1.append(m)
-            members.remove(m)
-            continue
-
-        if host2 is not None and host2 in m.roles:
-            hosts2.append(m)
-            members.remove(m)
-            continue
-
-        if host3 is not None and host3 in m.roles:
-            hosts3.append(m)
-            members.remove(m)
-            continue
-
-    random.shuffle(members)
-    random.shuffle(hosts1)
-    random.shuffle(hosts2)
-    random.shuffle(hosts3)
-
-    for i in range(len(members)):
-        await members[i].move_to(channels[i % len(channels)])
-    for i in range(len(hosts1)):
-        await hosts1[i].move_to(channels[i % len(channels)])
-    for i in range(len(hosts2)):
-        await hosts2[i].move_to(channels[i % len(channels)])
-    for i in range(len(hosts3)):
-        await hosts3[i].move_to(channels[i % len(channels)])
-
-    await printLog(f"{channel.mention}に接続している人を移動させました")
-
+        await printLog(client, message)
 
 """
 !vote
@@ -240,33 +146,33 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 
 @client.command()
 async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * args):
-    authority = authority_check(ctx)
+    authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
-        await printLog("!vote : Error00")
+        await printLog(client, "!vote : Error00")
         return
 
     if arg == None:
         await ctx.send(embed=vote_error("引数が指定されていません！"))
-        await printLog("!vote : Error01")
+        await printLog(client, "!vote : Error01")
         return
 
     elif arg == "create":
         if channel == None:
             await ctx.send(embed=vote_create_error("送信先のテキストチャンネルIDが指定されていません！"))
-            await printLog("!vote : Error02")
+            await printLog(client, "!vote : Error02")
             return
         if len(args) == 0:
             await ctx.send(embed=vote_create_error("投票タイトルが指定されていません！"))
-            await printLog("!vote : Error03")
+            await printLog(client, "!vote : Error03")
             return
         elif len(args) == 1:
             await ctx.send(embed=vote_create_error("選択肢が指定されていません！"))
-            await printLog("!vote : Error04")
+            await printLog(client, "!vote : Error04")
             return
         elif len(args) > 10:
             await ctx.send(embed=vote_create_error("選択肢が多すぎます！最大9個まで指定できます。"))
-            await printLog("!vote : Error05")
+            await printLog(client, "!vote : Error05")
             return
         vote_title = args[0]
         vote_mes = ""
@@ -296,71 +202,10 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
 
     else:
         await ctx.send(embed=vote_error("引数が違います！"))
-        await printLog("!vote : Error06")
+        await printLog(client, "!vote : Error06")
         return
 
 
-"""
-!get_date [ロール]
-指定ロールに所属しているメンバーのサーバー参加日/その日からの経過日数を教えてくれる。
-体験入部の管理用に作ったけどそっちは自動でやってくれるので手動で実行することはほぼない。
-
-"""
-
-
-@client.command()
-async def get_date(ctx, role: typing.Optional[Role] = None):
-
-    if role == None:
-        await ctx.send(embed=get_date_error("ロールが指定されていません！"))
-        await printLog("!get_date : Error01")
-        return
-
-    now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
-
-    message = f"__{role.mention}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}\n__\n__参加日\t\t経過日数\t名前__\n"
-
-    sorted_taiken_members = sorted(
-        role.members, key=lambda x: x.joined_at)  # 参加日順にソート
-
-    for member in sorted_taiken_members:
-        # ログ用
-        member_days = now_time - member.joined_at
-        message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.name}\n"
-
-    await ctx.send(message)  # ログ
-
-"""
-!get_date_id [ロール]
-指定ロールに所属しているメンバーのサーバー参加日/その日からの経過日数を教えてくれる。
-体験入部の管理用に作ったけどそっちは自動でやってくれるので手動で実行することはほぼない。
-
-"""
-
-
-@client.command()
-async def get_date_id(ctx, role_id):
-    guild = client.get_guild(377392053182660609)
-    role = guild.get_role(int(role_id))
-
-    if role == None:
-        await ctx.send(embed=get_date_error("ロールが指定されていません！"))
-        await printLog("!get_date : Error01")
-        return
-
-    now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
-
-    message = f"__{role.name}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}\n__\n__参加日\t\t経過日数\t名前__\n"
-
-    sorted_taiken_members = sorted(
-        role.members, key=lambda x: x.joined_at)  # 参加日順にソート
-
-    for member in sorted_taiken_members:
-        # ログ用
-        member_days = now_time - member.joined_at
-        message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.name}\n"
-
-    await ctx.send(message)  # ログ
 
 
 # """
@@ -396,10 +241,10 @@ async def get_date_id(ctx, role_id):
 #             try:
 #                 member.remove_roles(taiken_role)
 #                 member.add_roles(yo_kakunin_role)
-#                 await printLog(f"{member.name}に要確認ロールを付与しました。")
+#                 await printLog(client, f"{member.name}に要確認ロールを付与しました。")
 #             except:
-#                 await printLog(f"{member.name}に要確認ロールを付与できませんでした")
-#     await printLog(message)  # ログ
+#                 await printLog(client, f"{member.name}に要確認ロールを付与できませんでした")
+#     await printLog(client, message)  # ログ
 
 
 """
@@ -528,22 +373,22 @@ async def おみくじ(ctx):
 
 @client.command()
 async def vote_role(ctx, channel: typing.Optional[TextChannel] = None, title="", *roles: typing.Optional[Role]):
-    authority = authority_check(ctx)
+    authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
-        await printLog("!vote_role : Error00")
+        await printLog(client, "!vote_role : Error00")
         return
     if channel == None:
         await ctx.send(embed=set_role_error("テキストチャンネルが指定されていません。"))
-        await printLog("!vote_role : Error01")
+        await printLog(client, "!vote_role : Error01")
         return
     if title == "":
         await ctx.send(embed=set_role_error("タイトルが指定されていません。"))
-        await printLog("!vote_role : Error02")
+        await printLog(client, "!vote_role : Error02")
         return
     if len(roles) == 0:
         await ctx.send(embed=set_role_error("roleが指定されていません。"))
-        await printLog("!vote_role : Error03")
+        await printLog(client, "!vote_role : Error03")
         return
     message = f"**{title}**\n\n"
     vote_icon = ["1️⃣", "2️⃣", "3️⃣", "4️⃣",
@@ -801,10 +646,10 @@ kariumiに要確認ロールを付与する
 
 @client.command()
 async def kariumi(ctx, *arg):
-    authority = authority_check(ctx)
+    authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
-        await printLog("!vote_role : Error00")
+        await printLog(client, "!vote_role : Error00")
         return
     await ctx.send(arg[0])
 
@@ -822,7 +667,7 @@ async def yokakunin(ctx):
     try:
         await ctx.send("名前 id 日付")
     except:
-        await printLog("失敗")
+        await printLog(client, "失敗")
 
 """
 DMを受け取ったときの処理（TwitterのDMみたいなシステムで相互に返信可）
@@ -858,7 +703,7 @@ async def on_message(message):
             data = i.split(" ")
             if int(data[0]) == message.author.id:
                 sendMes = await client.get_channel(int(data[1])).send(message.content)
-                await printLog(f"BOTが{message.author.name}からDMを受け取りました。\n{sendMes.jump_url}")
+                await printLog(client, f"BOTが{message.author.name}からDMを受け取りました。\n{sendMes.jump_url}")
                 return
         # 初めて送ってきた人はチャンネルを作成する
         channel = await guild.create_text_channel(message.author.name, category=DMcategory)
@@ -866,7 +711,7 @@ async def on_message(message):
         new_database = f"{database.content}"
         new_database += f"\n{message.author.id} {channel.id}"
         await database.edit(content=new_database)
-        await printLog(f"BOTが{message.author.name}からDMを初めて受け取りました。\n{sendMes.jump_url}\nDBに{message.author.name}を追加します。\n{database.jump_url}")
+        await printLog(client, f"BOTが{message.author.name}からDMを初めて受け取りました。\n{sendMes.jump_url}\nDBに{message.author.name}を追加します。\n{database.jump_url}")
         return
     # データベースに返信を書き込む→DM送信
     if message.channel.category == DMcategory:
@@ -877,12 +722,12 @@ async def on_message(message):
             if int(data[1]) == message.channel.id:
                 try:  # try→本鯖にいるメンバーを取得、except→新歓鯖にいるメンバーを取得、どちらにもいないとバグる
                     member = itcGuild.get_member(int(data[0]))
-                    await printLog(f"本鯖に、{member.name}がいます")
+                    await printLog(client, f"本鯖に、{member.name}がいます")
                 except:
                     member = shinkanGuild.get_member(int(data[0]))
-                    await printLog(f"本鯖には、{member.name}がいませんでした。")
+                    await printLog(client, f"本鯖には、{member.name}がいませんでした。")
                 await member.send(message.content)
-                await printLog(f"BOTから、{member.name}にDMを返信しました。\n{message.jump_url}")
+                await printLog(client, f"BOTから、{member.name}にDMを返信しました。\n{message.jump_url}")
                 return
 
     # ロール一斉送信
@@ -891,30 +736,30 @@ async def on_message(message):
     ShinkanRoleCategory = client.get_channel(1086441780574167071)
 
     if message.channel.category == ShinkanRoleCategory:
-        await printLog(message.channel.topic)
+        await printLog(client, message.channel.topic)
         try:
             role = shinkanGuild.get_role(int(message.channel.topic))
-            await printLog(f"文章を@{role.name}ロール保持者に一斉送信します。")
+            await printLog(client, f"文章を@{role.name}ロール保持者に一斉送信します。")
             members = role.members
             for member in members:
                 await member.send(message.content)
-                await printLog(f"|{member.name}に送信しました。")
+                await printLog(client, f"|{member.name}に送信しました。")
         except:
-            await printLog("DM一斉送信に失敗しました。")
+            await printLog(client, "DM一斉送信に失敗しました。")
         return
 
     if message.channel.category == RoleCategory:
-        await printLog(message.channel.topic)
+        await printLog(client, message.channel.topic)
         try:
             role = itcGuild.get_role(int(message.channel.topic))
-            await printLog(f"文章を@{role.name}ロール保持者に一斉送信します。")
+            await printLog(client, f"文章を@{role.name}ロール保持者に一斉送信します。")
 
             members = role.members
             for member in members:
                 await member.send(message.content)
-                await printLog(f"|{member.name}に送信しました。")
+                await printLog(client, f"|{member.name}に送信しました。")
         except:
-            await printLog("DM一斉送信に失敗しました。")
+            await printLog(client, "DM一斉送信に失敗しました。")
         return
 
 
@@ -982,7 +827,7 @@ async def modify(ctx, arg, channel: typing.Optional[TextChannel],  mes, s):
     if arg == "add":
         content += f"\n{s}"
         changeMes = await message.edit(content=content)
-        await printLog(f"{changeMes.jump_url} の文章に追加しました。")
+        await printLog(client, f"{changeMes.jump_url} の文章に追加しました。")
 
     if arg == "remove":
         try:
@@ -994,9 +839,9 @@ async def modify(ctx, arg, channel: typing.Optional[TextChannel],  mes, s):
                 else:
                     new_content = f"{i}\n"
             changeMes = await message.edit(content=new_content)
-            await printLog(f"{changeMes.jump_url} の文章の一部を削除しました。")
+            await printLog(client, f"{changeMes.jump_url} の文章の一部を削除しました。")
         except Exception as e:
-            await printLog(f"失敗しました。{e}")
+            await printLog(client, f"失敗しました。{e}")
 
 
 """
@@ -1073,9 +918,9 @@ async def Trial_entry_explulsion():
                 try:
                     await member.remove_roles(taiken_role)
                     await member.add_roles(yo_kakunin_role)
-                    await printLog(f"{member.name}に要確認ロールを付与しました。")
+                    await printLog(client, f"{member.name}に要確認ロールを付与しました。")
                 except:
-                    await printLog(f"{member.name}に要確認ロールを付与できませんでした")
+                    await printLog(client, f"{member.name}に要確認ロールを付与できませんでした")
 
         message += f"----------------------------------------------------------------------------------------\n"
         message += f"**要確認の一覧(UTC基準)**\n - __要確認日\t\t\t\t経過日数\t\t\t\t\t\t名前__\n"
@@ -1173,7 +1018,7 @@ async def Trial_entry_explulsion():
     # else:
     #     message += "90日を超えたメンバーはいませんでした。\n"
 
-    # await printLog(message)  # ログを出力
+    # await printLog(client, message)  # ログを出力
 
 
 """
@@ -1194,13 +1039,13 @@ async def on_member_update(before, after):
 
         # roleの差分を取得
         # diff_role = list(set(before.roles) ^ set(after.roles))
-        # await printLog(f"{before.name}の{diff_role}ロールが変更されました。")
+        # await printLog(client, f"{before.name}の{diff_role}ロールが変更されました。")
         if (not (role in before.roles)) and (role in after.roles):
             try:
                 await before.send(sendMes.content)
-                await printLog(f"{before.name}に「体験入部が付与された時」のDMを送信しました。")
+                await printLog(client, f"{before.name}に「体験入部が付与された時」のDMを送信しました。")
             except:  # 失敗したら報告
-                await printLog(f"Error!!：{before.name}に「体験入部が付与された時」のDMを送信できませんでした。")
+                await printLog(client, f"Error!!：{before.name}に「体験入部が付与された時」のDMを送信できませんでした。")
             return
     # 新歓鯖で体験入部ロールが付与されたときの処理
     if before.guild.id == 1056591502958145627:
@@ -1213,13 +1058,13 @@ async def on_member_update(before, after):
 
         # roleの差分を取得
         # diff_role = list(set(before.roles) ^ set(after.roles))
-        # await printLog(f"{before.name}の{diff_role}ロールが変更されました。")
+        # await printLog(client, f"{before.name}の{diff_role}ロールが変更されました。")
         if (not (role in before.roles)) and (role in after.roles):
             try:
                 await before.send(sendMes.content)
-                await printLog(f"{before.name}に「新歓鯖で体験入部が付与された時」のDMを送信しました。")
+                await printLog(client, f"{before.name}に「新歓鯖で体験入部が付与された時」のDMを送信しました。")
             except:  # 失敗したら報告
-                await printLog(f"Error!!：{before.name}に「新歓鯖で体験入部が付与された時」のDMを送信できませんでした。")
+                await printLog(client, f"Error!!：{before.name}に「新歓鯖で体験入部が付与された時」のDMを送信できませんでした。")
             return
 
     # 本鯖で要確認ロールを付与されたときの処理
@@ -1236,7 +1081,7 @@ async def on_member_update(before, after):
         if (not (role in before.roles)) and (role in after.roles):
             new_database = f"{database.content}\n{before.name} {before.id} {now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}"
             await database.edit(content=new_database)
-            await printLog(f"{before.name}に要確認ロールを付与しました")
+            await printLog(client, f"{before.name}に要確認ロールを付与しました")
 
     # 本鯖で要確認ロールを剥奪されたときの処理
     if before.guild.id == 377392053182660609:
@@ -1259,51 +1104,13 @@ async def on_member_update(before, after):
                 if data_[1] != str(before.id):
                     new_database += f"{i}\n"
                 else:
-                    await printLog(f"{before.name}から要確認ロールを剥奪しました")
+                    await printLog(client, f"{before.name}から要確認ロールを剥奪しました")
 
             await database.edit(content=new_database)
 
 """
 権限の確認
 """
-
-
-def authority_check(ctx):
-    true_role = [968160313797136414, 1051495123285983304, 1052290950875062403]
-    # true_guildはtrue_roleと一対一対応で。
-    true_guild = [884771781708247041, 1053669243616501800]
-
-    authority = False
-
-    # サーバー内ロール権限
-    try:
-        for i in range(len(true_role)):
-            if ctx.guild.get_role(true_role[i]) in ctx.author.roles:
-                authority = True
-    except:
-        pass
-    try:
-        for i in range(len(true_guild)):
-            if ctx.guild == client.get_guild(true_guild[i]):
-                authority = True
-    except:
-        pass
-    return authority
-
-
-"""
-ログを残す
-printLog
-"""
-
-
-async def printLog(content):
-    t_delta = datetime.timedelta(hours=9)
-    JST = datetime.timezone(t_delta, 'JST')
-    nowTime = datetime.datetime.now(JST)
-    textch = client.get_channel(1076682589185790065)
-    now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
-    await textch.send(f"[{now}] - {content}")
 
 token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
