@@ -17,7 +17,7 @@ import linecache
 from extensions.utils.bot_error import *
 from extensions.utils.others import *
 
-final_update = "最終更新日：2023/4/9 0:30"
+final_update = get_startup_jst()
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -40,7 +40,7 @@ def failure(e):
 @client.event
 async def on_ready():
     print(f"{color.YELLOW}{client.user}{color.RESET}でログインしました")
-    await printLog(client, "BOTが更新されました。ver0.1.15")
+    await printLog(client, final_update)
     Trial_entry_explulsion.start()
 
 @client.event
@@ -73,15 +73,6 @@ async def bot_mes(ctx, textchannel: typing.Optional[TextChannel], arg):
         return
     await textchannel.send(arg)
 
-
-"""
-一時的に作ったやつ、消して良い
-"""
-
-
-@client.command()
-async def version(ctx):
-    await ctx.send(content="ver.0.1.18 2023/3/24 1:00")
 
 """
 !vote

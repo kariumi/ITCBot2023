@@ -32,8 +32,8 @@ async def printLog(bot, content):
     t_delta = datetime.timedelta(hours=9)
     JST = datetime.timezone(t_delta, 'JST')
     nowTime = datetime.datetime.now(JST)
-    textch = bot.get_channel(1076682589185790065)
     now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
+    textch = bot.get_channel(1076682589185790065)
     await textch.send(f"[{now}] - {content}")
 
 """
@@ -61,3 +61,11 @@ def authority_check(client, ctx):
     except:
         pass
     return authority
+
+def get_startup_jst():
+    t_delta = datetime.timedelta(hours=9)
+    JST = datetime.timezone(t_delta, 'JST')
+    nowTime = datetime.datetime.now(JST)
+    now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
+    final_update = "BOT更新日：" + now
+    return final_update
