@@ -70,6 +70,7 @@ async def on_ready():
 async def setup_hook():
     await client.load_extension("extensions.ping")
     await client.load_extension("extensions.get_date")
+    await client.load_extension("extensions.shuffle")
 
 @client.event
 async def on_command_error(ctx, error):
@@ -117,7 +118,7 @@ async def 離脱(ctx):
 
 @client.command()
 async def bot_mes(ctx, textchannel: typing.Optional[TextChannel], arg):
-    authority = authority_check(ctx)
+    authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
         await printLog(client, "!vote_role : Error00")
@@ -150,79 +151,6 @@ async def omikuji_test(ctx):
             message += f"{row}\n"
         await printLog(client, message)
 
-
-"""
-!shuffle
-自分が入っているボイスチャンネルの人を指定したボイスチャンネルにランダムに振り分け、自動的に移動させるコマンドです。
-
-!shuffle [ボイスチャンネルID 1] [ボイスチャンネルID 2] ...
-例：!shuffle 123456789012345678 123456789012345679
-上記のように指定すると、指定したボイスチャンネルにランダムに振り分けることができます。
-
-!shuffle [(任意)ロール 1] [(任意)ロール 2] [(任意)ロール 3] [ボイスチャンネルID 1] [ボイスチャンネルID 2] ...
-例：!shuffle @DTM部 @CG部 123456789012345678 123456789012345679
-上記のようにロールを指定すると、指定したロールのメンバーは均等に振り分けられます。
-・ロールは0~3個の間で指定することができます。
-(created by Chino)
-"""
-
-
-@client.command()
-async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Optional[Role] = None, host3: typing.Optional[Role] = None, *channels: VoiceChannel):
-    authority = authority_check(ctx)
-    if not authority:
-        await ctx.send(embed=authority_error())
-        await printLog(client, "!shuffle : Error00")
-        return
-    if ctx.author.voice is None:
-        await ctx.send(embed=any_error("ボイスチャンネルに入ってください", ""))
-        printLog(client, "!shuffle : Error01")
-        return
-    if len(channels) == 0:
-        await ctx.send(embed=any_error("ボイスチャンネルを指定してください", ""))
-        printLog(client, "!shuffle : Error02")
-        return
-
-    channel = ctx.author.voice.channel  # 実行者の入っているチャンネル
-
-    members = channel.members  # channelに入っている全メンバーをmenbersに追加
-    hosts1 = []
-    hosts2 = []
-    hosts3 = []
-
-    for m in members[:]:
-        if host1 is not None and host1 in m.roles:
-            hosts1.append(m)
-            members.remove(m)
-            continue
-
-        if host2 is not None and host2 in m.roles:
-            hosts2.append(m)
-            members.remove(m)
-            continue
-
-        if host3 is not None and host3 in m.roles:
-            hosts3.append(m)
-            members.remove(m)
-            continue
-
-    random.shuffle(members)
-    random.shuffle(hosts1)
-    random.shuffle(hosts2)
-    random.shuffle(hosts3)
-
-    for i in range(len(members)):
-        await members[i].move_to(channels[i % len(channels)])
-    for i in range(len(hosts1)):
-        await hosts1[i].move_to(channels[i % len(channels)])
-    for i in range(len(hosts2)):
-        await hosts2[i].move_to(channels[i % len(channels)])
-    for i in range(len(hosts3)):
-        await hosts3[i].move_to(channels[i % len(channels)])
-
-    await printLog(client, f"{channel.mention}に接続している人を移動させました")
-
-
 """
 !vote
 投票を作成して色々できる
@@ -241,7 +169,7 @@ async def shuffle(ctx, host1: typing.Optional[Role] = None, host2: typing.Option
 
 @client.command()
 async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * args):
-    authority = authority_check(ctx)
+    authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
         await printLog(client, "!vote : Error00")
@@ -468,7 +396,7 @@ async def おみくじ(ctx):
 
 @client.command()
 async def vote_role(ctx, channel: typing.Optional[TextChannel] = None, title="", *roles: typing.Optional[Role]):
-    authority = authority_check(ctx)
+    authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
         await printLog(client, "!vote_role : Error00")
@@ -741,7 +669,7 @@ kariumiに要確認ロールを付与する
 
 @client.command()
 async def kariumi(ctx, *arg):
-    authority = authority_check(ctx)
+    authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
         await printLog(client, "!vote_role : Error00")
@@ -1208,7 +1136,7 @@ async def on_member_update(before, after):
 """
 
 
-def authority_check(ctx):
+def authority_check(client, ctx):
     true_role = [968160313797136414, 1051495123285983304, 1052290950875062403]
     # true_guildはtrue_roleと一対一対応で。
     true_guild = [884771781708247041, 1053669243616501800]
@@ -1231,5 +1159,5 @@ def authority_check(ctx):
     return authority
 
 # token = getenv('DISCORD_BOT_TOKEN')
-token = "ODQ5NjczNjExMjE1NjM0NDYy.G0KTcn.iukJYHsUbA4th33HfvWTF8ppp5kTXONZZ097To"
+token = "ODQ5NjczNjExMjE1NjM0NDYy.Gm9awt.ykAXqipf7gNYXqXyXpaDQ6Wz-1-nAoO7_xQOWQ"
 client.run(token)
