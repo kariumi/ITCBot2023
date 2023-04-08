@@ -17,7 +17,7 @@ import linecache
 from extensions.utils.bot_error import *
 from extensions.utils.others import *
 
-final_update = "最終更新日：2023/4/9 0:30"
+final_update = get_startup_jst()
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -40,7 +40,7 @@ def failure(e):
 @client.event
 async def on_ready():
     print(f"{color.YELLOW}{client.user}{color.RESET}でログインしました")
-    await printLog(client, "BOTが更新されました。ver0.1.15")
+    await printLog(client, final_update)
     Trial_entry_explulsion.start()
 
 @client.event
@@ -59,35 +59,6 @@ async def on_command_error(ctx, error):
 
 
 """
-!読み上げ
-ボイスチャンネルに参加させる
-"""
-
-
-@client.command()
-async def 読み上げ(ctx):
-    try:
-        vc = ctx.author.voice.channel
-        await vc.connect()
-    except Exception as e:
-        await printLog(client, failure(e))
-
-
-"""
-!離脱
-ボイスチャンネルから離脱
-"""
-
-
-@client.command()
-async def 離脱(ctx):
-    try:
-        await ctx.guild.voice_client.disconnect()
-    except Exception as e:
-        await printLog(client, failure(e))
-
-
-"""
 !bot_mes
 ボットから好きなチャンネルに送信
 """
@@ -102,31 +73,6 @@ async def bot_mes(ctx, textchannel: typing.Optional[TextChannel], arg):
         return
     await textchannel.send(arg)
 
-
-"""
-一時的に作ったやつ、消して良い
-"""
-
-
-@client.command()
-async def version(ctx):
-    await ctx.send(content="ver.0.1.18 2023/3/24 1:00")
-
-
-"""
-おみくじ確認用
-!omikuji_test
-"""
-
-
-@client.command()
-async def omikuji_test(ctx):
-    with open('data/omikuji.csv') as f:
-        reader = csv.reader(f)
-        message = ""
-        for row in reader:
-            message += f"{row}\n"
-        await printLog(client, message)
 
 """
 !vote
@@ -204,47 +150,6 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
         await ctx.send(embed=vote_error("引数が違います！"))
         await printLog(client, "!vote : Error06")
         return
-
-
-
-
-# """
-# !get_date_test
-# 後で消す
-# """
-
-
-# @client.command()
-# async def get_date_test(ctx):
-#     guild = client.get_guild(377392053182660609)  # 本鯖
-#     taiken_role = guild.get_role(851748635023769630)  # @体験入部
-#     yo_kakunin_role = guild.get_role(833323166440095744)  # @要確認
-#     role = guild.get_role(851748635023769630)
-#     now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
-#     message = f"__{role.name}の一覧:{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}(UTC表記)\n__\n__参加日\t\t経過日数\t名前__\n"
-#     sorted_taiken_members = sorted(
-#         role.members, key=lambda x: x.joined_at)  # 参加日順にソート
-
-#     # ここから、60日を超えためんばーを選別
-#     membersOf60days = []
-#     time_start_date = datetime.datetime(year=2023, month=4, day=1, tzinfo=utc)
-
-#     for member in sorted_taiken_members:
-#         if member.joined_at > time_start_date:
-#             member_days = now_time - member.joined_at
-#         else:
-#             member_days = now_time - time_start_date
-#         message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t{member_days.days}日\t{member.name}\n"
-
-#         if member_days.days >= 60:
-#             membersOf60days.append(member.name)
-#             try:
-#                 member.remove_roles(taiken_role)
-#                 member.add_roles(yo_kakunin_role)
-#                 await printLog(client, f"{member.name}に要確認ロールを付与しました。")
-#             except:
-#                 await printLog(client, f"{member.name}に要確認ロールを付与できませんでした")
-#     await printLog(client, message)  # ログ
 
 
 """
@@ -946,79 +851,6 @@ async def Trial_entry_explulsion():
     except Exception as e:
         message = failure(e)
     await DBmessage.edit(content=message)  # ログ
-
-#       except Exception as e:
-#           message += f"取得に失敗しました。\n{type(e)}\n"
-
-    # # itcの鯖
-    # ITCserver = client.get_guild(1075592226534600755)
-    # # 代表の人を取得
-    # member_leader = ITCserver.get_member(588717978594443264)
-    # # ｵﾚ
-    # member_me = ITCserver.get_member(599515603484672002)
-    # # 体験入部ロール
-    # taiken_role = ITCserver.get_role(851748635023769630)
-    # # 要確認ロール
-    # yo_kakunin_role = ITCserver.get_role(833323166440095744)
-
-    # t_delta = datetime.timedelta(hours=9)
-    # JST = datetime.timezone(t_delta, 'JST')
-    # now_time = datetime.datetime.now(JST)  # 現在時刻を取得
-    # now = now_time.strftime('%Y/%m/%d %H:%M:%S')
-    # role = client.get_guild(377392053182660609).get_role(851748635023769630)
-    # # ↓↓year=は毎年変更する必要あり。↓↓
-    # time_start_date = datetime.datetime(year=2023, month=4, day=1, tzinfo=utc)
-    # message = f"__{role.name}の一覧を出力します:\n参加日\t経過日数\t名前__\n"
-
-    # day90_members = []
-    # day60_members = []
-    # sorted_taiken_members = sorted(
-    #     role.members, key=lambda x: x.joined_at)  # 参加日順にソート
-
-    # for member in sorted_taiken_members:  # 90日、60日経過メンバーを絞る->90_members、60_membersへ。尚、4月1日以前に参加した者は4月1日参加とみなして計算する。
-
-    #     if member.joined_at > time_start_date:
-    #         member_days = now_time - member.joined_at
-    #     else:
-    #         member_days = now_time - time_start_date
-    #     # ログ用
-
-    #     if member_days.days == 60:  # 60
-    #         # 体験入部ロールを外し、要確認ロールを付与
-    #         member.remove_roles(taiken_role)
-    #         member.add_roles(yo_kakunin_role)
-    #         day60_members.append(member.name)
-    #         message += f"__***❗\t{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日***\t{member.mention}__\n"
-    #     elif 60 < member_days.days < 90:
-    #         message += f"_{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.mention}_\n"
-
-    #     elif member_days.days >= 90:  # 90~<----------------ここを変更すること！！！！
-    #         day90_members.append(member.name)
-    #         message += f"__***❌{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日***__\t{member.mention}\n"
-    #     elif member_days.days >= 0:  # 0~59,61~89
-    #         message += f"{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t{member_days.days}日\t{member.name}\n"
-
-    # if len(day60_members) > 0 or len(day90_members) > 0:
-    #     leader_role = client.get_guild(
-    #         377392053182660609).get_role(377446484162904065)
-
-    # if len(day60_members) > 0:
-    #     message += f"60日を超えたメンバーが{len(day60_members)}人いました。\n"
-    # else:
-    #     message += "60日を超えたメンバーはいませんでした。\n"
-
-    # # 代表に送信するDMの内容
-    # if len(day90_members) > 0:
-    #     dm_mes = "90日を超えたメンバーを検出しました。確認してください。\n"
-    #     message += f"90日を超えたメンバーが{len(day90_members)}人いました。\n"
-    #     for i in range(len(day90_members)):
-    #         dm_mes += f"{member.name}\t【参加日】{member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day}\t【経過日数】{member_days.days}日\n"
-    #     await member_me.send(dm_mes)  # テスト用に自分にも送信する。後で消してよい。
-    #     await member_leader.send(dm_mes)
-    # else:
-    #     message += "90日を超えたメンバーはいませんでした。\n"
-
-    # await printLog(client, message)  # ログを出力
 
 
 """
