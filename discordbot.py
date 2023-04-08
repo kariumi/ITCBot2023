@@ -19,35 +19,12 @@ from extensions.utils.others import *
 
 final_update = "最終更新日：2023/4/9 0:30"
 
-
-class color:
-    RED = '\033[31m'  # (文字)赤
-    GREEN = '\033[32m'  # (文字)緑
-    YELLOW = '\033[33m'  # (文字)黄
-    BLUE = '\033[34m'  # (文字)青
-    MAGENTA = '\033[35m'  # (文字)マゼンタ
-    CYAN = '\033[36m'  # (文字)シアン
-    WHITE = '\033[37m'  # (文字)白
-    BOLD = '\033[1m'  # 太字
-    UNDERLINE = '\033[4m'  # 下線
-    INVISIBLE = '\033[08m'  # 不可視
-    REVERCE = '\033[07m'  # 文字色と背景色を反転
-    BG_RED = '\033[41m'  # (背景)赤
-    BG_GREEN = '\033[42m'  # (背景)緑
-    BG_YELLOW = '\033[43m'  # (背景)黄
-    BG_BLUE = '\033[44m'  # (背景)青
-    BG_MAGENTA = '\033[45m'  # (背景)マゼンタ
-    BG_CYAN = '\033[46m'  # (背景)シアン
-    BG_WHITE = '\033[47m'  # (背景)白
-    RESET = '\033[0m'  # 全てリセット
-
-
 intents = discord.Intents.default()
 intents.message_content = True
 intents.reactions = True
 intents.members = True
 
-client = commands.Bot(command_prefix='+', intents=intents)
+client = commands.Bot(command_prefix='!', intents=intents)
 
 authority_role = ["", ""]
 
@@ -63,7 +40,7 @@ def failure(e):
 @client.event
 async def on_ready():
     print(f"{color.YELLOW}{client.user}{color.RESET}でログインしました")
-    # await printLog(client, "BOTが更新されました。ver0.1.15")
+    await printLog(client, "BOTが更新されました。ver0.1.15")
     Trial_entry_explulsion.start()
 
 @client.event
@@ -1135,29 +1112,5 @@ async def on_member_update(before, after):
 権限の確認
 """
 
-
-def authority_check(client, ctx):
-    true_role = [968160313797136414, 1051495123285983304, 1052290950875062403]
-    # true_guildはtrue_roleと一対一対応で。
-    true_guild = [884771781708247041, 1053669243616501800]
-
-    authority = False
-
-    # サーバー内ロール権限
-    try:
-        for i in range(len(true_role)):
-            if ctx.guild.get_role(true_role[i]) in ctx.author.roles:
-                authority = True
-    except:
-        pass
-    try:
-        for i in range(len(true_guild)):
-            if ctx.guild == client.get_guild(true_guild[i]):
-                authority = True
-    except:
-        pass
-    return authority
-
-# token = getenv('DISCORD_BOT_TOKEN')
-token = "ODQ5NjczNjExMjE1NjM0NDYy.Gm9awt.ykAXqipf7gNYXqXyXpaDQ6Wz-1-nAoO7_xQOWQ"
+token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
