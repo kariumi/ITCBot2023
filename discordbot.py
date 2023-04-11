@@ -877,13 +877,14 @@ async def Trial_entry_explulsion():
 
 @client.command()
 async def list_id(ctx):
+    await printLog(client, "リストの取得を始めます")
     guild = client.get_guild(377392053182660609)
     members = guild.members
     message = ""
     for member in members:
         message += f"{member.id}, {member.nick}\n"
 
-    await printLog(client, message)
+    await ctx.send(message)
 
 """
 @体験入部のロールが付与された時、その人にBOTから自動でDMを送信する
