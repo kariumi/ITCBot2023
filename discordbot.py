@@ -888,20 +888,13 @@ async def list_id(ctx):
     await ctx.send("--------------------------------------------------------\n現役生一覧")
 
     for member in g_members:
-        if member.nick == "None":
-            name = member.name
-        else:
-            name = member.nick
-        await ctx.send(f"{member.id}, {name}\n")
+
+        await ctx.send(f"{member.id}, {member.nick}, {member.name}\n")
 
     await ctx.send("--------------------------------------------------------\n体験入部一覧")
 
     for member in t_members:
-        if member.nick == "None":
-            name = member.name
-        else:
-            name = member.nick
-        await ctx.send(f"{member.id}, {name}\n")
+        await ctx.send(f"{member.id}, {member.nick}, {member.name}\n")
 
 
 """
