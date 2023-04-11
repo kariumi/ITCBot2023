@@ -881,10 +881,13 @@ async def list_id(ctx):
     guild = client.get_guild(377392053182660609)
     members = guild.members
     message = ""
-    for member in members:
-        message += f"{member.id}, {member.nick}\n"
+    try:
+        for member in members:
+            message += f"{member.id}, {member.nick}\n"
 
-    await ctx.send(message)
+        await ctx.send(message)
+    except Exception as e:
+        await printLog(client, failure(e))
 
 """
 @体験入部のロールが付与された時、その人にBOTから自動でDMを送信する
