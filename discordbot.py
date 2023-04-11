@@ -871,6 +871,19 @@ async def Trial_entry_explulsion():
 
 
 """
+!list_id
+"""
+
+
+@client.command()
+async def list_id(ctx):
+    guild = client.get_guild(377392053182660609)
+    members = guild.members
+    message = ""
+    for member in members:
+        message += f"{member.id}, {member.nick}\n"
+
+"""
 @体験入部のロールが付与された時、その人にBOTから自動でDMを送信する
 """
 
