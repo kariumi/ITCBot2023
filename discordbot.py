@@ -883,11 +883,8 @@ async def list_id(ctx):
     message = ""
 
     for member in members:
-        message += f"{member.id}, {member.nick}\n"
-    try:
-        await printLog(client, f"{message}")
-    except Exception as e:
-        await printLog(client, failure(e))
+        await ctx.send(f"{member.id}, {member.nick}\n")
+
 
 """
 @体験入部のロールが付与された時、その人にBOTから自動でDMを送信する
