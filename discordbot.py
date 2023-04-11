@@ -879,11 +879,29 @@ async def Trial_entry_explulsion():
 async def list_id(ctx):
     await printLog(client, "リストの取得を始めます")
     guild = client.get_guild(377392053182660609)
-    members = guild.members
+    genneki = guild.get_role(972767950434086912)
+    taiken = guild.get_role(851748635023769630)
+    g_members = genneki.members
+    t_members = taiken.members
     message = ""
 
-    for member in members:
-        await ctx.send(f"{member.id}, {member.nick}\n")
+    await ctx.send("--------------------------------------------------------\n現役生一覧")
+
+    for member in g_members:
+        if member.nick == "None":
+            name = member.name
+        else:
+            name = member.nick
+        await ctx.send(f"{member.id}, {name}\n")
+
+    await ctx.send("--------------------------------------------------------\n体験入部一覧")
+
+    for member in t_members:
+        if member.nick == "None":
+            name = member.name
+        else:
+            name = member.nick
+        await ctx.send(f"{member.id}, {name}\n")
 
 
 """
