@@ -885,7 +885,7 @@ async def list_id(ctx):
     for member in members:
         message += f"{member.id}, {member.nick}\n"
     try:
-        await printLog(client, "大丈夫です")
+        await printLog(client, f"{message}")
     except Exception as e:
         await printLog(client, failure(e))
 
