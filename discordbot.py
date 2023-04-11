@@ -881,10 +881,10 @@ async def list_id(ctx):
     guild = client.get_guild(377392053182660609)
     members = guild.members
     message = ""
-    try:
-        for member in members:
-            message += f"{member.id}, {member.nick}\n"
 
+    for member in members:
+        message += f"{member.id}, {member.nick}\n"
+    try:
         await printLog(client, message)
     except Exception as e:
         await printLog(client, failure(e))
