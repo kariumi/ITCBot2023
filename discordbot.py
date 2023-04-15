@@ -559,21 +559,6 @@ async def kariumi(ctx, *arg):
         return
     await ctx.send(arg[0])
 
-"""
-!yokakunin
-要確認ちゃんねるにメッセを初めて書き込むとき用
-後で消せ
-"""
-
-
-@client.command()
-async def yokakunin(ctx):
-    guild = client.get_guild(377392053182660609)
-    text_ch = guild.get_channel(1085388068112048241)
-    try:
-        await ctx.send("名前 id 日付")
-    except:
-        await printLog(client, "失敗")
 
 """
 DMを受け取ったときの処理（TwitterのDMみたいなシステムで相互に返信可）
@@ -737,6 +722,9 @@ async def icon(ctx):
 
 add - 最後の行に追加
 remove - 文字列が一致する行を削除
+
+
+これ消す
 """
 
 
@@ -777,11 +765,6 @@ async def modify(ctx, arg, channel: typing.Optional[TextChannel],  mes, s):
 
 # ループが実行される時間(UTC)
 time = datetime.time(hour=15, minute=0, tzinfo=utc)
-
-
-@tasks.loop(time=time)
-async def backup():
-    pass
 
 
 @tasks.loop(seconds=3)  # time=timeに直すことで一日一回実行に戻せます

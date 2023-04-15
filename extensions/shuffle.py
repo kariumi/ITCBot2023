@@ -21,13 +21,15 @@ from .utils.others import *
 ・ロールは0~3個の間で指定することができます。
 (created by Chino)
 """
+
+
 class Shuffle(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
     async def shuffle(self, ctx, host1: typing.Optional[Role] = None, host2: typing.Optional[Role] = None, host3: typing.Optional[Role] = None, *channels: VoiceChannel):
-        authority = authority_check(self.bot, ctx)
+        authority = authority_check2(self.bot, ctx)
         if not authority:
             await ctx.send(embed=authority_error())
             await printLog(self.bot, "!shuffle : Error00")
@@ -79,6 +81,7 @@ class Shuffle(commands.Cog):
             await hosts3[i].move_to(channels[i % len(channels)])
 
         await printLog(self.bot, f"{channel.mention}に接続している人を移動させました")
+
 
 async def setup(bot):
     await bot.add_cog(Shuffle(bot))

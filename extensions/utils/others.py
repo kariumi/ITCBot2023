@@ -3,6 +3,7 @@ import datetime
 
 utc = datetime.timezone.utc
 
+
 class color:
     RED = '\033[31m'  # (文字)赤
     GREEN = '\033[32m'  # (文字)緑
@@ -24,10 +25,13 @@ class color:
     BG_WHITE = '\033[47m'  # (背景)白
     RESET = '\033[0m'  # 全てリセット
 
+
 """
 ログを残す
 printLog(client, "内容")
 """
+
+
 async def printLog(bot, content):
     t_delta = datetime.timedelta(hours=9)
     JST = datetime.timezone(t_delta, 'JST')
@@ -40,10 +44,16 @@ async def printLog(bot, content):
 権限の確認
 """
 
+# BOT使用の人のみ使えます。
+#
+#
+
+
 def authority_check(client, ctx):
-    true_role = [968160313797136414, 1051495123285983304, 1052290950875062403]
-    # true_guildはtrue_roleと一対一対応で。
-    true_guild = [884771781708247041, 1053669243616501800]
+    # コマンドを使用した鯖でこのロールが付与されていたら使用できる。BOT使用
+    true_role = [968160313797136414]
+    # true_guildの鯖ではロールなしでも使える。DB鯖/TEST鯖
+    true_guild = [1075592226534600755, 1053669243616501800]
 
     authority = False
 
@@ -61,6 +71,34 @@ def authority_check(client, ctx):
     except:
         pass
     return authority
+
+
+# こっちの方はBOT使用(一時)の人も使えます
+#
+#
+def authority_check2(client, ctx):
+    # コマンドを使用した鯖でこのロールが付与されていたら使用できる。BOT使用/BOT使用(一時)
+    true_role = [968160313797136414, 1096674116473462865]
+    # true_guildはtrue_roleと一対一対応で。
+    true_guild = [1075592226534600755, 1053669243616501800]
+
+    authority = False
+
+    # サーバー内ロール権限
+    try:
+        for i in range(len(true_role)):
+            if ctx.guild.get_role(true_role[i]) in ctx.author.roles:
+                authority = True
+    except:
+        pass
+    try:
+        for i in range(len(true_guild)):
+            if ctx.guild == client.get_guild(true_guild[i]):
+                authority = True
+    except:
+        pass
+    return authority
+
 
 def get_startup_jst():
     t_delta = datetime.timedelta(hours=9)
