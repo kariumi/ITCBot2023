@@ -733,7 +733,7 @@ async def modify(ctx, channel: typing.Optional[TextChannel],  mes_id, mes):
     try:
         guild = client.get_guild(1075592226534600755)
         message = await channel.fetch_message(int(mes_id))
-        await message.edit(mes)
+        await message.edit(content=mes)
         await printLog(client, f"{message.jump_url} - メッセージを更新しました。")
     except Exception as e:
         await printLog(client, f"{failure(e)}")
