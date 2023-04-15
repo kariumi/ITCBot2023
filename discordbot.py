@@ -920,7 +920,7 @@ async def 通知オン(ctx):
         DBmes = await DBch.fetch_message(1096723359045255238)
 
         mes = DBmes.content
-        mes += f"\n{ctx.member.id}"
+        mes += f"\n{ctx.author.id}"
         await DBmes.edit(content=mes)
     except Exception as e:
         await printLog(client, failure(e))
@@ -935,7 +935,7 @@ async def 通知オフ(ctx):
 
         DBid = DBmes.content.split("\n")
 
-        DBid.remove(f"{ctx.member.id}")
+        DBid.remove(f"{ctx.author.id}")
         newmes = ""
         for id in DBid:
             newmes += f"{id}\n"
