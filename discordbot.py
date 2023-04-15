@@ -914,35 +914,32 @@ async def on_voice_state_update(member, before, after):
 
 @client.command()
 async def 通知オン(ctx):
-    try:
-        DBguild = client.get_guild(1075592226534600755)
-        DBch = DBguild.get_channel(1096722589960917073)
-        DBmes = await DBch.fetch_message(1096723359045255238)
 
-        mes = DBmes.content
-        mes += f"\n{ctx.author.id}"
-        await DBmes.edit(content=mes)
-    except Exception as e:
-        await printLog(client, failure(e))
+    DBguild = client.get_guild(1075592226534600755)
+    DBch = DBguild.get_channel(1096722589960917073)
+    DBmes = await DBch.fetch_message(1096723359045255238)
+
+    mes = DBmes.content
+    mes += f"\n{ctx.author.id}"
+    await DBmes.edit(content=mes)
 
 
 @client.command()
 async def 通知オフ(ctx):
-    try:
-        DBguild = client.get_guild(1075592226534600755)
-        DBch = DBguild.get_channel(1096722589960917073)
-        DBmes = await DBch.fetch_message(1096723359045255238)
 
-        DBid = DBmes.content.split("\n")
+    DBguild = client.get_guild(1075592226534600755)
+    DBch = DBguild.get_channel(1096722589960917073)
+    DBmes = await DBch.fetch_message(1096723359045255238)
 
-        DBid.remove(f"{ctx.author.id}")
-        newmes = ""
-        for id in DBid:
-            newmes += f"{id}\n"
+    DBid = DBmes.content.split("\n")
 
-        await DBmes.edit(content=newmes)
-    except Exception as e:
-        await printLog(client, failure(e))
+    DBid.remove(f"{ctx.author.id}")
+    newmes = ""
+    for id in DBid:
+        newmes += f"{id}\n"
+
+    await DBmes.edit(content=newmes)
+
 
 """
 @体験入部のロールが付与された時、その人にBOTから自動でDMを送信する
