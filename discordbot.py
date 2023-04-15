@@ -729,29 +729,11 @@ remove - 文字列が一致する行を削除
 
 
 @client.command()
-async def modify(ctx, arg, channel: typing.Optional[TextChannel],  mes, s):
+async def modify(ctx, channel: typing.Optional[TextChannel],  mes_id, mes):
     guild = client.get_guild(1075592226534600755)
     # channel = guild.get_channel(arg[1])
-    message = await channel.fetch_message(mes)
-    content = message.content
-    if arg == "add":
-        content += f"\n{s}"
-        changeMes = await message.edit(content=content)
-        await printLog(client, f"{changeMes.jump_url} の文章に追加しました。")
-
-    if arg == "remove":
-        try:
-            data = content.split("\n")
-            new_content = ""
-            for i in data:
-                if i == s:
-                    pass
-                else:
-                    new_content = f"{i}\n"
-            changeMes = await message.edit(content=new_content)
-            await printLog(client, f"{changeMes.jump_url} の文章の一部を削除しました。")
-        except Exception as e:
-            await printLog(client, f"失敗しました。{e}")
+    message = await channel.fetch_message(mes_id)
+    await message.edit(mes)
 
 
 """
