@@ -908,7 +908,7 @@ async def on_voice_state_update(member, before, after):
             for auth in auths:
                 if member.id == int(auth):
                     # ここに処理を書く
-                    sagyou_TextCh.send(
+                    await sagyou_TextCh.send(
                         f"{member.mention}が{after.channel.mention}に入室しました")
     except Exception as e:
         await printLog(failure(e))
