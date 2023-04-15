@@ -734,6 +734,7 @@ async def modify(ctx, channel: typing.Optional[TextChannel],  mes_id, mes):
     # channel = guild.get_channel(arg[1])
     message = await channel.fetch_message(mes_id)
     await message.edit(mes)
+    await printLog(f"{message.jump_url} - メッセージを更新しました。")
 
 
 """
