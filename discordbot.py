@@ -882,6 +882,38 @@ async def list_id(ctx):
 
 
 """
+作業部屋入出した時に通知を送信するようにする。
+
+
+
+"""
+
+
+@client.event
+async def on_voice_state_update(member, before, after):
+    try:
+        sagyoBeya = [833684506790723614, 1092178739451920425, 1096708775525744782,
+                     822408934664306699, 822408969342550036, 818756552642527262, 828283228971859978]
+
+        DBguild = client.get_guild(1075592226534600755)
+        DBch = DBguild.get_channel(1096722589960917073)
+        DBmes = await DBch.fetch_message(1096723359045255238)
+        auths = DBmes.split("\n")
+
+        # 作業部屋の通知チャンネル
+        ITCguild = client.get_guild(377392053182660609)
+        sagyou_TextCh = ITCguild.get_channel(822446386707824700)
+
+        if after.channel.id in sagyoBeya:
+            for auth in auths:
+                if member.id == int(auth):
+                    # ここに処理を書く
+                    sagyou_TextCh.send(
+                        f"{member.mention}が{after.channel.mention}に入室しました")
+    except Exception as e:
+        await printLog(failure(e))
+
+"""
 @体験入部のロールが付与された時、その人にBOTから自動でDMを送信する
 """
 
