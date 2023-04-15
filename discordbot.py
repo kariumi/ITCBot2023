@@ -904,6 +904,8 @@ async def on_voice_state_update(member, before, after):
         ITCguild = client.get_guild(377392053182660609)
         sagyou_TextCh = ITCguild.get_channel(822446386707824700)
 
+        await printLog(f"{after.channel.id},{member.id}")
+
         if after.channel.id in sagyoBeya:
             for auth in auths:
                 if member.id == int(auth):
