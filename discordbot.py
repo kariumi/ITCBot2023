@@ -890,6 +890,10 @@ async def list_id(ctx):
 
 @client.event
 async def on_voice_state_update(member, before, after):
+    t_delta = datetime.timedelta(hours=9)
+    JST = datetime.timezone(t_delta, 'JST')
+    nowTime = datetime.datetime.now(JST)
+    now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
     sagyoBeya = [833684506790723614, 1092178739451920425, 1096708775525744782,
                  822408934664306699, 822408969342550036, 818756552642527262, 828283228971859978]
 
@@ -909,7 +913,7 @@ async def on_voice_state_update(member, before, after):
             if member.id == int(auth):
                 # ここに処理を書く
                 await sagyou_TextCh.send(
-                    f"{member.mention}が{after.channel.mention}に入室しました")
+                    f"[{now}] {member.mention}が{after.channel.mention}に入室しました")
 
 
 @client.command()
@@ -923,6 +927,8 @@ async def 通知オン(ctx):
     if not (str(ctx.author.id) in mes.split("\n")):
         mes += f"\n{ctx.author.id}"
     await DBmes.edit(content=mes)
+    await ctx.send(f"{ctx.author.name}が作業部屋に入ったときの通知をオンにしました。")
+    await printLog(client, f"{ctx.author.name}が作業部屋に入ったときの通知をオンにしました。")
 
 
 @ client.command()
@@ -940,6 +946,8 @@ async def 通知オフ(ctx):
         newmes += f"{id}\n"
 
     await DBmes.edit(content=newmes)
+    await ctx.send(f"{ctx.author.name}が作業部屋に入ったときの通知をオフにしました。")
+    await printLog(client, f"{ctx.author.name}が作業部屋に入ったときの通知をオフにしました。")
 
 
 """
