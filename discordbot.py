@@ -920,11 +920,12 @@ async def 通知オン(ctx):
     DBmes = await DBch.fetch_message(1096723359045255238)
 
     mes = DBmes.content
-    mes += f"\n{ctx.author.id}"
+    if not (ctx.author.id in mes.split("\n")):
+        mes += f"\n{ctx.author.id}"
     await DBmes.edit(content=mes)
 
 
-@client.command()
+@ client.command()
 async def 通知オフ(ctx):
 
     DBguild = client.get_guild(1075592226534600755)
@@ -946,7 +947,7 @@ async def 通知オフ(ctx):
 """
 
 
-@client.event
+@ client.event
 async def on_member_update(before, after):
     # 本鯖で体験入部ロールが付与されたときの処理
     if before.guild.id == 377392053182660609:
