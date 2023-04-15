@@ -771,6 +771,9 @@ async def Trial_entry_explulsion():
 
         message += f"----------------------------------------------------------------------------------------\n"
 
+    except Exception as e:
+        message += f"{failure(e)}\n"
+    try:
         # ログを更新するメッセージ
         DBguild = client.get_guild(1075592226534600755)
         DBchannel = DBguild.get_channel(1088489507923443722)
@@ -812,6 +815,10 @@ async def Trial_entry_explulsion():
                     await printLog(client, f"{member.name}に要確認ロールを付与できませんでした")
 
         message += f"----------------------------------------------------------------------------------------\n"
+    except Exception as e:
+        message += f"{failure(e)}\n"
+    try:
+
         message += f"**要確認の一覧(UTC基準)**\n - __要確認日\t\t\t\t経過日数\t\t\t\t\t\t名前__\n"
         YoukakuninCH = DBguild.get_channel(1085388068112048241)
         YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
