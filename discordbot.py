@@ -845,6 +845,7 @@ async def Trial_entry_explulsion():
 
     except Exception as e:
         message3 = failure(e)
+    message = f"{message1}{message2}"
     await DBmessage.edit(content=message1)  # ログ
 
 
