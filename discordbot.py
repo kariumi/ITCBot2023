@@ -840,7 +840,7 @@ async def Trial_entry_explulsion():
             message += f" - {data[1]} {data[2]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member_.name}\n"
 
     except Exception as e:
-        message = failure(e)
+        message += failure(e)
     await DBmessage.edit(content=message)  # ログ
 
 
