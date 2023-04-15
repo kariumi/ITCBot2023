@@ -1003,6 +1003,5 @@ async def on_member_update(before, after):
 """
 権限の確認
 """
-token = "MTA0Nzc2MjQ2NjAxODQyNjkzMQ.GJVb-7.vMih0iR3wJ3kR86nkL6McA3wK45aFE-drTTKaA"
-# token = getenv('DISCORD_BOT_TOKEN')
+token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
