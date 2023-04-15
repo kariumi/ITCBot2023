@@ -753,6 +753,7 @@ time = datetime.time(hour=15, minute=0, tzinfo=utc)
 
 @tasks.loop(seconds=3)  # time=timeに直すことで一日一回実行に戻せます
 async def Trial_entry_explulsion():
+    message = ""
     try:
 
         # 今の時間を取得
@@ -841,7 +842,7 @@ async def Trial_entry_explulsion():
             message += f" - {data[1]} {data[2]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member_.name}\n"
 
     except Exception as e:
-        message = failure(e)
+        message += failure(e)
     await DBmessage.edit(content=message)  # ログ
 
 
