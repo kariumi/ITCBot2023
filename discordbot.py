@@ -753,6 +753,7 @@ time = datetime.time(hour=15, minute=0, tzinfo=utc)
 
 @tasks.loop(seconds=3)  # time=timeに直すことで一日一回実行に戻せます
 async def Trial_entry_explulsion():
+    message = ""
     try:
 
         # 今の時間を取得
@@ -761,7 +762,7 @@ async def Trial_entry_explulsion():
         nowTime = datetime.datetime.now(JST)
         now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
         now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得(UTC)
-        message = f"[{now}]\n"
+        message += f"[{now}]\n"
 
         message += f"**BOTの最新データ** \n"
 
