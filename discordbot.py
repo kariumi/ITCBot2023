@@ -914,29 +914,35 @@ async def on_voice_state_update(member, before, after):
 
 @client.command()
 async def 通知オン(ctx):
-    DBguild = client.get_guild(1075592226534600755)
-    DBch = DBguild.get_channel(1096722589960917073)
-    DBmes = await DBch.fetch_message(1096723359045255238)
+    try:
+        DBguild = client.get_guild(1075592226534600755)
+        DBch = DBguild.get_channel(1096722589960917073)
+        DBmes = await DBch.fetch_message(1096723359045255238)
 
-    mes = DBmes.content
-    mes += f"\n{ctx.member.id}"
-    await DBmes.edit(content=mes)
+        mes = DBmes.content
+        mes += f"\n{ctx.member.id}"
+        await DBmes.edit(content=mes)
+    except Exception as e:
+        await printLog(failure(e))
 
 
 @client.command()
 async def 通知オフ(ctx):
-    DBguild = client.get_guild(1075592226534600755)
-    DBch = DBguild.get_channel(1096722589960917073)
-    DBmes = await DBch.fetch_message(1096723359045255238)
+    try:
+        DBguild = client.get_guild(1075592226534600755)
+        DBch = DBguild.get_channel(1096722589960917073)
+        DBmes = await DBch.fetch_message(1096723359045255238)
 
-    DBid = DBmes.content.split("\n")
+        DBid = DBmes.content.split("\n")
 
-    DBid.remove(f"{ctx.member.id}")
-    newmes = ""
-    for id in DBid:
-        newmes += f"{id}\n"
+        DBid.remove(f"{ctx.member.id}")
+        newmes = ""
+        for id in DBid:
+            newmes += f"{id}\n"
 
-    await DBmes.edit(content=newmes)
+        await DBmes.edit(content=newmes)
+    except Exception as e:
+        await printLog(failure(e))
 
 """
 @体験入部のロールが付与された時、その人にBOTから自動でDMを送信する
