@@ -913,6 +913,33 @@ async def on_voice_state_update(member, before, after):
                 await sagyou_TextCh.send(
                     f"{member.mention}が{after.channel.mention}に入室しました")
 
+
+@client.command()
+async def 通知オン(ctx):
+    DBguild = client.get_guild(1075592226534600755)
+    DBch = DBguild.get_channel(1096722589960917073)
+    DBmes = await DBch.fetch_message(1096723359045255238)
+
+    mes = DBmes.content
+    mes += f"\n{ctx.member.id}"
+    await DBmes.edit(content=mes)
+
+
+@client.command()
+async def 通知オフ(ctx):
+    DBguild = client.get_guild(1075592226534600755)
+    DBch = DBguild.get_channel(1096722589960917073)
+    DBmes = await DBch.fetch_message(1096723359045255238)
+
+    DBid = DBmes.content.split("\n")
+
+    DBid.remove(f"{ctx.member.id}")
+    newmes = ""
+    for id in DBid:
+        newmes += f"{id}\n"
+
+    await DBmes.edit(content=newmes)
+
 """
 @体験入部のロールが付与された時、その人にBOTから自動でDMを送信する
 """
