@@ -923,7 +923,7 @@ async def 通知オン(ctx):
         mes += f"\n{ctx.member.id}"
         await DBmes.edit(content=mes)
     except Exception as e:
-        await printLog(failure(e))
+        await printLog(client, failure(e))
 
 
 @client.command()
@@ -942,7 +942,7 @@ async def 通知オフ(ctx):
 
         await DBmes.edit(content=newmes)
     except Exception as e:
-        await printLog(failure(e))
+        await printLog(client, failure(e))
 
 """
 @体験入部のロールが付与された時、その人にBOTから自動でDMを送信する
