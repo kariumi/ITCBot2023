@@ -912,8 +912,8 @@ async def on_voice_state_update(member, before, after):
         # for auth in auths:
         #    if member.id == int(auth):
         #        # ここに処理を書く
-        await sagyou_TextCh.send(
-            f"[{now}] {member.mention}が{after.channel.mention}に入室しました")
+        # await sagyou_TextCh.send(
+        #    f"[{now}] {member.mention}が{after.channel.mention}に入室しました")
         for auth in auths:
             member = ITCguild.get_member(int(auth))
             await member.send(
