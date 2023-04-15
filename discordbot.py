@@ -753,96 +753,99 @@ time = datetime.time(hour=15, minute=0, tzinfo=utc)
 
 @tasks.loop(seconds=3)  # time=timeに直すことで一日一回実行に戻せます
 async def Trial_entry_explulsion():
-    message = ""
     try:
+        message = ""
+        try:
 
-        # 今の時間を取得
-        t_delta = datetime.timedelta(hours=9)
-        JST = datetime.timezone(t_delta, 'JST')
-        nowTime = datetime.datetime.now(JST)
-        now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
-        now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得(UTC)
-        message += f"[{now}]\n"
+            # 今の時間を取得
+            t_delta = datetime.timedelta(hours=9)
+            JST = datetime.timezone(t_delta, 'JST')
+            nowTime = datetime.datetime.now(JST)
+            now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
+            now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得(UTC)
+            message += f"[{now}]\n"
 
-        message += f"**BOTの最新データ** \n"
+            message += f"**BOTの最新データ** \n"
 
-        message += f" - {final_update}\n"
+            message += f" - {final_update}\n"
 
-        message += f" - UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
+            message += f" - UTC時間：{now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}\n"
 
-        message += f"----------------------------------------------------------------------------------------\n"
+            message += f"----------------------------------------------------------------------------------------\n"
 
+        except Exception as e:
+            message += f"{failure(e)}\n"
+        try:
+            # ログを更新するメッセージ
+            DBguild = client.get_guild(1075592226534600755)
+            DBchannel = DBguild.get_channel(1088489507923443722)
+            DBmessage = await DBchannel.fetch_message(1088489590681260032)
+
+            # 体験入部メンバーの一覧を表示/60日超えを選別
+            guild = client.get_guild(377392053182660609)  # 本鯖
+            taiken_role = guild.get_role(851748635023769630)  # @体験入部
+            yo_kakunin_role = guild.get_role(833323166440095744)  # @要確認
+            # role = guild.get_role(851748635023769630) #@体験入部
+            message += f"**体験入部の一覧(UTC基準)**\n - __参加日\t\t\t\t\t\t経過日数\t\t\t\t\t\t名前__\n"
+            sorted_taiken_members = sorted(
+                taiken_role.members, key=lambda x: x.joined_at)  # 参加日順にソート
+
+            # ここから、60日を超えためんばーを選別
+            membersOf60days = []
+            time_start_date = datetime.datetime(
+                year=2023, month=4, day=1, hour=0, minute=0, second=0, tzinfo=utc)
+
+            for member in sorted_taiken_members:
+                if member.joined_at > time_start_date:
+                    member_days = now_time - member.joined_at
+                else:
+                    member_days = now_time - time_start_date
+                # member_days.secondsを時分秒に直す
+                member_hours = int(member_days.seconds/3600)
+                tmp = member_days.seconds % 3600
+                member_minutes = int(tmp/60)
+                member_seconds = tmp % 60
+                message += f" - {member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t{member_days.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member.name}\n"
+
+                if member_days.days >= 60:
+                    membersOf60days.append(member.name)
+                    try:
+                        await member.remove_roles(taiken_role)
+                        await member.add_roles(yo_kakunin_role)
+                        await printLog(client, f"{member.name}に要確認ロールを付与しました。")
+                    except:
+                        await printLog(client, f"{member.name}に要確認ロールを付与できませんでした")
+
+            message += f"----------------------------------------------------------------------------------------\n"
+        except Exception as e:
+            message += f"{failure(e)}\n"
+        try:
+
+            message += f"**要確認の一覧(UTC基準)**\n - __要確認日\t\t\t\t経過日数\t\t\t\t\t\t名前__\n"
+            YoukakuninCH = DBguild.get_channel(1085388068112048241)
+            YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
+            mes = YoukakuninMes.content.split("\n")
+            for i in mes:
+                data = i.split(" ")
+
+                date = data[1].split("/")
+                time = data[2].split(":")
+                time_ = datetime.datetime(
+                    year=int(date[0]), month=int(date[1]), day=int(date[2]), hour=int(time[0]), minute=int(time[1]), second=int(time[2]), tzinfo=utc)
+                KeikaDays = now_time - time_
+                member_hours = int(KeikaDays.seconds/3600)
+                tmp = member_days.seconds % 3600
+                member_minutes = int(tmp/60)
+                member_seconds = tmp % 60
+                member_ = guild.get_member(int(data[0]))
+
+                message += f" - {data[1]} {data[2]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member_.name}\n"
+
+        except Exception as e:
+            message += failure(e)
+        await DBmessage.edit(content=message)  # ログ
     except Exception as e:
-        message += f"{failure(e)}\n"
-    try:
-        # ログを更新するメッセージ
-        DBguild = client.get_guild(1075592226534600755)
-        DBchannel = DBguild.get_channel(1088489507923443722)
-        DBmessage = await DBchannel.fetch_message(1088489590681260032)
-
-        # 体験入部メンバーの一覧を表示/60日超えを選別
-        guild = client.get_guild(377392053182660609)  # 本鯖
-        taiken_role = guild.get_role(851748635023769630)  # @体験入部
-        yo_kakunin_role = guild.get_role(833323166440095744)  # @要確認
-        # role = guild.get_role(851748635023769630) #@体験入部
-        message += f"**体験入部の一覧(UTC基準)**\n - __参加日\t\t\t\t\t\t経過日数\t\t\t\t\t\t名前__\n"
-        sorted_taiken_members = sorted(
-            taiken_role.members, key=lambda x: x.joined_at)  # 参加日順にソート
-
-        # ここから、60日を超えためんばーを選別
-        membersOf60days = []
-        time_start_date = datetime.datetime(
-            year=2023, month=4, day=1, hour=0, minute=0, second=0, tzinfo=utc)
-
-        for member in sorted_taiken_members:
-            if member.joined_at > time_start_date:
-                member_days = now_time - member.joined_at
-            else:
-                member_days = now_time - time_start_date
-            # member_days.secondsを時分秒に直す
-            member_hours = int(member_days.seconds/3600)
-            tmp = member_days.seconds % 3600
-            member_minutes = int(tmp/60)
-            member_seconds = tmp % 60
-            message += f" - {member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t{member_days.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member.name}\n"
-
-            if member_days.days >= 60:
-                membersOf60days.append(member.name)
-                try:
-                    await member.remove_roles(taiken_role)
-                    await member.add_roles(yo_kakunin_role)
-                    await printLog(client, f"{member.name}に要確認ロールを付与しました。")
-                except:
-                    await printLog(client, f"{member.name}に要確認ロールを付与できませんでした")
-
-        message += f"----------------------------------------------------------------------------------------\n"
-    except Exception as e:
-        message += f"{failure(e)}\n"
-    try:
-
-        message += f"**要確認の一覧(UTC基準)**\n - __要確認日\t\t\t\t経過日数\t\t\t\t\t\t名前__\n"
-        YoukakuninCH = DBguild.get_channel(1085388068112048241)
-        YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
-        mes = YoukakuninMes.content.split("\n")
-        for i in mes:
-            data = i.split(" ")
-
-            date = data[1].split("/")
-            time = data[2].split(":")
-            time_ = datetime.datetime(
-                year=int(date[0]), month=int(date[1]), day=int(date[2]), hour=int(time[0]), minute=int(time[1]), second=int(time[2]), tzinfo=utc)
-            KeikaDays = now_time - time_
-            member_hours = int(KeikaDays.seconds/3600)
-            tmp = member_days.seconds % 3600
-            member_minutes = int(tmp/60)
-            member_seconds = tmp % 60
-            member_ = guild.get_member(int(data[0]))
-
-            message += f" - {data[1]} {data[2]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member_.name}\n"
-
-    except Exception as e:
-        message += failure(e)
-    await DBmessage.edit(content=message)  # ログ
+        await printLog(f"{failure(e)}")
 
 
 """
