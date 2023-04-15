@@ -732,7 +732,7 @@ remove - 文字列が一致する行を削除
 async def modify(ctx, channel: typing.Optional[TextChannel],  mes_id, mes):
     guild = client.get_guild(1075592226534600755)
     # channel = guild.get_channel(arg[1])
-    message = await channel.fetch_message(mes_id)
+    message = await channel.fetch_message(int(mes_id))
     await message.edit(mes)
     await printLog(f"{message.jump_url} - メッセージを更新しました。")
 
