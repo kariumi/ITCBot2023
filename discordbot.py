@@ -773,7 +773,7 @@ async def Trial_entry_explulsion():
         message1 += f"----------------------------------------------------------------------------------------\n"
 
     except Exception as e:
-        message1 = f"{failure(e)}\n"
+        message1 = failure(e)
     message2 = ""
     try:
         # ログを更新するメッセージ
@@ -818,7 +818,7 @@ async def Trial_entry_explulsion():
 
         message2 += f"----------------------------------------------------------------------------------------\n"
     except Exception as e:
-        message2 = f"{failure(e)}\n"
+        message2 = failure(e)
 
     message3 = ""
     try:
