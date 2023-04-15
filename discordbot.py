@@ -920,7 +920,7 @@ async def 通知オン(ctx):
     DBmes = await DBch.fetch_message(1096723359045255238)
 
     mes = DBmes.content
-    if not (ctx.author.id in mes.split("\n")):
+    if not (str(ctx.author.id) in mes.split("\n")):
         mes += f"\n{ctx.author.id}"
     await DBmes.edit(content=mes)
 
