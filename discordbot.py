@@ -900,13 +900,13 @@ async def on_voice_state_update(member, before, after):
         DBmes = await DBch.fetch_message(1096723359045255238)
         auths = DBmes.split("\n")
 
-        await printLog(auths)
+        await printLog(client, auths)
 
         # 作業部屋の通知チャンネル
         ITCguild = client.get_guild(377392053182660609)
         sagyou_TextCh = ITCguild.get_channel(1096673565258022973)
 
-        await printLog(f"{after.channel.id},{member.id}")
+        await printLog(client, f"{after.channel.id},{member.id}")
 
         if after.channel.id in sagyoBeya:
             for auth in auths:
