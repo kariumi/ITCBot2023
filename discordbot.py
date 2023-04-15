@@ -909,14 +909,18 @@ async def on_voice_state_update(member, before, after):
     sagyou_TextCh = ITCguild.get_channel(822446386707824700)
 
     if after.channel.id in sagyoBeya:
+        # for auth in auths:
+        #    if member.id == int(auth):
+        #        # ここに処理を書く
+        await sagyou_TextCh.send(
+            f"[{now}] {member.mention}が{after.channel.mention}に入室しました")
         for auth in auths:
-            if member.id == int(auth):
-                # ここに処理を書く
-                await sagyou_TextCh.send(
-                    f"[{now}] {member.mention}が{after.channel.mention}に入室しました")
+            member = ITCguild.get_member(int(auth))
+            await member.send(
+                f"[{now}] {member.mention}が{after.channel.mention}に入室しました")
 
 
-@client.command()
+@ client.command()
 async def 通知オン(ctx):
 
     DBguild = client.get_guild(1075592226534600755)
