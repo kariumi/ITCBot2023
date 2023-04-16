@@ -309,6 +309,10 @@ async def vote_role(ctx, channel: typing.Optional[TextChannel] = None, title="",
     await id.add_reaction("😎")
 
 
+@client.command()
+async def 乱数(ctx, a, b):
+    await ctx.send(random.randint(a, b))
+
 """
 on_raw_reaction_add
 
