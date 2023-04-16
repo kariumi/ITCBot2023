@@ -908,23 +908,26 @@ async def on_voice_state_update(member, before, after):
 
     await printLog(client, f"name:{member.name}, 入室VC:{after.channel.name}")
 
-    # 作業部屋の通知チャンネル
-    ITCguild = client.get_guild(377392053182660609)
-    sagyou_TextCh = ITCguild.get_channel(822446386707824700)
+    try:
+        # 作業部屋の通知チャンネル
+        ITCguild = client.get_guild(377392053182660609)
+        sagyou_TextCh = ITCguild.get_channel(822446386707824700)
 
-    if after.channel.id != before.channel.id:
+        if after.channel.id != before.channel.id:
 
-        if after.channel.id in sagyoBeya:
+            if after.channel.id in sagyoBeya:
 
-            # for auth in auths:
-            #    if member.id == int(auth):
-            #        # ここに処理を書く
-            # await sagyou_TextCh.send(
-            #    f"[{now}] {member.mention}が{after.channel.mention}に入室しました")
-            for auth in auths:
-                member_ = ITCguild.get_member(int(auth))
-                await member_.send(
-                    f"[{now}] {member.mention}が{after.channel.mention}に入室しました")
+                # for auth in auths:
+                #    if member.id == int(auth):
+                #        # ここに処理を書く
+                # await sagyou_TextCh.send(
+                #    f"[{now}] {member.mention}が{after.channel.mention}に入室しました")
+                for auth in auths:
+                    member_ = ITCguild.get_member(int(auth))
+                    await member_.send(
+                        f"[{now}] {member.mention}が{after.channel.mention}に入室しました")
+    except Exception as e:
+        await printLog(client, failure(e))
 
 
 @ client.command()
