@@ -311,7 +311,7 @@ async def vote_role(ctx, channel: typing.Optional[TextChannel] = None, title="",
 
 @client.command()
 async def 乱数(ctx, a, b):
-    await ctx.send(random.randint(a, b))
+    await ctx.send(random.randint(int(a), int(b))
 
 """
 on_raw_reaction_add
@@ -324,20 +324,20 @@ on_raw_reaction_add
 """
 
 
-@client.event
+@ client.event
 async def on_raw_reaction_add(payload):
     if payload.member.bot:
         return
 
-    message = await client.get_channel(payload.channel_id).fetch_message(payload.message_id)
-    embeds = message.embeds
+    message=await client.get_channel(payload.channel_id).fetch_message(payload.message_id)
+    embeds=message.embeds
     for embed in embeds:  # embedを使用している場合はこの中を使用する。
 
-        title = embed.title
-        line = embed.description.split("\n")
-        user = client.get_user(payload.user_id)
-        user_name = user.name
-        number = payload.emoji.name
+        title=embed.title
+        line=embed.description.split("\n")
+        user=client.get_user(payload.user_id)
+        user_name=user.name
+        number=payload.emoji.name
 
         # voteコマンド
         # 1.リフレッシュマークが押された時
@@ -345,17 +345,17 @@ async def on_raw_reaction_add(payload):
         # 3.vote finish後にリフレッシュしたいとき（これはvote finishに統合すると一番良い。面倒くさいからやらん）
         # 4.vote finish後に選択肢が押された時
         if title == "【投票受付中】`(バグったらリサイクルマークを押してください)`":
-            mes = []
-            new_mes = ""
-            reactions = message.reactions
-            new_members = []
-            i = 0
+            mes=[]
+            new_mes=""
+            reactions=message.reactions
+            new_members=[]
+            i=0
             # 1.リフレッシュマークが押された時
             if number == "♻️":  # リフレッシュ用。
-                temp_embed = embed
-                temp_embed.color = 0xffff00
+                temp_embed=embed
+                temp_embed.color=0xffff00
                 await message.edit(embed=temp_embed, content="⚠️⚠️__***ボタンを押さないでください***__⚠️⚠️")
-                new = []
+                new=[]
                 for reaction_ in reactions:
                     new.append([reaction_.emoji])
                     async for user in reaction_.users():
@@ -367,19 +367,19 @@ async def on_raw_reaction_add(payload):
                     for j in range(len(new)):
                         if mes[i][0] == new[j][0]:
                             try:
-                                mes[i][2] = ""
+                                mes[i][2]=""
                             except:
                                 mes[i].append("")
                             for user_ in new[j][1:]:
                                 mes[i][2] += f"{user_},　"
-                            line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2][:-2]}"
+                            line[i]=f"{mes[i][0]} {mes[i][1]} {mes[i][2][:-2]}"
                     new_mes += f"{line[i]}\n"
-                embed = discord.Embed(
+                embed=discord.Embed(
                     title=f"{title}", description=f"{new_mes}", color=0x008000)
                 await message.edit(embed=embed, content="♻️__***リフレッシュ完了！***__♻️")
                 if not user.bot:
                     await message.remove_reaction('♻️', user)
-                embed.color = 0x0000ff
+                embed.color=0x0000ff
                 await message.edit(embed=embed, content="")
                 return
             # 2.選択肢が押された時
@@ -390,24 +390,24 @@ async def on_raw_reaction_add(payload):
                         mes[i][2] += f",　{user_name}"
                     except:
                         mes[i].append(user_name)
-                    line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2]}"
+                    line[i]=f"{mes[i][0]} {mes[i][1]} {mes[i][2]}"
                 new_mes += f"{line[i]}\n"
-                embed = discord.Embed(
+                embed=discord.Embed(
                     title=f"{title}", description=f"{new_mes}", color=0x0000ff)
             await message.edit(embed=embed)
             return
         # 3.vote finish後にリフレッシュしたいとき（これはvote finishに統合すると一番良い。面倒くさいからやらん）
         if title == "【投票終了】`(バグっている場合はリサイクルマークを押してください)`":
-            mes = []
-            new_mes = ""
-            reactions = message.reactions
-            new_members = []
-            i = 0
+            mes=[]
+            new_mes=""
+            reactions=message.reactions
+            new_members=[]
+            i=0
             if number == "♻️":  # リフレッシュ用。
-                temp_embed = embed
-                temp_embed.color = 0xffff00
+                temp_embed=embed
+                temp_embed.color=0xffff00
                 await message.edit(embed=temp_embed, content="⚠️⚠️__***ボタンを押さないでください***__⚠️⚠️")
-                new = []
+                new=[]
                 for reaction_ in reactions:
                     new.append([reaction_.emoji])
                     async for user in reaction_.users():
@@ -419,19 +419,19 @@ async def on_raw_reaction_add(payload):
                     for j in range(len(new)):
                         if mes[i][0] == new[j][0]:
                             try:
-                                mes[i][2] = ""
+                                mes[i][2]=""
                             except:
                                 mes[i].append("")
                             for user_ in new[j][1:]:
                                 mes[i][2] += f"{user_},　"
-                            line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2][:-2]}"
+                            line[i]=f"{mes[i][0]} {mes[i][1]} {mes[i][2][:-2]}"
                     new_mes += f"{line[i]}\n"
-                embed = discord.Embed(
+                embed=discord.Embed(
                     title=f"{title}", description=f"{new_mes}", color=0x008000)
                 await message.edit(embed=embed, content="♻️__***リフレッシュ完了！***__♻️")
                 if not user.bot:
                     await message.remove_reaction('♻️', user)
-                embed.color = 0x0000ff
+                embed.color=0x0000ff
                 await message.edit(embed=embed, content="")
                 return
             # 4.vote finish後に選択肢が押された時
@@ -441,21 +441,21 @@ async def on_raw_reaction_add(payload):
         # 1.リセットボタンが押されたら選択肢にあるロールを全て剥奪
         # 2.押された選択肢に対応するロールを付与
         if title == "【投票受付中】ロールが自動で付与されます。":
-            mes = []
+            mes=[]
             print(number)
             if number == "😎":   # ←絵文字が見えない（泣）フォントの問題かな
-                vote_icon = ["1️⃣", "2️⃣", "3️⃣", "4️⃣",
+                vote_icon=["1️⃣", "2️⃣", "3️⃣", "4️⃣",
                              "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
-                vote_list = []
+                vote_list=[]
                 for i in range(len(line)):
                     mes.append(line[i].split(" "))
                     for j in vote_icon:
                         if mes[i][0] == j:
                             vote_list.append(mes[i][1])
-                guild = client.get_guild(payload.guild_id)
+                guild=client.get_guild(payload.guild_id)
                 print(vote_list)
                 for role_name in vote_list:
-                    role = discord.utils.get(guild.roles, name=role_name)
+                    role=discord.utils.get(guild.roles, name=role_name)
                     await payload.member.remove_roles(role)
                 await message.remove_reaction(number, user)
                 return
@@ -463,8 +463,8 @@ async def on_raw_reaction_add(payload):
                 for i in range(len(line)):
                     mes.append(line[i].split(" "))
                     if mes[i][0] == number:
-                        guild = client.get_guild(payload.guild_id)
-                        role = discord.utils.get(guild.roles, name=mes[i][1])
+                        guild=client.get_guild(payload.guild_id)
+                        role=discord.utils.get(guild.roles, name=mes[i][1])
                         await message.remove_reaction(number, user)
                         await payload.member.add_roles(role)
                 return
@@ -476,13 +476,13 @@ async def on_raw_reaction_add(payload):
 
     # CG
 
-    CGch = client.get_channel(1056757946610110494)
-    PROGch = client.get_channel(1056760188243292273)
-    DTMch = client.get_channel(1056758114600353922)
-    MVch = client.get_channel(1056758410558845038)
+    CGch=client.get_channel(1056757946610110494)
+    PROGch=client.get_channel(1056760188243292273)
+    DTMch=client.get_channel(1056758114600353922)
+    MVch=client.get_channel(1056758410558845038)
 
-    user = client.get_user(payload.user_id)
-    stamp = payload.emoji.name
+    user=client.get_user(payload.user_id)
+    stamp=payload.emoji.name
 
     if payload.message_id == 1076845241421803530:
         await message.remove_reaction(stamp, user)
@@ -506,8 +506,8 @@ async def on_raw_reaction_add(payload):
     #
 
     if payload.message_id == 1092095707164463194:
-        user = client.get_user(payload.user_id)
-        stamp = payload.emoji.name
+        user=client.get_user(payload.user_id)
+        stamp=payload.emoji.name
         await message.remove_reaction(stamp, user)
         await user.send("ITC BOT 2023です！個人にDMを送信しづらい場合や、誰に質問していいかわからない場合はここに質問をしてください。")
 
@@ -519,11 +519,11 @@ async def on_raw_reaction_add(payload):
 """
 
 
-@client.command()
+@ client.command()
 async def さいころ(ctx):
 
-    num = random.randrange(6)
-    file = f"img/saikoro/saikoro{num}.gif"
+    num=random.randrange(6)
+    file=f"img/saikoro/saikoro{num}.gif"
     await ctx.send(file=discord.File(file))
 
 """
@@ -532,16 +532,16 @@ async def さいころ(ctx):
 """
 
 
-@client.command()
+@ client.command()
 async def じゃんけん(ctx, arg):
-    te = ["gu", "choki", "pa"]
-    num = random.randrange(3)
+    te=["gu", "choki", "pa"]
+    num=random.randrange(3)
     if arg == "グー":
-        file = f"img/janken/gu{te[num]}.gif"
+        file=f"img/janken/gu{te[num]}.gif"
     elif arg == "チョキ":
-        file = f"img/janken/choki{te[num]}.gif"
+        file=f"img/janken/choki{te[num]}.gif"
     elif arg == "パー":
-        file = f"img/janken/pa{te[num]}.gif"
+        file=f"img/janken/pa{te[num]}.gif"
 
     await ctx.send(file=discord.File(file))
 
@@ -553,9 +553,9 @@ kariumiに要確認ロールを付与する
 """
 
 
-@client.command()
+@ client.command()
 async def kariumi(ctx, *arg):
-    authority = authority_check(client, ctx)
+    authority=authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
         await printLog(client, "!vote_role : Error00")
@@ -569,56 +569,56 @@ DMを受け取ったときの処理（TwitterのDMみたいなシステムで相
 """
 
 
-@client.listen()
+@ client.listen()
 async def on_message(message):
     if message.author == client.user:
         return
 
     # DMを管理するサーバー
-    guild = client.get_guild(1075592226534600755)
+    guild=client.get_guild(1075592226534600755)
 
     # 本鯖
-    itcGuild = client.get_guild(377392053182660609)
+    itcGuild=client.get_guild(377392053182660609)
 
     # 新歓鯖
-    shinkanGuild = client.get_guild(1056591502958145627)
+    shinkanGuild=client.get_guild(1056591502958145627)
 
     # DMカテゴリーの取得
-    DMcategory = client.get_channel(1076657448200458362)
+    DMcategory=client.get_channel(1076657448200458362)
 
     # test送信用のtextchannel
-    test_channel = client.get_channel(1075592227180527699)
+    test_channel=client.get_channel(1075592227180527699)
 
     # DMを受け取る→データベースに送信　
     if type(message.channel) == discord.DMChannel:
-        database = await client.get_channel(1076661281131601940).fetch_message(1076864300200755261)
-        data_ = database.content.split("\n")
+        database=await client.get_channel(1076661281131601940).fetch_message(1076864300200755261)
+        data_=database.content.split("\n")
         for i in data_:
-            data = i.split(" ")
+            data=i.split(" ")
             if int(data[0]) == message.author.id:
-                sendMes = await client.get_channel(int(data[1])).send(message.content)
+                sendMes=await client.get_channel(int(data[1])).send(message.content)
                 await printLog(client, f"BOTが{message.author.name}からDMを受け取りました。\n{sendMes.jump_url}")
                 return
         # 初めて送ってきた人はチャンネルを作成する
-        channel = await guild.create_text_channel(message.author.name, category=DMcategory)
-        send_Mes = await client.get_channel(channel.id).send(f"【{message.author.name}】\n\n{message.content}")
-        new_database = f"{database.content}"
+        channel=await guild.create_text_channel(message.author.name, category=DMcategory)
+        send_Mes=await client.get_channel(channel.id).send(f"【{message.author.name}】\n\n{message.content}")
+        new_database=f"{database.content}"
         new_database += f"\n{message.author.id} {channel.id}"
         await database.edit(content=new_database)
         await printLog(client, f"BOTが{message.author.name}からDMを初めて受け取りました。\n{sendMes.jump_url}\nDBに{message.author.name}を追加します。\n{database.jump_url}")
         return
     # データベースに返信を書き込む→DM送信
     if message.channel.category == DMcategory:
-        database = await client.get_channel(1076661281131601940).fetch_message(1076864300200755261)
-        data_ = database.content.split("\n")
+        database=await client.get_channel(1076661281131601940).fetch_message(1076864300200755261)
+        data_=database.content.split("\n")
         for i in data_:
-            data = i.split(" ")
+            data=i.split(" ")
             if int(data[1]) == message.channel.id:
                 try:  # try→本鯖にいるメンバーを取得、except→新歓鯖にいるメンバーを取得、どちらにもいないとバグる
-                    member = itcGuild.get_member(int(data[0]))
+                    member=itcGuild.get_member(int(data[0]))
                     await printLog(client, f"本鯖に、{member.name}がいます")
                 except:
-                    member = shinkanGuild.get_member(int(data[0]))
+                    member=shinkanGuild.get_member(int(data[0]))
                     await printLog(client, f"本鯖には、{member.name}がいませんでした。")
                 await member.send(message.content)
                 await printLog(client, f"BOTから、{member.name}にDMを返信しました。\n{message.jump_url}")
@@ -626,15 +626,15 @@ async def on_message(message):
 
     # ロール一斉送信
 
-    RoleCategory = client.get_channel(1076860376924307557)
-    ShinkanRoleCategory = client.get_channel(1086441780574167071)
+    RoleCategory=client.get_channel(1076860376924307557)
+    ShinkanRoleCategory=client.get_channel(1086441780574167071)
 
     if message.channel.category == ShinkanRoleCategory:
         await printLog(client, message.channel.topic)
         try:
-            role = shinkanGuild.get_role(int(message.channel.topic))
+            role=shinkanGuild.get_role(int(message.channel.topic))
             await printLog(client, f"文章を@{role.name}ロール保持者に一斉送信します。")
-            members = role.members
+            members=role.members
             for member in members:
                 await member.send(message.content)
                 await printLog(client, f"|{member.name}に送信しました。")
@@ -645,10 +645,10 @@ async def on_message(message):
     if message.channel.category == RoleCategory:
         await printLog(client, message.channel.topic)
         try:
-            role = itcGuild.get_role(int(message.channel.topic))
+            role=itcGuild.get_role(int(message.channel.topic))
             await printLog(client, f"文章を@{role.name}ロール保持者に一斉送信します。")
 
-            members = role.members
+            members=role.members
             for member in members:
                 await member.send(message.content)
                 await printLog(client, f"|{member.name}に送信しました。")
@@ -666,38 +666,38 @@ on_raw_reaction_remove
 """
 
 
-@client.event
+@ client.event
 async def on_raw_reaction_remove(payload):
 
-    message = await client.get_channel(payload.channel_id).fetch_message(payload.message_id)
-    embeds = message.embeds
+    message=await client.get_channel(payload.channel_id).fetch_message(payload.message_id)
+    embeds=message.embeds
     for embed in embeds:
-        title = embed.title
-        line = embed.description.split("\n")
-        user = client.get_user(payload.user_id)
-        user_name = user.name
-        number = payload.emoji.name
+        title=embed.title
+        line=embed.description.split("\n")
+        user=client.get_user(payload.user_id)
+        user_name=user.name
+        number=payload.emoji.name
 
         if title == "【投票受付中】`(バグったらリサイクルマークを押してください)`":
-            mes = []
-            new_mes = ""
-            new_members = ""
+            mes=[]
+            new_mes=""
+            new_members=""
             for i in range(len(line)):
                 mes.append(line[i].split(" "))
                 if mes[i][0] == number:
-                    members = mes[i][2].split(",　")
+                    members=mes[i][2].split(",　")
                     for j in range(len(members)):
                         if members[j] == user_name:
-                            members[j] = ""
+                            members[j]=""
                         else:
                             new_members += f"{members[j]},　"
-                    mes[i][2] = new_members[:-2]
+                    mes[i][2]=new_members[:-2]
                     if mes[i][2] == "":
-                        line[i] = f"{mes[i][0]} {mes[i][1]}"
+                        line[i]=f"{mes[i][0]} {mes[i][1]}"
                     else:
-                        line[i] = f"{mes[i][0]} {mes[i][1]} {mes[i][2]}"
+                        line[i]=f"{mes[i][0]} {mes[i][1]} {mes[i][2]}"
                 new_mes += f"{line[i]}\n"
-            embed = discord.Embed(
+            embed=discord.Embed(
                 title=f"{title}", description=f"{new_mes}", color=0x0000ff)
             await message.edit(embed=embed)
         if title == "【投票終了】`(バグっている場合はリサイクルマークを押してください)`":
@@ -709,13 +709,13 @@ async def on_raw_reaction_remove(payload):
 """
 
 
-@client.command()
+@ client.command()
 async def icon(ctx):
-    guild = client.get_guild(377392053182660609)
-    members = guild.members
+    guild=client.get_guild(377392053182660609)
+    members=guild.members
     for member in members:
         try:
-            avatar = member.avatar.url
+            avatar=member.avatar.url
             await ctx.send(avatar)
         except Exception as e:
             await ctx.send(f"{member.name} - {e}")
@@ -731,11 +731,11 @@ remove - 文字列が一致する行を削除
 """
 
 
-@client.command()
+@ client.command()
 async def modify(ctx, channel: typing.Optional[TextChannel],  mes_id, mes):
     try:
-        guild = client.get_guild(1075592226534600755)
-        message = await channel.fetch_message(int(mes_id))
+        guild=client.get_guild(1075592226534600755)
+        message=await channel.fetch_message(int(mes_id))
         await message.edit(content=mes)
         await printLog(client, f"{message.jump_url} - メッセージを更新しました。")
     except Exception as e:
@@ -751,22 +751,22 @@ async def modify(ctx, channel: typing.Optional[TextChannel],  mes_id, mes):
 
 
 # ループが実行される時間(UTC)
-time = datetime.time(hour=15, minute=0, tzinfo=utc)
+time=datetime.time(hour=15, minute=0, tzinfo=utc)
 
 
-@tasks.loop(seconds=3)  # time=timeに直すことで一日一回実行に戻せます
+@ tasks.loop(seconds=3)  # time=timeに直すことで一日一回実行に戻せます
 async def Trial_entry_explulsion():
     try:
-        message1 = ""
+        message1=""
         try:
 
             # 今の時間を取得
-            t_delta = datetime.timedelta(hours=9)
-            JST = datetime.timezone(t_delta, 'JST')
-            nowTime = datetime.datetime.now(JST)
-            now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
-            now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得(UTC)
-            message1 = f"[{now}]\n"
+            t_delta=datetime.timedelta(hours=9)
+            JST=datetime.timezone(t_delta, 'JST')
+            nowTime=datetime.datetime.now(JST)
+            now=nowTime.strftime('%Y/%m/%d %H:%M:%S')
+            now_time=datetime.datetime.now(tz=utc)  # 現在時刻を取得(UTC)
+            message1=f"[{now}]\n"
 
             message1 += f"**BOTの最新データ** \n"
 
@@ -777,38 +777,38 @@ async def Trial_entry_explulsion():
             message1 += f"----------------------------------------------------------------------------------------\n"
 
         except Exception as e:
-            message1 = failure(e)
-        message2 = ""
+            message1=failure(e)
+        message2=""
         try:
             # ログを更新するメッセージ
-            DBguild = client.get_guild(1075592226534600755)
-            DBchannel = DBguild.get_channel(1088489507923443722)
-            DBmessage = await DBchannel.fetch_message(1088489590681260032)
+            DBguild=client.get_guild(1075592226534600755)
+            DBchannel=DBguild.get_channel(1088489507923443722)
+            DBmessage=await DBchannel.fetch_message(1088489590681260032)
 
             # 体験入部メンバーの一覧を表示/60日超えを選別
-            guild = client.get_guild(377392053182660609)  # 本鯖
-            taiken_role = guild.get_role(851748635023769630)  # @体験入部
-            yo_kakunin_role = guild.get_role(833323166440095744)  # @要確認
+            guild=client.get_guild(377392053182660609)  # 本鯖
+            taiken_role=guild.get_role(851748635023769630)  # @体験入部
+            yo_kakunin_role=guild.get_role(833323166440095744)  # @要確認
             # role = guild.get_role(851748635023769630) #@体験入部
             message2 += f"**体験入部の一覧(UTC基準)**\n - __参加日\t\t\t\t\t\t経過日数\t\t\t\t\t\t名前__\n"
-            sorted_taiken_members = sorted(
+            sorted_taiken_members=sorted(
                 taiken_role.members, key=lambda x: x.joined_at)  # 参加日順にソート
 
             # ここから、60日を超えためんばーを選別
-            membersOf60days = []
-            time_start_date = datetime.datetime(
+            membersOf60days=[]
+            time_start_date=datetime.datetime(
                 year=2023, month=4, day=1, hour=0, minute=0, second=0, tzinfo=utc)
 
             for member in sorted_taiken_members:
                 if member.joined_at > time_start_date:
-                    member_days = now_time - member.joined_at
+                    member_days=now_time - member.joined_at
                 else:
-                    member_days = now_time - time_start_date
+                    member_days=now_time - time_start_date
                 # member_days.secondsを時分秒に直す
-                member_hours = int(member_days.seconds/3600)
-                tmp = member_days.seconds % 3600
-                member_minutes = int(tmp/60)
-                member_seconds = tmp % 60
+                member_hours=int(member_days.seconds/3600)
+                tmp=member_days.seconds % 3600
+                member_minutes=int(tmp/60)
+                member_seconds=tmp % 60
                 message2 += f" - {member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t{member_days.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member.name}\n"
 
                 if member_days.days >= 60:
@@ -822,34 +822,34 @@ async def Trial_entry_explulsion():
 
             message2 += f"----------------------------------------------------------------------------------------\n"
         except Exception as e:
-            message2 = failure(e)
+            message2=failure(e)
 
-        message3 = ""
+        message3=""
         try:
 
             message3 += f"**要確認の一覧(UTC基準)**\n - __要確認日\t\t\t\t経過日数\t\t\t\t\t\t名前__\n"
-            YoukakuninCH = DBguild.get_channel(1085388068112048241)
-            YoukakuninMes = await YoukakuninCH.fetch_message(1087927106509475860)
-            mes = YoukakuninMes.content.split("\n")
+            YoukakuninCH=DBguild.get_channel(1085388068112048241)
+            YoukakuninMes=await YoukakuninCH.fetch_message(1087927106509475860)
+            mes=YoukakuninMes.content.split("\n")
             for i in mes:
-                data = i.split(" ")
+                data=i.split(" ")
 
-                date = data[1].split("/")
-                time = data[2].split(":")
-                time_ = datetime.datetime(
+                date=data[1].split("/")
+                time=data[2].split(":")
+                time_=datetime.datetime(
                     year=int(date[0]), month=int(date[1]), day=int(date[2]), hour=int(time[0]), minute=int(time[1]), second=int(time[2]), tzinfo=utc)
-                KeikaDays = now_time - time_
-                member_hours = int(KeikaDays.seconds/3600)
-                tmp = member_days.seconds % 3600
-                member_minutes = int(tmp/60)
-                member_seconds = tmp % 60
-                member_ = guild.get_member(int(data[0]))
+                KeikaDays=now_time - time_
+                member_hours=int(KeikaDays.seconds/3600)
+                tmp=member_days.seconds % 3600
+                member_minutes=int(tmp/60)
+                member_seconds=tmp % 60
+                member_=guild.get_member(int(data[0]))
 
                 message3 += f" - {data[1]} {data[2]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member_.name}\n"
 
         except Exception as e:
-            message3 = failure(e)
-        message = f"{message1}{message2}{message3}"
+            message3=failure(e)
+        message=f"{message1}{message2}{message3}"
 
         await DBmessage.edit(content=message)  # ログ
     except Exception as e:
@@ -862,15 +862,15 @@ async def Trial_entry_explulsion():
 """
 
 
-@client.command()
+@ client.command()
 async def list_id(ctx):
     await printLog(client, "リストの取得を始めます")
-    guild = client.get_guild(377392053182660609)
-    genneki = guild.get_role(972767950434086912)
-    taiken = guild.get_role(851748635023769630)
-    g_members = genneki.members
-    t_members = taiken.members
-    message = ""
+    guild=client.get_guild(377392053182660609)
+    genneki=guild.get_role(972767950434086912)
+    taiken=guild.get_role(851748635023769630)
+    g_members=genneki.members
+    t_members=taiken.members
+    message=""
 
     await ctx.send("--------------------------------------------------------\n現役生一覧")
 
@@ -892,23 +892,23 @@ async def list_id(ctx):
 """
 
 
-@client.event
+@ client.event
 async def on_voice_state_update(member, before, after):
-    t_delta = datetime.timedelta(hours=9)
-    JST = datetime.timezone(t_delta, 'JST')
-    nowTime = datetime.datetime.now(JST)
-    now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
-    sagyoBeya = [833684506790723614, 1092178739451920425, 1096708775525744782,
+    t_delta=datetime.timedelta(hours=9)
+    JST=datetime.timezone(t_delta, 'JST')
+    nowTime=datetime.datetime.now(JST)
+    now=nowTime.strftime('%Y/%m/%d %H:%M:%S')
+    sagyoBeya=[833684506790723614, 1092178739451920425, 1096708775525744782,
                  822408934664306699, 822408969342550036, 818756552642527262, 828283228971859978]
 
-    DBguild = client.get_guild(1075592226534600755)
-    DBch = DBguild.get_channel(1096722589960917073)
-    DBmes = await DBch.fetch_message(1096723359045255238)
-    auths = DBmes.content.split("\n")
+    DBguild=client.get_guild(1075592226534600755)
+    DBch=DBguild.get_channel(1096722589960917073)
+    DBmes=await DBch.fetch_message(1096723359045255238)
+    auths=DBmes.content.split("\n")
 
     # 作業部屋の通知チャンネル
-    ITCguild = client.get_guild(377392053182660609)
-    sagyou_TextCh = ITCguild.get_channel(822446386707824700)
+    ITCguild=client.get_guild(377392053182660609)
+    sagyou_TextCh=ITCguild.get_channel(822446386707824700)
 
     if after.channel.id != before.channel.id:
         await printLog(client, f"name:{member.name}, 入室VC:{after.channel.name}")
@@ -921,7 +921,7 @@ async def on_voice_state_update(member, before, after):
             # await sagyou_TextCh.send(
             #    f"[{now}] {member.mention}が{after.channel.mention}に入室しました")
             for auth in auths:
-                member_ = ITCguild.get_member(int(auth))
+                member_=ITCguild.get_member(int(auth))
                 await member_.send(
                     f"[{now}] {member.mention}が{after.channel.mention}に入室しました")
 
@@ -929,11 +929,11 @@ async def on_voice_state_update(member, before, after):
 @ client.command()
 async def 通知オン(ctx):
 
-    DBguild = client.get_guild(1075592226534600755)
-    DBch = DBguild.get_channel(1096722589960917073)
-    DBmes = await DBch.fetch_message(1096723359045255238)
+    DBguild=client.get_guild(1075592226534600755)
+    DBch=DBguild.get_channel(1096722589960917073)
+    DBmes=await DBch.fetch_message(1096723359045255238)
 
-    mes = DBmes.content
+    mes=DBmes.content
     if not (str(ctx.author.id) in mes.split("\n")):
         mes += f"\n{ctx.author.id}"
     await DBmes.edit(content=mes)
@@ -944,14 +944,14 @@ async def 通知オン(ctx):
 @ client.command()
 async def 通知オフ(ctx):
 
-    DBguild = client.get_guild(1075592226534600755)
-    DBch = DBguild.get_channel(1096722589960917073)
-    DBmes = await DBch.fetch_message(1096723359045255238)
+    DBguild=client.get_guild(1075592226534600755)
+    DBch=DBguild.get_channel(1096722589960917073)
+    DBmes=await DBch.fetch_message(1096723359045255238)
 
-    DBid = DBmes.content.split("\n")
+    DBid=DBmes.content.split("\n")
 
     DBid.remove(f"{ctx.author.id}")
-    newmes = ""
+    newmes=""
     for id in DBid:
         newmes += f"{id}\n"
 
@@ -969,12 +969,12 @@ async def 通知オフ(ctx):
 async def on_member_update(before, after):
     # 本鯖で体験入部ロールが付与されたときの処理
     if before.guild.id == 377392053182660609:
-        guild = client.get_guild(377392053182660609)
-        role = guild.get_role(851748635023769630)  # 体験入部
+        guild=client.get_guild(377392053182660609)
+        role=guild.get_role(851748635023769630)  # 体験入部
 
         # 送信する文章の取得
-        teikeibunCh = client.get_channel(1076714278154932344)
-        sendMes = await teikeibunCh.fetch_message(1076714411512840192)
+        teikeibunCh=client.get_channel(1076714278154932344)
+        sendMes=await teikeibunCh.fetch_message(1076714411512840192)
 
         # roleの差分を取得
         # diff_role = list(set(before.roles) ^ set(after.roles))
@@ -988,12 +988,12 @@ async def on_member_update(before, after):
             return
     # 新歓鯖で体験入部ロールが付与されたときの処理
     if before.guild.id == 1056591502958145627:
-        guild = client.get_guild(1056591502958145627)
-        role = guild.get_role(1078850225281708122)  # 体験入部
+        guild=client.get_guild(1056591502958145627)
+        role=guild.get_role(1078850225281708122)  # 体験入部
 
         # 送信する文章の取得
-        teikeibunCh = client.get_channel(1076714278154932344)
-        sendMes = await teikeibunCh.fetch_message(1086872856551489637)
+        teikeibunCh=client.get_channel(1076714278154932344)
+        sendMes=await teikeibunCh.fetch_message(1086872856551489637)
 
         # roleの差分を取得
         # diff_role = list(set(before.roles) ^ set(after.roles))
@@ -1008,37 +1008,37 @@ async def on_member_update(before, after):
 
     # 本鯖で要確認ロールを付与されたときの処理
     if before.guild.id == 377392053182660609:
-        guild = client.get_guild(377392053182660609)
-        role = guild.get_role(833323166440095744)  # 要確認
+        guild=client.get_guild(377392053182660609)
+        role=guild.get_role(833323166440095744)  # 要確認
 
         # 要確認の人のデータベース
-        youkakuninCh = client.get_channel(1085388068112048241)
-        database = await youkakuninCh.fetch_message(1087927106509475860)
+        youkakuninCh=client.get_channel(1085388068112048241)
+        database=await youkakuninCh.fetch_message(1087927106509475860)
 
-        now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
+        now_time=datetime.datetime.now(tz=utc)  # 現在時刻を取得
 
         if (not (role in before.roles)) and (role in after.roles):
-            new_database = f"{database.content}\n{before.name} {before.id} {now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}"
+            new_database=f"{database.content}\n{before.name} {before.id} {now_time.year}/{now_time.month}/{now_time.day} {now_time.hour}:{now_time.minute}:{now_time.second}"
             await database.edit(content=new_database)
             await printLog(client, f"{before.name}に要確認ロールを付与しました")
 
     # 本鯖で要確認ロールを剥奪されたときの処理
     if before.guild.id == 377392053182660609:
-        guild = client.get_guild(377392053182660609)
-        role = guild.get_role(833323166440095744)  # 要確認
+        guild=client.get_guild(377392053182660609)
+        role=guild.get_role(833323166440095744)  # 要確認
 
         # 要確認の人のデータベース
-        youkakuninCh = client.get_channel(1085388068112048241)
-        database = await youkakuninCh.fetch_message(1087927106509475860)
+        youkakuninCh=client.get_channel(1085388068112048241)
+        database=await youkakuninCh.fetch_message(1087927106509475860)
 
-        now_time = datetime.datetime.now(tz=utc)  # 現在時刻を取得
+        now_time=datetime.datetime.now(tz=utc)  # 現在時刻を取得
 
         if (role in before.roles) and (not (role in after.roles)):
-            new_database = f""
-            data = database.content.split("\n")
+            new_database=f""
+            data=database.content.split("\n")
 
             for i in data:
-                data_ = i.split(" ")
+                data_=i.split(" ")
 
                 if data_[1] != str(before.id):
                     new_database += f"{i}\n"
@@ -1050,5 +1050,5 @@ async def on_member_update(before, after):
 """
 権限の確認
 """
-token = getenv('DISCORD_BOT_TOKEN')
+token=getenv('DISCORD_BOT_TOKEN')
 client.run(token)
