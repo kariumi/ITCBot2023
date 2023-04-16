@@ -754,7 +754,7 @@ async def modify(ctx, channel: typing.Optional[TextChannel],  mes_id, mes):
 time = datetime.time(hour=15, minute=0, tzinfo=utc)
 
 
-@ tasks.loop(seconds=3)  # time=timeに直すことで一日一回実行に戻せます
+@ tasks.loop(seconds=10)  # time=timeに直すことで一日一回実行に戻せます
 async def Trial_entry_explulsion():
     try:
         message1 = ""
@@ -783,7 +783,7 @@ async def Trial_entry_explulsion():
             # ログを更新するメッセージ
             DBguild = client.get_guild(1075592226534600755)
             DBchannel = DBguild.get_channel(1088489507923443722)
-            DBmessage = await DBchannel.fetch_message(1088489590681260032)
+            DBmessage = await DBchannel.fetch_message(1097142461220012062)
 
             # 体験入部メンバーの一覧を表示/60日超えを選別
             guild = client.get_guild(377392053182660609)  # 本鯖
@@ -849,7 +849,7 @@ async def Trial_entry_explulsion():
 
         except Exception as e:
             message3 = failure(e)
-        message = f"{message1}{message2}{message3}"
+        message = f"{message1}, {message2}, {message3}"
 
         await DBmessage.edit(content=message)  # ログ
     except Exception as e:
@@ -1046,6 +1046,11 @@ async def on_member_update(before, after):
                     await printLog(client, f"{before.name}から要確認ロールを剥奪しました")
 
             await database.edit(content=new_database)
+
+
+@client.command()
+async def test(ctx):
+    await ctx.send("test1")
 
 """
 権限の確認
