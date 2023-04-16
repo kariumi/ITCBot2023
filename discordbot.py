@@ -1059,6 +1059,5 @@ async def test(ctx):
 """
 権限の確認
 """
-token = "MTA0Nzc2MjQ2NjAxODQyNjkzMQ.GtbzJF.GhsxfUdnC00w-jIqOSsTS7lhtCG6PCLcpCN-dw"
-# token = getenv('DISCORD_BOT_TOKEN')
+token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
