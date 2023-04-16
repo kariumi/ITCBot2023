@@ -906,14 +906,14 @@ async def on_voice_state_update(member, before, after):
     DBmes = await DBch.fetch_message(1096723359045255238)
     auths = DBmes.content.split("\n")
 
-    await printLog(client, f"name:{member.name}, 入室VC:{after.channel.name}")
+    await printLog(client, f"name:{member.mention}, 入室VC:{after.channel.name}")
 
     try:
         # 作業部屋の通知チャンネル
         ITCguild = client.get_guild(377392053182660609)
         sagyou_TextCh = ITCguild.get_channel(822446386707824700)
 
-        if after.channel.id != before.channel.id:
+        if not before.channel and after.channel:
 
             if after.channel.id in sagyoBeya:
 
@@ -1059,5 +1059,6 @@ async def test(ctx):
 """
 権限の確認
 """
-token = getenv('DISCORD_BOT_TOKEN')
+token = "MTA0Nzc2MjQ2NjAxODQyNjkzMQ.GtbzJF.GhsxfUdnC00w-jIqOSsTS7lhtCG6PCLcpCN-dw"
+# token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
