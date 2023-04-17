@@ -857,7 +857,7 @@ async def Trial_entry_explulsion():
 
             message3 += f" - {data[1]} {data[2]}\t**{KeikaDays.days}日**{member_hours}時間{member_minutes}分{member_seconds}秒\t{member_name}\n"
         except:
-            message3 += f" - {data[1]} {data[2]}\t**{KeikaDays.days}日**{member_hours}時間{member_minutes}分{member_seconds}秒\t名前不明❓\n"
+            message3 += f" - {data[1]} {data[2]}\t**{KeikaDays.days}日**{member_hours}時間{member_minutes}分{member_seconds}秒\t名前不明❓({data[0]})\n"
 
     await DBmessage3.edit(content=message3)  # ログ
 
