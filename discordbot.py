@@ -746,7 +746,7 @@ async def modify(ctx, channel: typing.Optional[TextChannel],  mes_id, mes):
 （予定では、botが自動で60日経過でDMを送信し、90日でkickする。）
 毎日のログはDB鯖のbot-logに送信します。
 60日が経過すると@体験入部のロールを外し、@要確認をつける。
-90日が経過すると、代表にDMを送信する。
+要確認が30日が経過すると、代表にDMを送信する。←未実装？
 """
 
 
@@ -813,16 +813,16 @@ async def Trial_entry_explulsion():
         tmp = member_days.seconds % 3600
         member_minutes = int(tmp/60)
         member_seconds = tmp % 60
-        message2 += f" - {member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t{member_days.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member.name}\n"
+        message2 += f" - {member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t{member_days.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member.mention}\n"
 
         if member_days.days >= 60:
             membersOf60days.append(member.name)
             try:
                 await member.remove_roles(taiken_role)
                 await member.add_roles(yo_kakunin_role)
-                await printLog(client, f"{member.name}に要確認ロールを付与しました。")
+                await printLog(client, f"{member.mention}に要確認ロールを付与しました。")
             except:
-                await printLog(client, f"{member.name}に要確認ロールを付与できませんでした")
+                await printLog(client, f"{member.mention}に要確認ロールを付与できませんでした")
         number += 1
         if number > 10:
             DBmessage2 = await DBchannel.fetch_message(DBmessage2_list[DBmes_num])
@@ -853,7 +853,7 @@ async def Trial_entry_explulsion():
             member_minutes = int(tmp/60)
             member_seconds = tmp % 60
             member_ = guild.get_member(int(data[0]))
-            member_name = member_.name
+            member_name = member_.mention
 
             message3 += f" - {data[1]} {data[2]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member_name}\n"
         except:
