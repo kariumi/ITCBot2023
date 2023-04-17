@@ -813,7 +813,7 @@ async def Trial_entry_explulsion():
         tmp = member_days.seconds % 3600
         member_minutes = int(tmp/60)
         member_seconds = tmp % 60
-        message2 += f" - {member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t{member_days.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member.mention}\n"
+        message2 += f" - {member.joined_at.year}/{member.joined_at.month}/{member.joined_at.day} {member.joined_at.hour}:{member.joined_at.minute}:{member.joined_at.second}\t**{member_days.days}日{member_hours}時間{member_minutes}分{member_seconds}秒**\t{member.mention}\n"
 
         if member_days.days >= 60:
             membersOf60days.append(member.name)
@@ -855,9 +855,9 @@ async def Trial_entry_explulsion():
             member_ = guild.get_member(int(data[0]))
             member_name = member_.mention
 
-            message3 += f" - {data[1]} {data[2]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t{member_name}\n"
+            message3 += f" - {data[1]} {data[2]}\t**{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒**\t{member_name}\n"
         except:
-            message3 += f" - {data[1]} {data[2]}\t{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒\t名前不明\n"
+            message3 += f" - {data[1]} {data[2]}\t**{KeikaDays.days}日{member_hours}時間{member_minutes}分{member_seconds}秒**\t名前不明❓\n"
 
     await DBmessage3.edit(content=message3)  # ログ
 
