@@ -151,28 +151,28 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
         await printLog(client, "!vote : Error06")
         return
 
-"""
-ロール一斉送信用チャンネル作成
+# """
+# ロール一斉送信用チャンネル作成
 
-"""
+# """
 
 
-@client.command()
-async def チャンネル一斉作成(ctx):
-    try:
-        isseisousin_category = client.get_channel(1076860376924307557)
-        db = client.get_guild(1075592226534600755)
+# @client.command()
+# async def チャンネル一斉作成(ctx):
+#     try:
+#         isseisousin_category = client.get_channel(1076860376924307557)
+#         db = client.get_guild(1075592226534600755)
 
-        itc = client.get_guild(377392053182660609)
-        roles = itc.roles
-        for role in roles:
-            try:
-                await db.create_text_channel(f"{role.name}", category=isseisousin_category, topic=f"{role.id}")
-                await printLog(client, f"{role.name} - 成功")
-            except:
-                await printLog(client, f"{role.name}のチャンネルの作成に失敗しました")
-    except Exception as e:
-        await printLog(client, failure(e))
+#         itc = client.get_guild(377392053182660609)
+#         roles = itc.roles
+#         for role in roles:
+#             try:
+#                 await db.create_text_channel(f"{role.name}", category=isseisousin_category, topic=f"{role.id}")
+#                 await printLog(client, f"{role.name} - 成功")
+#             except:
+#                 await printLog(client, f"{role.name}のチャンネルの作成に失敗しました")
+#     except Exception as e:
+#         await printLog(client, failure(e))
 
 
 """
