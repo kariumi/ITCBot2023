@@ -167,12 +167,12 @@ async def チャンネル一斉作成(ctx):
         roles = itc.roles
         for role in roles:
             try:
-                await printLog(f"{role.name} - 成功")
                 await db.create_text_channel(f"{role.name}", category=isseisousin_category, topic=f"{role.id}")
+                await printLog(client, f"{role.name} - 成功")
             except:
-                await printLog(f"{role.name}のチャンネルの作成に失敗しました")
+                await printLog(client, f"{role.name}のチャンネルの作成に失敗しました")
     except Exception as e:
-        await printLog(failure(e))
+        await printLog(client, failure(e))
 
 
 """
