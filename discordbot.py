@@ -602,6 +602,18 @@ async def kariumi(ctx, *arg):
         return
     await ctx.send(arg[0])
 
+"""
+!get_now_VC
+"""
+@client.command()
+async def get_now_VC(ctx):
+    members = ctx.channel.members
+    message = "現在のVCにいる人一覧：\n"
+    for member in members:
+        message+=f"・{member.name}\n"
+    await ctx.send(message)
+
+
 
 """
 DMを受け取ったときの処理（TwitterのDMみたいなシステムで相互に返信可）
