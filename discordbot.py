@@ -57,6 +57,20 @@ async def on_command_error(ctx, error):
         return
     raise error
 
+"""
+urlを送信したときに、urlからギルドID、チャンネルID、メッセージIDを分離してくれるやつのテスト
+"""
+
+
+@client.command()
+async def url(ctx, url_):
+    id_name = ["鯖ID", "チャンネルID", "メッセージID"]
+    separated_url = separate_URL(url_)
+    message = "分離しました！\n"
+    for i in separated_url:
+        message += f"{id_name[i]}:{separated_url[i]}\n"
+    await printLog(message)
+
 
 """
 !bot_mes

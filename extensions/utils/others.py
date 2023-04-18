@@ -107,3 +107,9 @@ def get_startup_jst():
     now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
     final_update = "BOT更新日：" + now
     return final_update
+
+
+def separate_URL(url: str):
+    url_ = url.replace("https://discord.com/channels/", "")
+    data = url_.split("/")
+    return data
