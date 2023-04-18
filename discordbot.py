@@ -607,12 +607,13 @@ async def kariumi(ctx, *arg):
 """
 @client.command()
 async def get_now_VC(ctx):
+    
     members = ctx.channel.members
     message = "現在のVCにいる人一覧：\n"
     for member in members:
         message+=f"・{member.name}\n"
     await ctx.send(message)
-
+#
 
 
 """
