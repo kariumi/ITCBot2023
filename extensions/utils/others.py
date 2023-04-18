@@ -37,7 +37,7 @@ async def printLog(bot, content):
     JST = datetime.timezone(t_delta, 'JST')
     nowTime = datetime.datetime.now(JST)
     now = nowTime.strftime('%Y/%m/%d %H:%M:%S')
-    textch = bot.get_channel(1076682589185790065)
+    textch = bot.get_channel(1097835951499268146)
     await textch.send(f"[{now}] - {content}")
 
 """
