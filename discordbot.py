@@ -6,7 +6,7 @@ from os import getenv
 import random
 import typing
 import sqlite3
-from discord import TextChannel, VoiceChannel, Role, Intents
+from discord import TextChannel, VoiceChannel, Role, Intents, app_commands
 import asyncio
 import csv
 import pprint
@@ -198,7 +198,7 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
 """
 
 
-@client.command()
+@client.hybrid_command(name="おみくじ", description="今日の運勢を表示します！")
 async def おみくじ(ctx):
     # img = ["daikichi.png", "kichi.png",
     #       "syoukichi.png", "kyou.png", "daikyou.png"]
