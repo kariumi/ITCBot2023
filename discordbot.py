@@ -69,7 +69,7 @@ async def url(ctx, url_):
     message = "分離しました！\n"
     for i in separated_url:
         message += f"{id_name[i]}:{separated_url[i]}\n"
-    await printLog(message)
+    await printLog(client, message)
 
 
 """
