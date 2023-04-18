@@ -68,7 +68,7 @@ async def url(ctx, url_):
         id_name = ["鯖ID", "チャンネルID", "メッセージID"]
         separated_url = separate_URL(url_)
         message = "分離しました！\n"
-        for i in separated_url:
+        for i in range(len(separated_url)):
             message += f"{id_name[i]}:{separated_url[i]}\n"
         await printLog(client, message)
     except Exception as e:
