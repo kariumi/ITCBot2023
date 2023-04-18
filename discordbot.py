@@ -606,7 +606,7 @@ async def kariumi(ctx, *arg):
 !get_now_VC
 """
 @client.command()
-async def get_now_VC(ctx):
+async def get_now_ch_members(ctx):
     
     members = ctx.channel.members
     message = "現在のVCにいる人一覧：\n"
@@ -1116,5 +1116,6 @@ async def test(ctx):
 """
 権限の確認
 """
+
 token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
