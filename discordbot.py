@@ -443,10 +443,10 @@ async def vote_role(ctx, channel: typing.Optional[TextChannel] = None, title="",
     await id.add_reaction("😎")
 
 
-@client.hybrid_command(discription = "乱数生成")
-@discord.app_commands.describe(a='最低値',b='最大値')
-async def 乱数(ctx, a, b):
-    await ctx.send(random.randint(int(a), int(b)))
+@client.hybrid_command(name="乱数",description = "乱数生成")
+@discord.app_commands.describe(min='最低値',max='最大値')
+async def 乱数(ctx, min, max):
+    await ctx.send(random.randint(int(min), int(max)))
 
 """
 on_raw_reaction_add
@@ -1248,5 +1248,7 @@ async def DM_send(ctx):
 """
 権限の確認
 """
-token = getenv('DISCORD_BOT_TOKEN')
+token="MTA0Nzc2MjQ2NjAxODQyNjkzMQ.GRlwEd.KdWJmf0aejn6iLFuI9STzfneOgN2UG1g6Xq1QI"
+
+#token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
