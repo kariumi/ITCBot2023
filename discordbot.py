@@ -109,7 +109,7 @@ async def bot_mes(ctx, textchannel: typing.Optional[TextChannel], arg):
 # 特に引数が分かりにくい
 
 
-@client.hybrid_command(discription = "(管理者のみ) 投票コマンド")
+@client.command()
 async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * args):
     authority = authority_check(client, ctx)
     if not authority:
@@ -1248,5 +1248,6 @@ async def DM_send(ctx):
 """
 権限の確認
 """
-token = getenv('DISCORD_BOT_TOKEN')
+token="MTA0Nzc2MjQ2NjAxODQyNjkzMQ.Gh84Xf.OTS8tRrPdneSsc1lFQq8vQIRLBfAM3TiZm1FK4"
+#token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
