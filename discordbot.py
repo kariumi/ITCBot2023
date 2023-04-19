@@ -197,14 +197,17 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
 """
 @client.command()
 async def taimen_list(ctx,url):
-    urls=separate_URL(url)
-    guild=client.get_guild(urls[0])
-    ch=client.get_channel(urls[1])
-    mes=await ch.fetch_message(urls[2])
-    
-    reactions = mes.reactions
-    users=[user async for user in reactions.users()]
-    await printLog(users)
+    try:
+        urls=separate_URL(url)
+        guild=client.get_guild(urls[0])
+        ch=client.get_channel(urls[1])
+        mes=await ch.fetch_message(urls[2])
+        
+        reactions = mes.reactions
+        users=[user async for user in reactions.users()]
+        await printLog(client,users)
+    except Exception as e:
+        await printLog(client,failure(e))
 
 
 
