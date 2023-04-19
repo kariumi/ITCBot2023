@@ -410,7 +410,7 @@ async def おみくじ(ctx):
 """
 
 
-@client.hybrid_command(discription = "（管理者のみ）ロールを割り振る用の投票を作成")
+@client.command()
 async def vote_role(ctx, channel: typing.Optional[TextChannel] = None, title="", *roles: typing.Optional[Role]):
     authority = authority_check(client, ctx)
     if not authority:
@@ -704,7 +704,7 @@ kariumiに要確認ロールを付与する
 """
 
 
-@ client.hybrid_command(discription = "(管理者のみ)")
+@ client.command()
 async def kariumi(ctx, *arg):
     authority = authority_check(client, ctx)
     if not authority:
@@ -1230,7 +1230,7 @@ async def test(ctx):
         return
     await ctx.send("test1")
     
-@client.hybrid_command(discription = "(管理者のみ) BOTからのDM送信")
+@client.command()
 async def DM_send(ctx):
     authority = authority_check(client, ctx)
     if not authority:
