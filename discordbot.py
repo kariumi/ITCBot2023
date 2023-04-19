@@ -214,9 +214,9 @@ async def taimen_list(ctx,url,emoji_):
                 mv=[]
                 dtm_role=guild.get_role(837510593077706782)
                 dtm_t_role=guild.get_role(1093911788929683506)
-                cg_role=guild.get_role(837510593077706782)
+                cg_role=guild.get_role(829263508016463923)
                 cg_t_role=guild.get_role(1093911494518898889)
-                prog_role=guild.get_role(837510593077706782)
+                prog_role=guild.get_role(837510590841880617)
                 prog_t_role=guild.get_role(1093911704510931104)
                 mv_role=guild.get_role(837510944459456562)
                 mv_t_role=guild.get_role(1093911834270105620)
@@ -226,19 +226,24 @@ async def taimen_list(ctx,url,emoji_):
                         dtm.append(user)
                     elif dtm_t_role in user.roles:
                         dtm.append(user)
+                        
                     if cg_role in user.roles:
                         cg.append(user)
                     elif cg_t_role in user.roles:
                         cg.append(user)
+                        
                     if prog_role in user.roles:
                         prog.append(user)
                     elif prog_t_role in user.roles:
                         prog.append(user)
+                        
                     if mv_role in user.roles:
                         mv.append(user)
                     elif mv_t_role in user.roles:
                         mv.append(user)
+                        
                     message+=f"{user.name}\n"
+                    
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
