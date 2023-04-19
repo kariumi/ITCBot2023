@@ -196,7 +196,7 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
 対面部会に出席する人のリスト
 """
 @client.command()
-async def taimen_list(ctx,url):
+async def taimen_list(ctx,url,emoji_):
     try:
         urls=separate_URL(url)
         guild=client.get_guild(int(urls[0]))
@@ -205,11 +205,68 @@ async def taimen_list(ctx,url):
         
         reactions = mes.reactions
         for reaction in reactions:
-            users=[user async for user in reaction.users()]
-            message=""
-            for user in users:
-                message+=f"{user.mention}\n"
-            await printLog(client,message)
+            if reaction.emoji==emoji_:
+                
+                users=[user async for user in reaction.users()]
+                dtm=[]
+                cg=[]
+                prog=[]
+                mv=[]
+                dtm_role=guild.get_role(837510593077706782)
+                dtm_t_role=guild.get_role(1093911788929683506)
+                cg_role=guild.get_role(837510593077706782)
+                cg_t_role=guild.get_role(1093911494518898889)
+                prog_role=guild.get_role(837510593077706782)
+                prog_t_role=guild.get_role(1093911704510931104)
+                mv_role=guild.get_role(837510944459456562)
+                mv_t_role=guild.get_role(1093911834270105620)
+                message="参加表明している体験入部生の一覧\n"
+                for user in users:
+                    if dtm_role in user.roles:
+                        dtm.append(user)
+                    elif dtm_t_role in user.roles:
+                        dtm.append(user)
+                    if cg_role in user.roles:
+                        cg.append(user)
+                    elif cg_t_role in user.roles:
+                        cg.append(user)
+                    if prog_role in user.roles:
+                        prog.append(user)
+                    elif prog_t_role in user.roles:
+                        prog.append(user)
+                    if mv_role in user.roles:
+                        mv.append(user)
+                    elif mv_t_role in user.roles:
+                        mv.append(user)
+                    message+=f"{user.name}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="DTMのメンバー\n"
+                for user in dtm:
+                    message+=f"{user.name}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="CGのメンバー\n"
+                for user in cg:
+                    message+=f"{user.name}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="PROGのメンバー\n"
+                for user in prog:
+                    message+=f"{user.name}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="MVのメンバー\n"
+                for user in mv:
+                    message+=f"{user.name}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                    
     except Exception as e:
         await printLog(client,failure(e))
 
@@ -1140,6 +1197,5 @@ async def test(ctx):
 """
 権限の確認
 """
-token="MTA0Nzc2MjQ2NjAxODQyNjkzMQ.GYfVrW.DBCTgmdUj55mGl4R6yrzN43-Bgkd1HdPvBfxUE"
-#token = getenv('DISCORD_BOT_TOKEN')
+token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
