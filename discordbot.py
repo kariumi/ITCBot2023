@@ -81,7 +81,7 @@ async def url(ctx, url_):
 !bot_mes
 ボットから好きなチャンネルに送信
 """
-
+#このコメントは消して下さい
 
 @client.hybrid_command(description = "(管理者のみ)")
 async def bot_mes(ctx, textchannel: typing.Optional[TextChannel], arg):
