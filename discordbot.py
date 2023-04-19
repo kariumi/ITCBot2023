@@ -39,6 +39,7 @@ def failure(e):
 @client.event
 async def on_ready():
     print(f"{color.YELLOW}{client.user}{color.RESET}でログインしました")
+    await client.tree.sync()
     await printLog(client, final_update)
     Trial_entry_explulsion.start()
 
@@ -63,7 +64,7 @@ urlを送信したときに、urlからギルドID、チャンネルID、メッ�
 """
 
 
-@client.command()
+@client.hybrid_command()
 async def url(ctx, url_):
     try:
         id_name = ["鯖ID", "チャンネルID", "メッセージID"]
@@ -82,7 +83,7 @@ async def url(ctx, url_):
 """
 
 
-@client.command()
+@client.hybrid_command(discription = "(管理者のみ)")
 async def bot_mes(ctx, textchannel: typing.Optional[TextChannel], arg):
     authority = authority_check(client, ctx)
     if not authority:
@@ -108,7 +109,7 @@ async def bot_mes(ctx, textchannel: typing.Optional[TextChannel], arg):
 # 特に引数が分かりにくい
 
 
-@client.command()
+@client.hybrid_command(discription = "(管理者のみ) 投票コマンド")
 async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * args):
     authority = authority_check(client, ctx)
     if not authority:
@@ -196,8 +197,13 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
 !taimen_list
 対面部会に出席する人のリスト
 """
-@client.command()
+@client.hybrid_command(descrinption = "(管理者のみ)リスト作成") 
 async def taimen_list_(ctx,url,emoji_):
+    authority = authority_check(client, ctx)
+    if not authority:
+        await ctx.send(embed=authority_error())
+        await printLog(client, "!vote_role : Error00")
+        return
     try:
         urls=separate_URL(url)
         guild=client.get_guild(int(urls[0]))
@@ -277,127 +283,6 @@ async def taimen_list_(ctx,url,emoji_):
                     
     except Exception as e:
         await printLog(client,failure(e))
-
-
-"""
-!taimen_list2
-対面部会に出席する人のリスト
-"""
-@client.command()
-async def taimen_list2(ctx,url,emoji_):
-    try:
-        urls=separate_URL(url)
-        guild=client.get_guild(int(urls[0]))
-        ch=client.get_channel(int(urls[1]))
-        mes=await ch.fetch_message(int(urls[2]))
-        
-        reactions = mes.reactions
-        for reaction in reactions:
-            if reaction.emoji==emoji_:
-                
-                users=[user async for user in reaction.users()]
-                dtm=[]
-                cg=[]
-                prog=[]
-                mv=[]
-                dtm_prog=[]
-                dtm_role=guild.get_role(837510593077706782)
-                dtm_t_role=guild.get_role(1093911788929683506)
-                cg_role=guild.get_role(829263508016463923)
-                cg_t_role=guild.get_role(1093911494518898889)
-                prog_role=guild.get_role(837510590841880617)
-                prog_t_role=guild.get_role(1093911704510931104)
-                mv_role=guild.get_role(837510944459456562)
-                mv_t_role=guild.get_role(1093911834270105620)
-                message="参加表明している体験入部生の一覧\n"
-                for user in users:
-                    time.sleep(0.1)
-                    
-                    if mv_role in user.roles:
-                        mv.append(user)
-                    elif mv_t_role in user.roles:
-                        mv.append(user)
-                        
-                    if cg_role in user.roles:
-                        cg.append(user)
-                    elif cg_t_role in user.roles:
-                        cg.append(user)
-                    else:
-                        if (dtm_role in user.roles) and (prog_role in user.roles):
-                            dtm_prog.append(user)
-                        elif (dtm_t_role in user.roles) and (prog_t_role in user.roles):
-                            dtm_prog.append(user)
-
-                        
-                        if dtm_role in user.roles:
-                            dtm.append(user)
-                        elif dtm_t_role in user.roles:
-                            dtm.append(user)
-
-                        if prog_role in user.roles:
-                            prog.append(user)
-                        elif prog_t_role in user.roles:
-                            prog.append(user)
-                        
-                    
-                        
-                    message+=f"{user.id}\n"
-                    
-                message+="-----------------------------------------------------\n"
-                await printLog(client,message)
-                
-                
-                
-                message="CGのメンバー\n"
-                for user in cg:
-                    message+=f"{user.id}\n"
-                message+="-----------------------------------------------------\n"
-                await printLog(client,message)
-                
-                message="DTM兼PROGのメンバー\n"
-                for user in dtm_prog:
-                    message+=f"{user.id}\n"
-                message+="-----------------------------------------------------\n"
-                await printLog(client,message)
-                
-                message="DTMのメンバー\n"
-                for user in dtm:
-                    message+=f"{user.id}\n"
-                message+="-----------------------------------------------------\n"
-                await printLog(client,message)
-                
-                message="PROGのメンバー\n"
-                for user in prog:
-                    message+=f"{user.id}\n"
-                message+="-----------------------------------------------------\n"
-                await printLog(client,message)
-                
-                message="MVのメンバー\n"
-                for user in mv:
-                    message+=f"{user.id}\n"
-                message+="-----------------------------------------------------\n"
-                await printLog(client,message)
-                
-                    
-                    
-    except Exception as e:
-        await printLog(client,failure(e))
-
-
-"""
-!id_member
-memberのidからmemberの情報を取得
-"""
-@client.command()
-async def id_member(ctx,):
-    list=[761513635221864459, 846690579139919882, 826112080855302195,1093448559061389322, 791628451505242142, 490868059985281024, 733293783600463892, 712874096039559209, 1093062903306915842, 1089209148467597485, 1097834303792091167, 1095677777983836180, 1095635437642596352,  1093560701437612202, 1093412359135043664, 997868516654972958,  876676335911727125,  853550282918068224, 613523406671052831, 347663185328996354,723702538154803310, 505293333434990602, 1093145200311930910, 637497539930882053, 1093496054776868916, 1093894948039962644 ]
-
-    guild = client.get_guild(377392053182660609)
-    message="一覧\n"
-    for mem in list:
-        member = guild.get_member(mem)
-        message+=f"{member.name}\n"
-    await printLog(client,message)
 
 
 """
@@ -524,7 +409,7 @@ async def おみくじ(ctx):
 """
 
 
-@client.command()
+@client.hybrid_command(discription = "（管理者のみ）ロールを割り振る用の投票を作成")
 async def vote_role(ctx, channel: typing.Optional[TextChannel] = None, title="", *roles: typing.Optional[Role]):
     authority = authority_check(client, ctx)
     if not authority:
@@ -557,7 +442,8 @@ async def vote_role(ctx, channel: typing.Optional[TextChannel] = None, title="",
     await id.add_reaction("😎")
 
 
-@client.command()
+@client.hybrid_command(discription = "乱数生成")
+@discord.app_commands.describe(a='最低値',b='最大値')
 async def 乱数(ctx, a, b):
     await ctx.send(random.randint(int(a), int(b)))
 
@@ -783,7 +669,7 @@ async def on_raw_reaction_add(payload):
 """
 
 
-@ client.command()
+@ client.hybrid_command(discription = "サイコロを回して1~6の乱数を生成")
 async def さいころ(ctx):
 
     num = random.randrange(6)
@@ -796,7 +682,7 @@ async def さいころ(ctx):
 """
 
 
-@ client.command()
+@ client.hybrid_command(discription = "じゃんけん (グー) (チョキ) (パー)のいずれかを入力")
 async def じゃんけん(ctx, arg):
     te = ["gu", "choki", "pa"]
     num = random.randrange(3)
@@ -817,7 +703,7 @@ kariumiに要確認ロールを付与する
 """
 
 
-@ client.command()
+@ client.hybrid_command(discription = "(管理者のみ)")
 async def kariumi(ctx, *arg):
     authority = authority_check(client, ctx)
     if not authority:
@@ -829,7 +715,7 @@ async def kariumi(ctx, *arg):
 """
 !get_now_VC
 """
-@client.command()
+@client.hybrid_command(discription = "現在VCにいる人の一覧を表示")
 async def get_now_ch_members(ctx):
     
     members = ctx.channel.members
@@ -1002,8 +888,13 @@ async def on_raw_reaction_remove(payload):
 """
 
 
-@ client.command()
+@ client.hybrid_command(discription = "（管理者のみ）アイコン情報取得")
 async def icon(ctx):
+    authority = authority_check(client, ctx)
+    if not authority:
+        await ctx.send(embed=authority_error())
+        await printLog(client, "!vote_role : Error00")
+        return
     guild = client.get_guild(377392053182660609)
     members = guild.members
     for member in members:
@@ -1024,8 +915,13 @@ remove - 文字列が一致する行を削除
 """
 
 
-@ client.command()
+@ client.hybrid_command(discription = "(管理者のみ) BOTの投稿を修正")
 async def modify(ctx, channel: typing.Optional[TextChannel],  mes_id, mes):
+    authority = authority_check(client, ctx)
+    if not authority:
+        await ctx.send(embed=authority_error())
+        await printLog(client, "!vote_role : Error00")
+        return
     try:
         guild = client.get_guild(1075592226534600755)
         message = await channel.fetch_message(int(mes_id))
@@ -1158,33 +1054,6 @@ async def Trial_entry_explulsion():
 
 
 """
-!list_id
-"""
-
-
-@ client.command()
-async def list_id(ctx):
-    await printLog(client, "リストの取得を始めます")
-    guild = client.get_guild(377392053182660609)
-    genneki = guild.get_role(972767950434086912)
-    taiken = guild.get_role(851748635023769630)
-    g_members = genneki.members
-    t_members = taiken.members
-    message = ""
-
-    await ctx.send("--------------------------------------------------------\n現役生一覧")
-
-    for member in g_members:
-
-        await ctx.send(f"{member.id}, {member.nick}, {member.name}\n")
-
-    await ctx.send("--------------------------------------------------------\n体験入部一覧")
-
-    for member in t_members:
-        await ctx.send(f"{member.id}, {member.nick}, {member.name}\n")
-
-
-"""
 作業部屋入出した時に通知を送信するようにする。
 
 
@@ -1229,7 +1098,7 @@ async def on_voice_state_update(member, before, after):
         await printLog(client, failure(e))
 
 
-@ client.command()
+@ client.hybrid_command(discription = "(BOTへのDMのみ) ボイスチャンネル入室通知オン")
 async def 通知オン(ctx):
 
     DBguild = client.get_guild(1075592226534600755)
@@ -1244,7 +1113,7 @@ async def 通知オン(ctx):
     await printLog(client, f"{ctx.author.name}が作業部屋に入ったときの通知をオンにしました。")
 
 
-@ client.command()
+@ client.hybrid_command(discription = "(BOTへのDMのみ) ボイスチャンネル入室通知オフ")
 async def 通知オフ(ctx):
 
     DBguild = client.get_guild(1075592226534600755)
@@ -1351,12 +1220,22 @@ async def on_member_update(before, after):
             await database.edit(content=new_database)
 
 
-@client.command()
+@client.hybrid_command(discription = "（管理者のみ）sendテストコマンド")
 async def test(ctx):
+    authority = authority_check(client, ctx)
+    if not authority:
+        await ctx.send(embed=authority_error())
+        await printLog(client, "!vote_role : Error00")
+        return
     await ctx.send("test1")
     
-@client.command()
+@client.hybrid_command(discription = "(管理者のみ) BOTからのDM送信")
 async def DM_send(ctx):
+    authority = authority_check(client, ctx)
+    if not authority:
+        await ctx.send(embed=authority_error())
+        await printLog(client, "!vote_role : Error00")
+        return
     guild = client.get_guild(377392053182660609)
     list=[599515603484672002, 832946276127473665, 696712425751445596,761513635221864459, 846690579139919882, 826112080855302195,1093448559061389322, 791628451505242142, 490868059985281024, 733293783600463892, 712874096039559209, 1093062903306915842, 1089209148467597485, 1097834303792091167, 1095677777983836180, 1095635437642596352,  1093560701437612202, 1093412359135043664, 997868516654972958,  876676335911727125,  853550282918068224, 613523406671052831, 347663185328996354,723702538154803310, 505293333434990602, 1093145200311930910, 637497539930882053, 1093496054776868916, 1093894948039962644 ]
     for member_id in list:
