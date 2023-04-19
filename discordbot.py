@@ -287,7 +287,7 @@ async def taimen_list(ctx,url,emoji_):
         await printLog(client,failure(e))
         
 """
-!taimen_list
+!taimen_list_all
 対面部会に出席する人のリスト、兼部とか全部出す
 """
 @client.command() 
@@ -514,6 +514,26 @@ async def taimen_list_all(ctx,url,emoji_):
                     
     except Exception as e:
         await printLog(client,failure(e))
+
+
+"""
+!icon
+アイコン画像を取得
+"""
+@client.command()
+async def icon(ctx,id):
+    authority = authority_check(client, ctx)
+    if not authority:
+        await ctx.send(embed=authority_error())
+        await printLog(client, "!vote_role : Error00")
+        return
+    guild=client.get_guild(377392053182660609)
+    member=guild.get_member(int(id))
+    try:
+        avatar = member.avatar.url
+        await ctx.send(avatar)
+    except Exception as e:
+        await ctx.send(f"{member.name} - {e}")
 
 
 """
