@@ -251,32 +251,32 @@ async def taimen_list_(ctx,url,emoji_):
                     elif mv_t_role in user.roles:
                         mv.append(user)
                         
-                    message+=f"{user.id}\n"
+                    message+=f"{user.mention}\n"
                     
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="DTMのメンバー\n"
                 for user in dtm:
-                    message+=f"{user.id}\n"
+                    message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="CGのメンバー\n"
                 for user in cg:
-                    message+=f"{user.id}\n"
+                    message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="PROGのメンバー\n"
                 for user in prog:
-                    message+=f"{user.id}\n"
+                    message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="MVのメンバー\n"
                 for user in mv:
-                    message+=f"{user.id}\n"
+                    message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
