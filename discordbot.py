@@ -83,7 +83,7 @@ async def url(ctx, url_):
 """
 
 
-@client.hybrid_command(discription = "(管理者のみ)")
+@client.hybrid_command(description = "(管理者のみ)")
 async def bot_mes(ctx, textchannel: typing.Optional[TextChannel], arg):
     authority = authority_check(client, ctx)
     if not authority:
@@ -670,7 +670,7 @@ async def on_raw_reaction_add(payload):
 """
 
 
-@ client.hybrid_command(discription = "サイコロを回して1~6の乱数を生成")
+@ client.hybrid_command(description = "サイコロを回して1~6の乱数を生成")
 async def さいころ(ctx):
 
     num = random.randrange(6)
@@ -683,7 +683,7 @@ async def さいころ(ctx):
 """
 
 
-@ client.hybrid_command(discription = "じゃんけん (グー) (チョキ) (パー)のいずれかを入力")
+@ client.hybrid_command(description = "じゃんけん (グー) (チョキ) (パー)のいずれかを入力")
 async def じゃんけん(ctx, arg):
     te = ["gu", "choki", "pa"]
     num = random.randrange(3)
@@ -716,7 +716,7 @@ async def kariumi(ctx, *arg):
 """
 !get_now_VC
 """
-@client.hybrid_command(discription = "現在VCにいる人の一覧を表示")
+@client.hybrid_command(description = "現在VCにいる人の一覧を表示")
 async def get_now_ch_members(ctx):
     
     members = ctx.channel.members
@@ -889,7 +889,7 @@ async def on_raw_reaction_remove(payload):
 """
 
 
-@ client.hybrid_command(discription = "（管理者のみ）アイコン情報取得")
+@ client.hybrid_command(description = "（管理者のみ）アイコン情報取得")
 async def icon(ctx):
     authority = authority_check(client, ctx)
     if not authority:
@@ -916,7 +916,7 @@ remove - 文字列が一致する行を削除
 """
 
 
-@ client.hybrid_command(discription = "(管理者のみ) BOTの投稿を修正")
+@ client.hybrid_command(description = "(管理者のみ) BOTの投稿を修正")
 async def modify(ctx, channel: typing.Optional[TextChannel],  mes_id, mes):
     authority = authority_check(client, ctx)
     if not authority:
@@ -1099,7 +1099,7 @@ async def on_voice_state_update(member, before, after):
         await printLog(client, failure(e))
 
 
-@ client.hybrid_command(discription = "(BOTへのDMのみ) ボイスチャンネル入室通知オン")
+@ client.hybrid_command(description = "(BOTへのDMのみ) ボイスチャンネル入室通知オン")
 async def 通知オン(ctx):
 
     DBguild = client.get_guild(1075592226534600755)
@@ -1114,7 +1114,7 @@ async def 通知オン(ctx):
     await printLog(client, f"{ctx.author.name}が作業部屋に入ったときの通知をオンにしました。")
 
 
-@ client.hybrid_command(discription = "(BOTへのDMのみ) ボイスチャンネル入室通知オフ")
+@ client.hybrid_command(description = "(BOTへのDMのみ) ボイスチャンネル入室通知オフ")
 async def 通知オフ(ctx):
 
     DBguild = client.get_guild(1075592226534600755)
@@ -1221,7 +1221,7 @@ async def on_member_update(before, after):
             await database.edit(content=new_database)
 
 
-@client.hybrid_command(discription = "（管理者のみ）sendテストコマンド")
+@client.hybrid_command(description = "（管理者のみ）sendテストコマンド")
 async def test(ctx):
     authority = authority_check(client, ctx)
     if not authority:
