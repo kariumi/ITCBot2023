@@ -425,91 +425,91 @@ async def taimen_list_all(ctx,url,emoji_):
                 for user in cg:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="DTMだけのメンバー\n"
                 for user in dtm:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="PROGだけのメンバー\n"
                 for user in prog:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="MVだけのメンバー\n"
                 for user in mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="CG&DTMのメンバー\n"
                 for user in cg_dtm:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="CG&PROGのメンバー\n"
                 for user in cg_prog:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="CG&MVのメンバー\n"
                 for user in cg_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="DTM&PROGのメンバー\n"
                 for user in dtm_prog:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="DTM&MVのメンバー\n"
                 for user in dtm_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="PROG&MVのメンバー\n"
                 for user in prog_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="CG&DTM&PROGのメンバー\n"
                 for user in cg_dtm_prog:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="CG&DTM&MVのメンバー\n"
                 for user in cg_dtm_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="CG&PROG&MVのメンバー\n"
                 for user in cg_prog_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="DTM&PROG&MVのメンバー\n"
                 for user in dtm_prog_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                 
                 message="CG&DTM&PROG&MVのメンバー\n"
                 for user in cg_dtm_prog_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await ctx.send(client,message)
                     
                     
     except Exception as e:
