@@ -339,9 +339,9 @@ async def taimen_list_all(ctx,url,emoji_):
                     
                     #テンプレ
                     if not (cg_role in user.roles) and not(dtm_role in user.roles) and not (prog_role in user.roles) and not (mv_role in user.roles):
-                        mv.append(user)
+                        cg.append(user)
                     elif not (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and not (mv_t_role in user.roles):
-                        mv.append(user)
+                        cg.append(user)
                         
                     if (cg_role in user.roles) and not(dtm_role in user.roles) and not (prog_role in user.roles) and not (mv_role in user.roles):
                         cg.append(user)
