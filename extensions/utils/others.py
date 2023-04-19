@@ -52,8 +52,8 @@ async def printLog(bot, content):
 def authority_check(client, ctx):
     # コマンドを使用した鯖でこのロールが付与されていたら使用できる。BOT使用
     true_role = [968160313797136414]
-    # true_guildの鯖ではロールなしでも使える。DB鯖/TEST鯖
-    true_guild = [1075592226534600755, 1053669243616501800]
+    # true_guildの鯖ではロールなしでも使える。DB鯖/TEST鯖/管理鯖
+    true_guild = [1075592226534600755, 1053669243616501800,1098052668431290538]
 
     authority = False
 
@@ -80,7 +80,7 @@ def authority_check2(client, ctx):
     # コマンドを使用した鯖でこのロールが付与されていたら使用できる。BOT使用/BOT使用(一時)
     true_role = [968160313797136414, 1096674116473462865]
     # true_guildはtrue_roleと一対一対応で。
-    true_guild = [1075592226534600755, 1053669243616501800]
+    true_guild = [1075592226534600755, 1053669243616501800,1098052668431290538]
 
     authority = False
 
