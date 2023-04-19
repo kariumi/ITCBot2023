@@ -204,8 +204,9 @@ async def taimen_list(ctx,url):
         mes=await ch.fetch_message(int(urls[2]))
         
         reactions = mes.reactions
-        users=[user async for user in reactions.users()]
-        await printLog(client,users)
+        for reaction in reactions:
+            users=[user async for user in reaction.users()]
+            await printLog(client,users)
     except Exception as e:
         await printLog(client,failure(e))
 
