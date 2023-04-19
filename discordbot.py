@@ -191,6 +191,7 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
 #                 await printLog(client, f"{role.name}のチャンネルの作成に失敗しました")
 #     except Exception as e:
 #         await printLog(client, failure(e))
+#a
 
 """
 !taimen_list
