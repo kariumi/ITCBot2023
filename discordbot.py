@@ -206,7 +206,10 @@ async def taimen_list(ctx,url):
         reactions = mes.reactions
         for reaction in reactions:
             users=[user async for user in reaction.users()]
-            await printLog(client,users)
+            message=""
+            for user in users:
+                message+=f"{user.mention}\n"
+            await printLog(client,message)
     except Exception as e:
         await printLog(client,failure(e))
 
@@ -1137,6 +1140,6 @@ async def test(ctx):
 """
 権限の確認
 """
-
-token = getenv('DISCORD_BOT_TOKEN')
+token="MTA0Nzc2MjQ2NjAxODQyNjkzMQ.GYfVrW.DBCTgmdUj55mGl4R6yrzN43-Bgkd1HdPvBfxUE"
+#token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
