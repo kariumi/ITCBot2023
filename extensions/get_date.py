@@ -20,9 +20,13 @@ class GetDate(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.hybrid_command(discription = "（管理者のみ）ロール指定、参加日数取得")
     async def get_date(self, ctx, role: typing.Optional[Role] = None):
-
+        authority = authority_check(self.bot, ctx)
+        if not authority:
+            await ctx.send(embed=authority_error())
+            await printLog(self.bot, "!vote_role : Error00")
+            return
         if role == None:
             await ctx.send(embed=get_date_error("ロールが指定されていません！"))
             await printLog(self.bot, "!get_date : Error01")
@@ -42,8 +46,13 @@ class GetDate(commands.Cog):
 
         await ctx.send(message)  # ログ
 
-    @commands.command()
+    @commands.hybrid_command(discription = "（管理者のみ）ID指定、参加日数取得")
     async def get_date_id(self, ctx, role_id):
+        authority = authority_check(self.bot, ctx)
+        if not authority:
+            await ctx.send(embed=authority_error())
+            await printLog(self.bot, "!vote_role : Error00")
+            return
         guild = self.bot.get_guild(377392053182660609)
         role = guild.get_role(int(role_id))
 
