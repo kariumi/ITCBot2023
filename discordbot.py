@@ -13,6 +13,7 @@ import pprint
 import sys
 import linecache
 # from git import *
+import time
 from extensions.utils.bot_error import *
 from extensions.utils.others import *
 #a
@@ -196,7 +197,7 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
 対面部会に出席する人のリスト
 """
 @client.command()
-async def taimen_list(ctx,url,emoji_):
+async def taimen_list_(ctx,url,emoji_):
     try:
         urls=separate_URL(url)
         guild=client.get_guild(int(urls[0]))
@@ -222,6 +223,7 @@ async def taimen_list(ctx,url,emoji_):
                 mv_t_role=guild.get_role(1093911834270105620)
                 message="参加表明している体験入部生の一覧\n"
                 for user in users:
+                    time.sleep(0.2)
                     if dtm_role in user.roles:
                         dtm.append(user)
                     elif dtm_t_role in user.roles:
@@ -275,6 +277,7 @@ async def taimen_list(ctx,url,emoji_):
                     
     except Exception as e:
         await printLog(client,failure(e))
+
 
 
 
@@ -596,6 +599,22 @@ async def on_raw_reaction_add(payload):
                         await payload.member.add_roles(role)
                 return
 
+
+    #リアクションロック
+    
+    botguild=client.get_guild(1098236195240165467)
+    botch=botguild.get_channel(1098236195240165467)
+    botmes=await botch.fetch_message(1098236572266151967)
+    contents=botmes.content.split("\n")
+    
+    for content in contents:
+        urls= separate_URL(content)
+        
+        if payload.message_id == urls[2]:
+            user = client.get_user(payload.user_id)
+            stamp = payload.emoji.name
+            await message.add_reaction(stamp, user)
+    
     #
     # 新歓サーバー用
     # スタンプを押されたら
@@ -842,6 +861,21 @@ async def on_raw_reaction_remove(payload):
             await message.edit(embed=embed)
         if title == "【投票終了】`(バグっている場合はリサイクルマークを押してください)`":
             await message.remove_reaction(number, user)
+    
+    #リアクションロック
+    
+    botguild=client.get_guild(1098236195240165467)
+    botch=botguild.get_channel(1098236195240165467)
+    botmes=await botch.fetch_message(1098236572266151967)
+    contents=botmes.content.split("\n")
+    
+    for content in contents:
+        urls= separate_URL(content)
+        
+        if payload.message_id == urls[2]:
+            user = client.get_user(payload.user_id)
+            stamp = payload.emoji.name
+            await message.remove_reaction(stamp, user)
 
 
 """
@@ -1203,5 +1237,6 @@ async def test(ctx):
 """
 権限の確認
 """
-token = getenv('DISCORD_BOT_TOKEN')
+token = ""
+#token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
