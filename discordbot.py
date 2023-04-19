@@ -337,6 +337,11 @@ async def taimen_list_all(ctx,url,emoji_):
                 for user in users:
                     time.sleep(0.1)
                     
+                    #テンプレ
+                    if not (cg_role in user.roles) and not(dtm_role in user.roles) and not (prog_role in user.roles) and not (mv_role in user.roles):
+                        mv.append(user)
+                    elif not (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                        mv.append(user)
                         
                     if (cg_role in user.roles) and not(dtm_role in user.roles) and not (prog_role in user.roles) and not (mv_role in user.roles):
                         cg.append(user)
@@ -357,7 +362,64 @@ async def taimen_list_all(ctx,url,emoji_):
                         mv.append(user)
                     elif not (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and  (mv_t_role in user.roles):
                         mv.append(user)
+                    
+                    #2つ兼部
+                    if (cg_role in user.roles) and (dtm_role in user.roles) and not (prog_role in user.roles) and not (mv_role in user.roles):
+                        cg_dtm.append(user)
+                    elif (cg_t_role in user.roles) and (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                        cg_dtm.append(user)
                         
+                    if  (cg_role in user.roles) and not(dtm_role in user.roles) and  (prog_role in user.roles) and not (mv_role in user.roles):
+                        cg_prog.append(user)
+                    elif  (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                        cg_prog.append(user)
+                        
+                    if  (cg_role in user.roles) and not(dtm_role in user.roles) and not (prog_role in user.roles) and  (mv_role in user.roles):
+                        cg_mv.append(user)
+                    elif  (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and  (mv_t_role in user.roles):
+                        cg_mv.append(user)
+                    
+                    if not (cg_role in user.roles) and (dtm_role in user.roles) and  (prog_role in user.roles) and not (mv_role in user.roles):
+                        dtm_prog.append(user)
+                    elif not (cg_t_role in user.roles) and  (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                        dtm_prog.append(user)
+                    
+                    if not (cg_role in user.roles) and (dtm_role in user.roles) and not (prog_role in user.roles) and  (mv_role in user.roles):
+                        dtm_mv.append(user)
+                    elif not (cg_t_role in user.roles) and  (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and  (mv_t_role in user.roles):
+                        dtm_mv.append(user)
+                    
+                    if not (cg_role in user.roles) and not(dtm_role in user.roles) and  (prog_role in user.roles) and  (mv_role in user.roles):
+                        prog_mv.append(user)
+                    elif not (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and  (mv_t_role in user.roles):
+                        prog_mv.append(user)
+                        
+                    #3つ
+                    if  (cg_role in user.roles) and (dtm_role in user.roles) and  (prog_role in user.roles) and not (mv_role in user.roles):
+                        cg_dtm_prog.append(user)
+                    elif  (cg_t_role in user.roles) and  (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                        cg_dtm_prog.append(user)
+                        
+                    if  (cg_role in user.roles) and (dtm_role in user.roles) and not (prog_role in user.roles) and  (mv_role in user.roles):
+                        cg_dtm_mv.append(user)
+                    elif  (cg_t_role in user.roles) and (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and  (mv_t_role in user.roles):
+                        cg_dtm_mv.append(user)
+                    
+                    if  (cg_role in user.roles) and not(dtm_role in user.roles) and  (prog_role in user.roles) and  (mv_role in user.roles):
+                        cg_prog_mv.append(user)
+                    elif  (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and (mv_t_role in user.roles):
+                        cg_prog_mv.append(user)
+                    
+                    if  not(cg_role in user.roles) and(dtm_role in user.roles) and  (prog_role in user.roles) and  (mv_role in user.roles):
+                        dtm_prog_mv.append(user)
+                    elif not (cg_t_role in user.roles) and (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and (mv_t_role in user.roles):
+                        dtm_prog_mv.append(user)
+                    
+                    #4つ
+                    if  (cg_role in user.roles) and (dtm_role in user.roles) and  (prog_role in user.roles) and  (mv_role in user.roles):
+                        cg_dtm_prog_mv.append(user)
+                    elif  (cg_t_role in user.roles) and (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and (mv_t_role in user.roles):
+                        cg_dtm_prog_mv.append(user)
                         
                     message+=f"{user.mention}\n"
                     
@@ -389,67 +451,67 @@ async def taimen_list_all(ctx,url,emoji_):
                 await printLog(client,message)
                 
                 message="CG&DTMのメンバー\n"
-                for user in cg:
+                for user in cg_dtm:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="CG&PROGのメンバー\n"
-                for user in cg:
+                for user in cg_prog:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="CG&MVのメンバー\n"
-                for user in cg:
+                for user in cg_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="DTM&PROGのメンバー\n"
-                for user in dtm:
+                for user in dtm_prog:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="DTM&MVのメンバー\n"
-                for user in dtm:
+                for user in dtm_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="PROG&MVのメンバー\n"
-                for user in dtm:
+                for user in prog_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="CG&DTM&PROGのメンバー\n"
-                for user in dtm:
+                for user in cg_dtm_prog:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="CG&DTM&MVのメンバー\n"
-                for user in dtm:
+                for user in cg_dtm_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="CG&PROG&MVのメンバー\n"
-                for user in dtm:
+                for user in cg_prog_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="DTM&PROG&MVのメンバー\n"
-                for user in dtm:
+                for user in dtm_prog_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="CG&DTM&PROG&MVのメンバー\n"
-                for user in dtm:
+                for user in cg_dtm_prog_mv:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
