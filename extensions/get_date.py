@@ -20,7 +20,7 @@ class GetDate(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.hybrid_command(discription = "（管理者のみ）ロール指定、参加日数取得")
+    @commands.hybrid_command(description = "（管理者のみ）ロール指定、参加日数取得")
     async def get_date(self, ctx, role: typing.Optional[Role] = None):
         authority = authority_check(self.bot, ctx)
         if not authority:
@@ -46,7 +46,7 @@ class GetDate(commands.Cog):
 
         await ctx.send(message)  # ログ
 
-    @commands.hybrid_command(discription = "（管理者のみ）ID指定、参加日数取得")
+    @commands.hybrid_command(description = "（管理者のみ）ID指定、参加日数取得")
     async def get_date_id(self, ctx, role_id):
         authority = authority_check(self.bot, ctx)
         if not authority:

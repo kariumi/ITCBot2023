@@ -27,7 +27,7 @@ class Shuffle(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.hibrid_command(description = "現在のボイスチャンネルから指定したボイスチャンネルにランダム振り分け")
     async def shuffle(self, ctx, host1: typing.Optional[Role] = None, host2: typing.Optional[Role] = None, host3: typing.Optional[Role] = None, *channels: VoiceChannel):
         authority = authority_check2(self.bot, ctx)
         if not authority:
