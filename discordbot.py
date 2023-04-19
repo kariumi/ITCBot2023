@@ -521,7 +521,7 @@ async def taimen_list_all(ctx,url,emoji_):
 アイコン画像を取得a
 """
 @client.command()
-async def icon(ctx,id):
+async def get_icon(ctx,id):
     authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
