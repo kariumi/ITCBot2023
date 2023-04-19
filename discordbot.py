@@ -199,9 +199,9 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
 async def taimen_list(ctx,url):
     try:
         urls=separate_URL(url)
-        guild=client.get_guild(urls[0])
-        ch=client.get_channel(urls[1])
-        mes=await ch.fetch_message(urls[2])
+        guild=client.get_guild(int(urls[0]))
+        ch=client.get_channel(int(urls[1]))
+        mes=await ch.fetch_message(int(urls[2]))
         
         reactions = mes.reactions
         users=[user async for user in reactions.users()]
