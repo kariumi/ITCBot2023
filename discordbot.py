@@ -518,7 +518,7 @@ async def taimen_list_all(ctx,url,emoji_):
 
 """
 !icon
-アイコン画像を取得
+アイコン画像を取得a
 """
 @client.command()
 async def icon(ctx,id):
