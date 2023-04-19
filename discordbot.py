@@ -1248,7 +1248,5 @@ async def DM_send(ctx):
 """
 権限の確認
 """
-token="MTA0Nzc2MjQ2NjAxODQyNjkzMQ.GRlwEd.KdWJmf0aejn6iLFuI9STzfneOgN2UG1g6Xq1QI"
-
-#token = getenv('DISCORD_BOT_TOKEN')
+token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
