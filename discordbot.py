@@ -12,8 +12,8 @@ import csv
 import pprint
 import sys
 import linecache
-# from git import *
 import time
+# from git import *
 from extensions.utils.bot_error import *
 from extensions.utils.others import *
 #a
@@ -223,7 +223,7 @@ async def taimen_list_(ctx,url,emoji_):
                 mv_t_role=guild.get_role(1093911834270105620)
                 message="参加表明している体験入部生の一覧\n"
                 for user in users:
-                    time.sleep(0.2)
+                    time.sleep(0.1)
                     if dtm_role in user.roles:
                         dtm.append(user)
                     elif dtm_t_role in user.roles:
@@ -244,32 +244,32 @@ async def taimen_list_(ctx,url,emoji_):
                     elif mv_t_role in user.roles:
                         mv.append(user)
                         
-                    message+=f"{user.name}\n"
+                    message+=f"{user.id}\n"
                     
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="DTMのメンバー\n"
                 for user in dtm:
-                    message+=f"{user.name}\n"
+                    message+=f"{user.id}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="CGのメンバー\n"
                 for user in cg:
-                    message+=f"{user.name}\n"
+                    message+=f"{user.id}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="PROGのメンバー\n"
                 for user in prog:
-                    message+=f"{user.name}\n"
+                    message+=f"{user.id}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
                 message="MVのメンバー\n"
                 for user in mv:
-                    message+=f"{user.name}\n"
+                    message+=f"{user.id}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
@@ -278,6 +278,110 @@ async def taimen_list_(ctx,url,emoji_):
     except Exception as e:
         await printLog(client,failure(e))
 
+
+"""
+!taimen_list2
+対面部会に出席する人のリスト
+"""
+@client.command()
+async def taimen_list2(ctx,url,emoji_):
+    try:
+        urls=separate_URL(url)
+        guild=client.get_guild(int(urls[0]))
+        ch=client.get_channel(int(urls[1]))
+        mes=await ch.fetch_message(int(urls[2]))
+        
+        reactions = mes.reactions
+        for reaction in reactions:
+            if reaction.emoji==emoji_:
+                
+                users=[user async for user in reaction.users()]
+                dtm=[]
+                cg=[]
+                prog=[]
+                mv=[]
+                dtm_prog=[]
+                dtm_role=guild.get_role(837510593077706782)
+                dtm_t_role=guild.get_role(1093911788929683506)
+                cg_role=guild.get_role(829263508016463923)
+                cg_t_role=guild.get_role(1093911494518898889)
+                prog_role=guild.get_role(837510590841880617)
+                prog_t_role=guild.get_role(1093911704510931104)
+                mv_role=guild.get_role(837510944459456562)
+                mv_t_role=guild.get_role(1093911834270105620)
+                message="参加表明している体験入部生の一覧\n"
+                for user in users:
+                    time.sleep(0.1)
+                    
+                    if mv_role in user.roles:
+                        mv.append(user)
+                    elif mv_t_role in user.roles:
+                        mv.append(user)
+                        
+                    if cg_role in user.roles:
+                        cg.append(user)
+                    elif cg_t_role in user.roles:
+                        cg.append(user)
+                    else:
+                        if (dtm_role in user.roles) and (prog_role in user.roles):
+                            dtm_prog.append(user)
+                        elif (dtm_t_role in user.roles) and (prog_t_role in user.roles):
+                            dtm_prog.append(user)
+
+                        
+                        if dtm_role in user.roles:
+                            dtm.append(user)
+                        elif dtm_t_role in user.roles:
+                            dtm.append(user)
+
+                        if prog_role in user.roles:
+                            prog.append(user)
+                        elif prog_t_role in user.roles:
+                            prog.append(user)
+                        
+                    
+                        
+                    message+=f"{user.id}\n"
+                    
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                
+                
+                message="CGのメンバー\n"
+                for user in cg:
+                    message+=f"{user.id}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="DTM兼PROGのメンバー\n"
+                for user in dtm_prog:
+                    message+=f"{user.id}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="DTMのメンバー\n"
+                for user in dtm:
+                    message+=f"{user.id}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="PROGのメンバー\n"
+                for user in prog:
+                    message+=f"{user.id}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="MVのメンバー\n"
+                for user in mv:
+                    message+=f"{user.id}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                    
+                    
+    except Exception as e:
+        await printLog(client,failure(e))
 
 
 
@@ -602,7 +706,7 @@ async def on_raw_reaction_add(payload):
 
     #リアクションロック
     
-    botguild=client.get_guild(1098236195240165467)
+    botguild=client.get_guild(1098052668431290538)
     botch=botguild.get_channel(1098236195240165467)
     botmes=await botch.fetch_message(1098236572266151967)
     contents=botmes.content.split("\n")
@@ -610,7 +714,7 @@ async def on_raw_reaction_add(payload):
     for content in contents:
         urls= separate_URL(content)
         
-        if payload.message_id == urls[2]:
+        if payload.message_id == int(urls[2]):
             user = client.get_user(payload.user_id)
             stamp = payload.emoji.name
             await message.add_reaction(stamp, user)
@@ -864,15 +968,16 @@ async def on_raw_reaction_remove(payload):
     
     #リアクションロック
     
-    botguild=client.get_guild(1098236195240165467)
+    botguild=client.get_guild(1098052668431290538)
     botch=botguild.get_channel(1098236195240165467)
     botmes=await botch.fetch_message(1098236572266151967)
     contents=botmes.content.split("\n")
     
     for content in contents:
         urls= separate_URL(content)
+        print(urls[2])
         
-        if payload.message_id == urls[2]:
+        if payload.message_id == int(urls[2]):
             user = client.get_user(payload.user_id)
             stamp = payload.emoji.name
             await message.remove_reaction(stamp, user)
@@ -925,10 +1030,10 @@ async def modify(ctx, channel: typing.Optional[TextChannel],  mes_id, mes):
 
 
 # ループが実行される時間(UTC)
-time = datetime.time(hour=15, minute=0, tzinfo=utc)
+timess = datetime.time(hour=15, minute=0, tzinfo=utc)
 
 
-@ tasks.loop(seconds=10)  # time=timeに直すことで一日一回実行に戻せます
+@ tasks.loop(seconds=30)  # time=timeに直すことで一日一回実行に戻せます
 async def Trial_entry_explulsion():
     # ログを更新するメッセージ
     DBguild = client.get_guild(1075592226534600755)
@@ -998,10 +1103,12 @@ async def Trial_entry_explulsion():
             except:
                 await printLog(client, f"{member.mention}に要確認ロールを付与できませんでした")
         number += 1
+        time.sleep(0.2)
         if number > 10:
             DBmessage2 = await DBchannel.fetch_message(DBmessage2_list[DBmes_num])
             await DBmessage2.edit(content=message2)
             message2 = ""
+            time.sleep(1)
             number = 0
             DBmes_num += 1
     message2 += f"----------------------------------------------------------------------------------------\n"
@@ -1018,9 +1125,9 @@ async def Trial_entry_explulsion():
             data = i.split(" ")
 
             date = data[1].split("/")
-            time = data[2].split(":")
+            time__ = data[2].split(":")
             time_ = datetime.datetime(
-                year=int(date[0]), month=int(date[1]), day=int(date[2]), hour=int(time[0]), minute=int(time[1]), second=int(time[2]), tzinfo=utc)
+                year=int(date[0]), month=int(date[1]), day=int(date[2]), hour=int(time__[0]), minute=int(time__[1]), second=int(time__[2]), tzinfo=utc)
             KeikaDays = now_time - time_
             member_hours = int(KeikaDays.seconds/3600)
             tmp = member_days.seconds % 3600
@@ -1237,6 +1344,5 @@ async def test(ctx):
 """
 権限の確認
 """
-token = ""
-#token = getenv('DISCORD_BOT_TOKEN')
+token = getenv('DISCORD_BOT_TOKEN')
 client.run(token)
