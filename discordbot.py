@@ -194,12 +194,13 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
 #         await printLog(client, failure(e))
 #a
 
+
 """
 !taimen_list
 対面部会に出席する人のリスト
 """
 @client.hybrid_command(descrinption = "(管理者のみ)リスト作成") 
-async def taimen_list_(ctx,url,emoji_):
+async def taimen_list(ctx,url,emoji_):
     authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
@@ -220,6 +221,7 @@ async def taimen_list_(ctx,url,emoji_):
                 cg=[]
                 prog=[]
                 mv=[]
+                message=""
                 dtm_role=guild.get_role(837510593077706782)
                 dtm_t_role=guild.get_role(1093911788929683506)
                 cg_role=guild.get_role(829263508016463923)
@@ -228,7 +230,7 @@ async def taimen_list_(ctx,url,emoji_):
                 prog_t_role=guild.get_role(1093911704510931104)
                 mv_role=guild.get_role(837510944459456562)
                 mv_t_role=guild.get_role(1093911834270105620)
-                message="参加表明している体験入部生の一覧\n"
+                message="参加表明している部員の一覧\n"
                 for user in users:
                     time.sleep(0.1)
                     if dtm_role in user.roles:
@@ -254,16 +256,16 @@ async def taimen_list_(ctx,url,emoji_):
                     message+=f"{user.mention}\n"
                     
                 message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                await printLog(client,message) #参加表明している部員の一覧
                 
-                message="DTMのメンバー\n"
-                for user in dtm:
+                message="CGのメンバー\n"
+                for user in cg:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
                 
-                message="CGのメンバー\n"
-                for user in cg:
+                message="DTMのメンバー\n"
+                for user in dtm:
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
@@ -279,7 +281,178 @@ async def taimen_list_(ctx,url,emoji_):
                     message+=f"{user.mention}\n"
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message)
+
+                    
+    except Exception as e:
+        await printLog(client,failure(e))
+        
+"""
+!taimen_list
+対面部会に出席する人のリスト、兼部とか全部出す
+"""
+@client.hybrid_command(descrinption = "(管理者のみ)リスト作成") 
+async def taimen_list_all(ctx,url,emoji_):
+    authority = authority_check(client, ctx)
+    if not authority:
+        await ctx.send(embed=authority_error())
+        await printLog(client, "!vote_role : Error00")
+        return
+    try:
+        urls=separate_URL(url)
+        guild=client.get_guild(int(urls[0]))
+        ch=client.get_channel(int(urls[1]))
+        mes=await ch.fetch_message(int(urls[2]))
+        
+        reactions = mes.reactions
+        for reaction in reactions:
+            if reaction.emoji==emoji_:
                 
+                users=[user async for user in reaction.users()]
+                cg=[]
+                dtm=[]
+                prog=[]
+                mv=[]
+                cg_dtm=[]
+                cg_prog=[]
+                cg_mv=[]
+                dtm_prog=[]
+                dtm_mv=[]
+                prog_mv=[]
+                cg_dtm_prog=[]
+                cg_dtm_mv=[]
+                cg_prog_mv=[]
+                dtm_prog_mv=[]
+                cg_dtm_prog_mv=[]
+                
+                message=""
+                dtm_role=guild.get_role(837510593077706782)
+                dtm_t_role=guild.get_role(1093911788929683506)
+                cg_role=guild.get_role(829263508016463923)
+                cg_t_role=guild.get_role(1093911494518898889)
+                prog_role=guild.get_role(837510590841880617)
+                prog_t_role=guild.get_role(1093911704510931104)
+                mv_role=guild.get_role(837510944459456562)
+                mv_t_role=guild.get_role(1093911834270105620)
+                #message="参加表明している部員の一覧\n"
+                for user in users:
+                    time.sleep(0.1)
+                    
+                        
+                    if (cg_role in user.roles) and not(dtm_role in user.roles) and not (prog_role in user.roles) and not (mv_role in user.roles):
+                        cg.append(user)
+                    elif (cg_t_role in user.roles) and not(dtm_t_role in user.roles) and not (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                        cg.append(user)
+                    
+                    if not (cg_role in user.roles) and (dtm_role in user.roles) and not (prog_role in user.roles) and not (mv_role in user.roles):
+                        dtm.append(user)
+                    elif not (cg_t_role in user.roles) and (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                        dtm.append(user)
+                        
+                    if not (cg_role in user.roles) and not(dtm_role in user.roles) and  (prog_role in user.roles) and not (mv_role in user.roles):
+                        prog.append(user)
+                    elif not (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                        prog.append(user)
+                        
+                    if not (cg_role in user.roles) and not(dtm_role in user.roles) and not (prog_role in user.roles) and (mv_role in user.roles):
+                        mv.append(user)
+                    elif not (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and  (mv_t_role in user.roles):
+                        mv.append(user)
+                        
+                        
+                    message+=f"{user.mention}\n"
+                    
+                message+="-----------------------------------------------------\n"
+                #await printLog(client,message) #参加表明している部員の一覧
+                
+                message="CGだけのメンバー\n"
+                for user in cg:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="DTMだけのメンバー\n"
+                for user in dtm:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="PROGだけのメンバー\n"
+                for user in prog:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="MVだけのメンバー\n"
+                for user in mv:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="CG&DTMのメンバー\n"
+                for user in cg:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="CG&PROGのメンバー\n"
+                for user in cg:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="CG&MVのメンバー\n"
+                for user in cg:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="DTM&PROGのメンバー\n"
+                for user in dtm:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="DTM&MVのメンバー\n"
+                for user in dtm:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="PROG&MVのメンバー\n"
+                for user in dtm:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="CG&DTM&PROGのメンバー\n"
+                for user in dtm:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="CG&DTM&MVのメンバー\n"
+                for user in dtm:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="CG&PROG&MVのメンバー\n"
+                for user in dtm:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="DTM&PROG&MVのメンバー\n"
+                for user in dtm:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
+                
+                message="CG&DTM&PROG&MVのメンバー\n"
+                for user in dtm:
+                    message+=f"{user.mention}\n"
+                message+="-----------------------------------------------------\n"
+                await printLog(client,message)
                     
                     
     except Exception as e:
