@@ -291,7 +291,230 @@ async def taimen_list(ctx,url,emoji_):
 対面部会に出席する人のリスト、兼部とか全部出す
 """
 @client.command() 
-async def taimen_list_all(ctx,url,emoji_):
+async def taimen_list_all(ctx,*list):
+    authority = authority_check(client, ctx)
+    if not authority:
+        await ctx.send(embed=authority_error())
+        await printLog(client, "!vote_role : Error00")
+        return
+    try:
+        urls=separate_URL(url)
+        guild=client.get_guild(int(urls[0]))
+
+        cg=[]
+        dtm=[]
+        prog=[]
+        mv=[]
+        cg_dtm=[]
+        cg_prog=[]
+        cg_mv=[]
+        dtm_prog=[]
+        dtm_mv=[]
+        prog_mv=[]
+        cg_dtm_prog=[]
+        cg_dtm_mv=[]
+        cg_prog_mv=[]
+        dtm_prog_mv=[]
+        cg_dtm_prog_mv=[]
+        
+        message=""
+        dtm_role=guild.get_role(837510593077706782)
+        dtm_t_role=guild.get_role(1093911788929683506)
+        cg_role=guild.get_role(829263508016463923)
+        cg_t_role=guild.get_role(1093911494518898889)
+        prog_role=guild.get_role(837510590841880617)
+        prog_t_role=guild.get_role(1093911704510931104)
+        mv_role=guild.get_role(837510944459456562)
+        mv_t_role=guild.get_role(1093911834270105620)
+        #users=[user async for user in reaction.users()]
+        for member_id in list:
+            user = guild.get_member(int(member_id))
+            time.sleep(0.1)
+            
+                
+            if (cg_role in user.roles) and not(dtm_role in user.roles) and not (prog_role in user.roles) and not (mv_role in user.roles):
+                cg.append(user)
+            elif (cg_t_role in user.roles) and not(dtm_t_role in user.roles) and not (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                cg.append(user)
+            
+            if not (cg_role in user.roles) and (dtm_role in user.roles) and not (prog_role in user.roles) and not (mv_role in user.roles):
+                dtm.append(user)
+            elif not (cg_t_role in user.roles) and (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                dtm.append(user)
+                
+            if not (cg_role in user.roles) and not(dtm_role in user.roles) and  (prog_role in user.roles) and not (mv_role in user.roles):
+                prog.append(user)
+            elif not (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                prog.append(user)
+                
+            if not (cg_role in user.roles) and not(dtm_role in user.roles) and not (prog_role in user.roles) and (mv_role in user.roles):
+                mv.append(user)
+            elif not (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and  (mv_t_role in user.roles):
+                mv.append(user)
+            
+            #2つ兼部
+            if (cg_role in user.roles) and (dtm_role in user.roles) and not (prog_role in user.roles) and not (mv_role in user.roles):
+                cg_dtm.append(user)
+            elif (cg_t_role in user.roles) and (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                cg_dtm.append(user)
+                
+            if  (cg_role in user.roles) and not(dtm_role in user.roles) and  (prog_role in user.roles) and not (mv_role in user.roles):
+                cg_prog.append(user)
+            elif  (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                cg_prog.append(user)
+                
+            if  (cg_role in user.roles) and not(dtm_role in user.roles) and not (prog_role in user.roles) and  (mv_role in user.roles):
+                cg_mv.append(user)
+            elif  (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and  (mv_t_role in user.roles):
+                cg_mv.append(user)
+            
+            if not (cg_role in user.roles) and (dtm_role in user.roles) and  (prog_role in user.roles) and not (mv_role in user.roles):
+                dtm_prog.append(user)
+            elif not (cg_t_role in user.roles) and  (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                dtm_prog.append(user)
+            
+            if not (cg_role in user.roles) and (dtm_role in user.roles) and not (prog_role in user.roles) and  (mv_role in user.roles):
+                dtm_mv.append(user)
+            elif not (cg_t_role in user.roles) and  (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and  (mv_t_role in user.roles):
+                dtm_mv.append(user)
+            
+            if not (cg_role in user.roles) and not(dtm_role in user.roles) and  (prog_role in user.roles) and  (mv_role in user.roles):
+                prog_mv.append(user)
+            elif not (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and  (mv_t_role in user.roles):
+                prog_mv.append(user)
+                
+            #3つ
+            if  (cg_role in user.roles) and (dtm_role in user.roles) and  (prog_role in user.roles) and not (mv_role in user.roles):
+                cg_dtm_prog.append(user)
+            elif  (cg_t_role in user.roles) and  (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and not (mv_t_role in user.roles):
+                cg_dtm_prog.append(user)
+                
+            if  (cg_role in user.roles) and (dtm_role in user.roles) and not (prog_role in user.roles) and  (mv_role in user.roles):
+                cg_dtm_mv.append(user)
+            elif  (cg_t_role in user.roles) and (dtm_t_role in user.roles) and not (prog_t_role in user.roles) and  (mv_t_role in user.roles):
+                cg_dtm_mv.append(user)
+            
+            if  (cg_role in user.roles) and not(dtm_role in user.roles) and  (prog_role in user.roles) and  (mv_role in user.roles):
+                cg_prog_mv.append(user)
+            elif  (cg_t_role in user.roles) and not (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and (mv_t_role in user.roles):
+                cg_prog_mv.append(user)
+            
+            if  not(cg_role in user.roles) and(dtm_role in user.roles) and  (prog_role in user.roles) and  (mv_role in user.roles):
+                dtm_prog_mv.append(user)
+            elif not (cg_t_role in user.roles) and (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and (mv_t_role in user.roles):
+                dtm_prog_mv.append(user)
+            
+            #4つ
+            if  (cg_role in user.roles) and (dtm_role in user.roles) and  (prog_role in user.roles) and  (mv_role in user.roles):
+                cg_dtm_prog_mv.append(user)
+            elif  (cg_t_role in user.roles) and (dtm_t_role in user.roles) and  (prog_t_role in user.roles) and (mv_t_role in user.roles):
+                cg_dtm_prog_mv.append(user)
+                
+            message+=f"{user.mention}\n"
+            
+        message+="-----------------------------------------------------\n"
+        #await printLog(client,message) #参加表明している部員の一覧
+        
+        message="CGだけのメンバー\n"
+        for user in cg:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="DTMだけのメンバー\n"
+        for user in dtm:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="PROGだけのメンバー\n"
+        for user in prog:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="MVだけのメンバー\n"
+        for user in mv:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="CG&DTMのメンバー\n"
+        for user in cg_dtm:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="CG&PROGのメンバー\n"
+        for user in cg_prog:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="CG&MVのメンバー\n"
+        for user in cg_mv:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="DTM&PROGのメンバー\n"
+        for user in dtm_prog:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="DTM&MVのメンバー\n"
+        for user in dtm_mv:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="PROG&MVのメンバー\n"
+        for user in prog_mv:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="CG&DTM&PROGのメンバー\n"
+        for user in cg_dtm_prog:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="CG&DTM&MVのメンバー\n"
+        for user in cg_dtm_mv:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="CG&PROG&MVのメンバー\n"
+        for user in cg_prog_mv:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="DTM&PROG&MVのメンバー\n"
+        for user in dtm_prog_mv:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+        
+        message="CG&DTM&PROG&MVのメンバー\n"
+        for user in cg_dtm_prog_mv:
+            message+=f"{user.mention}\n"
+        message+="-----------------------------------------------------\n"
+        await ctx.send(message)
+                    
+                    
+    except Exception as e:
+        await printLog(client,failure(e))
+
+"""
+!taimen_list_all
+対面部会に出席する人のリスト、兼部とか全部出す
+"""
+@client.command() 
+async def list_huriwake(ctx,*list):
     authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
@@ -307,7 +530,8 @@ async def taimen_list_all(ctx,url,emoji_):
         for reaction in reactions:
             if reaction.emoji==emoji_:
                 
-                users=[user async for user in reaction.users()]
+                #users=[user async for user in reaction.users()]
+                users = 
                 cg=[]
                 dtm=[]
                 prog=[]
@@ -514,7 +738,6 @@ async def taimen_list_all(ctx,url,emoji_):
                     
     except Exception as e:
         await printLog(client,failure(e))
-
 
 """
 !icon
