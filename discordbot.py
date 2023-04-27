@@ -1534,8 +1534,8 @@ async def random_member(ctx,num,*list):
     new_list=list[0:num]
     new_list2=list[num:len(list)+1]
 
-    print(f"当選者：{new_list}")
-    print(f"落選者：{new_list2}")
+    await printLog(client,f"当選者：{new_list}")
+    await printLog(client,f"落選者：{new_list2}")
 
 """
 権限の確認
