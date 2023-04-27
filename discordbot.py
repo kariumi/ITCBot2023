@@ -222,65 +222,65 @@ async def taimen_list(ctx,url,emoji_):
                 prog=[]
                 mv=[]
                 message=""
-                dtm_role=guild.get_role(837510593077706782)
-                dtm_t_role=guild.get_role(1093911788929683506)
-                cg_role=guild.get_role(829263508016463923)
-                cg_t_role=guild.get_role(1093911494518898889)
-                prog_role=guild.get_role(837510590841880617)
-                prog_t_role=guild.get_role(1093911704510931104)
-                mv_role=guild.get_role(837510944459456562)
-                mv_t_role=guild.get_role(1093911834270105620)
+                # dtm_role=guild.get_role(837510593077706782)
+                # dtm_t_role=guild.get_role(1093911788929683506)
+                # cg_role=guild.get_role(829263508016463923)
+                # cg_t_role=guild.get_role(1093911494518898889)
+                # prog_role=guild.get_role(837510590841880617)
+                # prog_t_role=guild.get_role(1093911704510931104)
+                # mv_role=guild.get_role(837510944459456562)
+                # mv_t_role=guild.get_role(1093911834270105620)
                 message="参加表明している部員の一覧\n"
                 for user in users:
                     time.sleep(0.1)
-                    if dtm_role in user.roles:
-                        dtm.append(user)
-                    elif dtm_t_role in user.roles:
-                        dtm.append(user)
+                    # if dtm_role in user.roles:
+                    #     dtm.append(user)
+                    # elif dtm_t_role in user.roles:
+                    #     dtm.append(user)
                         
-                    if cg_role in user.roles:
-                        cg.append(user)
-                    elif cg_t_role in user.roles:
-                        cg.append(user)
+                    # if cg_role in user.roles:
+                    #     cg.append(user)
+                    # elif cg_t_role in user.roles:
+                    #     cg.append(user)
                         
-                    if prog_role in user.roles:
-                        prog.append(user)
-                    elif prog_t_role in user.roles:
-                        prog.append(user)
+                    # if prog_role in user.roles:
+                    #     prog.append(user)
+                    # elif prog_t_role in user.roles:
+                    #     prog.append(user)
                         
-                    if mv_role in user.roles:
-                        mv.append(user)
-                    elif mv_t_role in user.roles:
-                        mv.append(user)
+                    # if mv_role in user.roles:
+                    #     mv.append(user)
+                    # elif mv_t_role in user.roles:
+                    #     mv.append(user)
                         
-                    message+=f"{user.mention}\n"
+                    message+=f"{user.id}\n"
                     
                 message+="-----------------------------------------------------\n"
                 await printLog(client,message) #参加表明している部員の一覧
                 
-                message="CGのメンバー\n"
-                for user in cg:
-                    message+=f"{user.mention}\n"
-                message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                # message="CGのメンバー\n"
+                # for user in cg:
+                #     message+=f"{user.mention}\n"
+                # message+="-----------------------------------------------------\n"
+                # await printLog(client,message)
                 
-                message="DTMのメンバー\n"
-                for user in dtm:
-                    message+=f"{user.mention}\n"
-                message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                # message="DTMのメンバー\n"
+                # for user in dtm:
+                #     message+=f"{user.mention}\n"
+                # message+="-----------------------------------------------------\n"
+                # await printLog(client,message)
                 
-                message="PROGのメンバー\n"
-                for user in prog:
-                    message+=f"{user.mention}\n"
-                message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                # message="PROGのメンバー\n"
+                # for user in prog:
+                #     message+=f"{user.mention}\n"
+                # message+="-----------------------------------------------------\n"
+                # await printLog(client,message)
                 
-                message="MVのメンバー\n"
-                for user in mv:
-                    message+=f"{user.mention}\n"
-                message+="-----------------------------------------------------\n"
-                await printLog(client,message)
+                # message="MVのメンバー\n"
+                # for user in mv:
+                #     message+=f"{user.mention}\n"
+                # message+="-----------------------------------------------------\n"
+                # await printLog(client,message)
 
                     
     except Exception as e:
@@ -881,6 +881,8 @@ async def on_raw_reaction_add(payload):
     PROGch = client.get_channel(1056760188243292273)
     DTMch = client.get_channel(1056758114600353922)
     MVch = client.get_channel(1056758410558845038)
+    
+    
 
     user = client.get_user(payload.user_id)
     stamp = payload.emoji.name
@@ -926,6 +928,8 @@ async def さいころ(ctx):
     num = random.randrange(6)
     file = f"img/saikoro/saikoro{num}.gif"
     await ctx.send(file=discord.File(file))
+    
+    
 
 """
 !じゃんけん
