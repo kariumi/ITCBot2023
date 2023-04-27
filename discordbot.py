@@ -1511,11 +1511,14 @@ async def id_name(ctx,*list):
         return
     guild = client.get_guild(377392053182660609)
     message =""
-    for member_id in list:
-        member = guild.get_member(member_id)
-        message += f"{member.name}\n"
-    
-    await printLog(client,message)
+    try:
+        for member_id in list:
+            member = guild.get_member(member_id)
+            message += f"{member.name}\n"
+        
+        await printLog(client,message)
+    except Exception as e:
+        await printLog(client,failure(e))
 
 """
 権限の確認
