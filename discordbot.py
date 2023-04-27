@@ -196,7 +196,7 @@ async def vote(ctx, arg=None, channel: typing.Optional[TextChannel] = None, * ar
 
 
 """
-!taimen_list
+!taimen_list 
 対面部会に出席する人のリスト
 """
 @client.hybrid_command(descrinption = "(管理者のみ)リスト作成") 
