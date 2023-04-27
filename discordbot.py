@@ -221,7 +221,7 @@ async def taimen_list(ctx,url,emoji_):
                 # cg=[]
                 # prog=[]
                 # mv=[]
-                message=""
+                message="[]"
                 # dtm_role=guild.get_role(837510593077706782)
                 # dtm_t_role=guild.get_role(1093911788929683506)
                 # cg_role=guild.get_role(829263508016463923)
@@ -253,9 +253,9 @@ async def taimen_list(ctx,url,emoji_):
                     # elif mv_t_role in user.roles:
                     #     mv.append(user)
                         
-                    message+=f"{user.id} "
+                    message+=f"{user.id},"
                     
-                message+="-----------------------------------------------------\n"
+                message+="]"
                 await printLog(client,message) #参加表明している部員の一覧
                 
                 # message="CGのメンバー\n"
@@ -1503,7 +1503,7 @@ async def DM_send(ctx,*list):
             await printLog(client,f"{member.name} - 失敗")
 
 @client.command()
-async def id_name(ctx,*list):
+async def id_name(ctx,list:list):
     authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
@@ -1521,7 +1521,7 @@ async def id_name(ctx,*list):
         await printLog(client,failure(e))
 
 @client.command()
-async def random_member(ctx,num,*list):
+async def random_member(ctx,num,list:list):
     authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
