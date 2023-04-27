@@ -1654,7 +1654,7 @@ async def on_member_update(before, after):
                 await printLog(client, f"Error!!：{before.name}に「新歓鯖で体験入部が付与された時」のDMを送信できませんでした。")
             return
 
-    # 本鯖で要確認ロールを付与されたときの処理
+    # 本鯖で要確認ロールを付与されたときの処理a
     if before.guild.id == 377392053182660609:
         guild = client.get_guild(377392053182660609)
         role = guild.get_role(833323166440095744)  # 要確認
