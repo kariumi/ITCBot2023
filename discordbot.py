@@ -291,7 +291,7 @@ async def taimen_list(ctx,url,emoji_):
 対面部会に出席する人のリスト、兼部とか全部出す
 """
 @client.command() 
-async def taimen_list_all(ctx,*list):
+async def list_huriwake(ctx,*list):
     authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
@@ -514,7 +514,7 @@ async def taimen_list_all(ctx,*list):
 対面部会に出席する人のリスト、兼部とか全部出す
 """
 @client.command() 
-async def list_huriwake(ctx,*list):
+async def taimen_list_all(ctx,*list):
     authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
@@ -530,7 +530,7 @@ async def list_huriwake(ctx,*list):
         for reaction in reactions:
             if reaction.emoji==emoji_:
                 
-                #users=[user async for user in reaction.users()]
+                users=[user async for user in reaction.users()]
                 users = 
                 cg=[]
                 dtm=[]
