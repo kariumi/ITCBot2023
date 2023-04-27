@@ -287,7 +287,7 @@ async def taimen_list(ctx,url,emoji_):
         await printLog(client,failure(e))
         
 """
-!taimen_list_all
+!list_huriwake
 対面部会に出席する人のリスト、兼部とか全部出す
 """
 @client.command() 
