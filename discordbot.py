@@ -1503,7 +1503,7 @@ async def DM_send(ctx,*list):
             await printLog(client,f"{member.name} - 失敗")
 
 @client.command()
-async def id_name(ctx,list:list):
+async def id_name(ctx,*list):
     authority = authority_check(client, ctx)
     if not authority:
         await ctx.send(embed=authority_error())
