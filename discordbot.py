@@ -298,8 +298,7 @@ async def list_huriwake(ctx,*list):
         await printLog(client, "!vote_role : Error00")
         return
     try:
-        urls=separate_URL(url)
-        guild=client.get_guild(int(urls[0]))
+        guild=client.get_guild(377392053182660609)
 
         cg=[]
         dtm=[]
@@ -531,7 +530,6 @@ async def taimen_list_all(ctx,*list):
             if reaction.emoji==emoji_:
                 
                 users=[user async for user in reaction.users()]
-                users = 
                 cg=[]
                 dtm=[]
                 prog=[]
