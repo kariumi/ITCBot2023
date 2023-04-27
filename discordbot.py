@@ -256,7 +256,7 @@ async def taimen_list(ctx,url,emoji_):
                     message+=f"{user.id}\n"
                     
                 message+="-----------------------------------------------------\n"
-                await ctx.send(message) #参加表明している部員の一覧
+                await printLog(message) #参加表明している部員の一覧
                 
                 # message="CGのメンバー\n"
                 # for user in cg:
