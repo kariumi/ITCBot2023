@@ -1493,7 +1493,7 @@ async def DM_send(ctx,*list):
         return
     guild = client.get_guild(377392053182660609)
     for member_id in list:
-        member = guild.get_member(member_id)
+        member = guild.get_member(int(member_id))
         str_ = f"4/20の対面部会の抽選の結果ですが、{member.name}は**__当選__**しました！！是非ご参加下さい！！\n\n●開催日時：4/20(木)　18:00~20:00まで予約済み\n●開催場所：407教室"
         
         try:
