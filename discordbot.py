@@ -1513,7 +1513,7 @@ async def id_name(ctx,*list):
     message =""
     try:
         for member_id in list:
-            member = guild.get_member(member_id)
+            member = guild.get_member(int(member_id))
             message += f"{member.name}\n"
         
         await printLog(client,message)
