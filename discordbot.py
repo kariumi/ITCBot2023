@@ -221,7 +221,7 @@ async def taimen_list(ctx,url,emoji_):
                 # cg=[]
                 # prog=[]
                 # mv=[]
-                message="[]"
+                message="["
                 # dtm_role=guild.get_role(837510593077706782)
                 # dtm_t_role=guild.get_role(1093911788929683506)
                 # cg_role=guild.get_role(829263508016463923)
