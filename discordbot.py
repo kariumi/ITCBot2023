@@ -1519,24 +1519,6 @@ async def id_name(ctx,list:list):
         await printLog(client,message)
     except Exception as e:
         await printLog(client,failure(e))
-
-@client.command()
-async def random_member(ctx,num,list:list):
-    authority = authority_check(client, ctx)
-    if not authority:
-        await ctx.send(embed=authority_error())
-        await printLog(client, "!vote_role : Error00")
-        return
-    guild = client.get_guild(377392053182660609)
-    message =""
-    random.shuffle(list)
-    
-    new_list=list[0:num]
-    new_list2=list[num:len(list)+1]
-
-    await printLog(client,f"当選者：{new_list}")
-    await printLog(client,f"落選者：{new_list2}")
-
 """
 権限の確認
 """
