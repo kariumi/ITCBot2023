@@ -77,7 +77,7 @@ async def url(ctx, url_):
         await printLog(client, failure(e))
 
 
-"""
+""" 
 !bot_mes
 ボットから好きなチャンネルに送信
 """
