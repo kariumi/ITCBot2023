@@ -1076,20 +1076,6 @@ async def on_raw_reaction_add(payload):
                 return
 
 
-    #リアクションロック
-    
-    botguild=client.get_guild(1098052668431290538)
-    botch=botguild.get_channel(1098236195240165467)
-    botmes=await botch.fetch_message(1098236572266151967)
-    contents=botmes.content.split("\n")
-    
-    for content in contents:
-        urls= separate_URL(content)
-        
-        if payload.message_id == int(urls[2]):
-            user = client.get_user(payload.user_id)
-            stamp = payload.emoji.name
-            await message.add_reaction(stamp, user)
     
     #
     # 新歓サーバー用
